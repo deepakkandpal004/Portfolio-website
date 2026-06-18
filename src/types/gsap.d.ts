@@ -1,4 +1,4 @@
-declare module 'gsap-trial/SplitText' {
+declare module 'gsap/SplitText' {
   export class SplitText {
     constructor(element: any, options?: any);
     chars: any[];
