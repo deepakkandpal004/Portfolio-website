@@ -1,65 +1,82 @@
-# My Portfolio Website - Overview 🚀
+# Deepak Kandpal - Portfolio Website 🚀
 
-This repository contains the open-source version of my personal portfolio website.  
-Feel free to explore the code and use it for learning and inspiration.
-
----
-
-## ⚠️ Usage Notice
-
-This project is shared for learning purposes only.
-
-Please do NOT:
-- Clone or replicate the full website or design
-- Repost it with minor content changes
-- Use this project for commercial/client work
-- Create tutorials or content using this exact project
-
-If you use parts of the code, you must provide proper credit linking back to the original repository.
-
-Build your own version — don’t just copy.
-
-— Moncy Yohannan
+A modern, interactive portfolio website showcasing my skills as a Full Stack Developer. Built with React, TypeScript, GSAP animations, and Three.js for immersive 3D experiences.
 
 ---
 
-## 🛠️ Instructions
+## ✨ About Me
 
-I have modified the GSAP Club plugins using trial versions.  
-⚠️ Note: Trial plugins cannot be used for production or hosting.
-
-For official GSAP Club plugins, refer here:  
-https://gsap.com/docs/v3/Installation/
+I'm a passionate Full Stack Developer and Computer Science student at Graphic Era Hill University with a 7.77 CGPA, expected to graduate in 2026. I specialize in building AI-powered web applications using modern technologies like React.js, Next.js, Node.js, and various databases.
 
 ---
 
-## ⚙️ Tech Stack
+## 🛠️ Tech Stack
 
-React • TypeScript • GSAP • Three.js • WebGL • HTML • CSS • JavaScript
-
----
-
-## 🎨 Assets Usage
-
-Some 3D assets included in this repository are free to use for learning purposes.
-
-However:
-
-- The original 3D avatar used on my live portfolio is NOT included in this repository
-- That avatar is a custom asset created over ~1 month
-- It is not open source and not available for reuse
-
-Any usage, extraction, or redistribution of that avatar from my live website is strictly prohibited.
+- **Frontend**: React, TypeScript, HTML5, CSS3, Tailwind CSS
+- **Backend**: Node.js, Express.js, REST APIs
+- **Databases**: MongoDB, MySQL, PostgreSQL
+- **Tools**: Git, GitHub, VSCode, npm
+- **Animation**: GSAP, Three.js, WebGL
+- **AI Integration**: Google Gemini API, OpenRouter API
 
 ---
 
-![Protfolio-Preview](https://github.com/user-attachments/assets/3c4557e7-6392-4928-b8a9-7b2476ef4edd)
+## 🚀 Featured Projects
+
+### AI Resume Builder
+A full-stack AI-powered resume builder using React.js, Node.js, and MongoDB with Google Gemini API for intelligent content generation.
+
+### AI Powered Expense Tracker  
+A Next.js expense tracking application with AI-powered financial insights using PostgreSQL and Clerk Authentication.
+
+---
+
+## 📊 Achievements
+
+- 🏆 Solved 250+ problems on LeetCode
+- 🎓 NPTEL Certification in Programming in Java (IIT Kharagpur)
+- 📜 Microsoft & LinkedIn Learning Software Development Certification
+- 🚀 Built and deployed two full-stack AI-powered applications
+
+---
+
+## 📞 Contact
+
+- **Email**: d.kandpal1832@gmail.com
+- **Phone**: +91 9917961832
+- **Location**: Pantnagar, Udham Singh Nagar, India
+- **LinkedIn**: [linkedin.com/in/deepakkandpal](https://www.linkedin.com/in/deepakkandpal)
+- **GitHub**: [github.com/deepakkandpal004](https://github.com/deepakkandpal004)
+- **LeetCode**: [leetcode.com/deepakkandpal](https://leetcode.com/deepakkandpal)
+
+---
+
+## 🎯 Installation & Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/deepakkandpal004/portfolio-website.git
+
+# Navigate to project directory
+cd portfolio-website
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+```
+
+## 🌐 Live Demo
+
+Visit my portfolio: [Your Live URL Here]
 
 ---
 
 ## 📄 License
 
-This project is licensed under the Personal Portfolio License (PPL) v1.0.
+This project is open source and available under the MIT License.
 
-See the LICENSE file for full details
+---
 
+**Built with ❤️ by Deepak Kandpal**
