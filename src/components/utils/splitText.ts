@@ -7,7 +7,7 @@ interface ParaElement extends HTMLElement {
   split?: SplitText;
 }
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 
 export default function setSplitText() {
   ScrollTrigger.config({ ignoreMobileResize: true });
