@@ -8,14 +8,3 @@ declare module 'gsap-trial/SplitText' {
     revert(): void;
   }
 }
-
-declare module 'gsap-trial/ScrollSmoother' {
-  export class ScrollSmoother {
-    static create(options?: any): ScrollSmoother;
-    static refresh(force?: boolean): void;
-    scrollTo(target: any, smooth?: boolean, position?: string): void;
-    scrollTop(value?: number): number | void;
-    paused(value?: boolean): boolean | void;
-    kill(): void;
-  }
-}

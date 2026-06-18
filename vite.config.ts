@@ -4,7 +4,7 @@ import react from "@vitejs/plugin-react";
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/Portfolio-website/", // Updated to match exact repository name
+  base: process.env.NODE_ENV === 'production' ? '/Portfolio-website/' : '/',
   build: {
     outDir: "dist",
     assetsDir: "assets",
