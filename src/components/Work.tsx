@@ -3,6 +3,7 @@ import WorkImage from "./WorkImage";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { asset } from "../utils/asset";
 
 gsap.registerPlugin(useGSAP);
 
@@ -96,7 +97,7 @@ const Work = () => {
                 <a href="https://github.com/deepakkandpal004" style={{color: "var(--accentColor)"}}>GitHub</a>
               </div>
             </div>
-            <WorkImage image="/images/resumebuilder.webp" alt="AI Resume Builder" />
+            <WorkImage image={asset("/images/resumebuilder.webp")} alt="AI Resume Builder" />
           </div>
           <div className="work-box">
             <div className="work-info">
@@ -120,7 +121,7 @@ const Work = () => {
                 <a href="https://github.com/deepakkandpal004" style={{color: "var(--accentColor)"}}>GitHub</a>
               </div>
             </div>
-            <WorkImage image="/images/expenseTracker.webp" alt="AI Expense Tracker" />
+            <WorkImage image={asset("/images/expenseTracker.webp")} alt="AI Expense Tracker" />
           </div>
         </div>
       </div>
