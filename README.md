@@ -23,7 +23,7 @@ I'm a passionate Full Stack Developer and Computer Science student at Graphic Er
 
 ## 🚀 Featured Projects
 
-### AI Resume Builder
+### Resume Builder SaaS Platform
 A full-stack AI-powered resume builder using React.js, Node.js, and MongoDB with Google Gemini API for intelligent content generation.
 
 ### AI Powered Expense Tracker  
@@ -69,7 +69,8 @@ npm run dev
 
 ## 🌐 Live Demo
 
-Visit my portfolio: [Your Live URL Here]
+Visit my portfolio:
+https://portfolio-website-khaki-six-88.vercel.app/
 
 ---
 
