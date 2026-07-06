@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://portfolio-website-khaki-six-88.vercel.app/sitemap.xml
