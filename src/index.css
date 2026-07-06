@@ -546,7 +546,7 @@ input:disabled, textarea:disabled {
   border-radius: var(--r-md);
   background: var(--bg2);
   border: 1px solid var(--bdr);
-  padding: 24px;
+  padding: 28px 28px 24px;
   margin-bottom: 32px;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }

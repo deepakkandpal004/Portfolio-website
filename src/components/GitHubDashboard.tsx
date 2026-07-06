@@ -137,6 +137,7 @@ const GitHubDashboard = () => {
             alt="GitHub contribution chart"
             className="contribution-graph"
             loading="lazy"
+            style={{ width: "100%", minHeight: 140, height: "auto", display: "block" }}
             onError={e => { (e.target as HTMLImageElement).style.display = "none"; }}
           />
         </div>
