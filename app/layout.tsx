@@ -45,9 +45,6 @@ export const metadata: Metadata = {
     title: "Deepak Kandpal — Full Stack Developer",
     publisher: "Deepak Kandpal",
     category: "technology",
-    verification: {
-  google: "YOUR_GOOGLE_VERIFICATION_CODE",
-},
     description:
       "Full Stack Developer specialising in React, Next.js, Node.js and TypeScript.",
     images: [
