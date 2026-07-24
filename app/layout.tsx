@@ -35,6 +35,7 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: "Deepak Kandpal", url: siteUrl }],
   creator: "Deepak Kandpal",
+  applicationName: "Deepak Kandpal Portfolio",
   metadataBase: new URL(siteUrl),
   alternates: { canonical: "/" },
   openGraph: {
@@ -42,6 +43,11 @@ export const metadata: Metadata = {
     url: siteUrl,
     siteName: "Deepak Kandpal",
     title: "Deepak Kandpal — Full Stack Developer",
+    publisher: "Deepak Kandpal",
+    category: "technology",
+    verification: {
+  google: "YOUR_GOOGLE_VERIFICATION_CODE",
+},
     description:
       "Full Stack Developer specialising in React, Next.js, Node.js and TypeScript.",
     images: [
