@@ -19,7 +19,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const siteUrl = "https://portfolio-website-khaki-six-88.vercel.app";
+const siteUrl = "https://deepakkandpal.me";
 
 export const metadata: Metadata = {
   title: {
