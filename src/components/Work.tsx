@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiExternalLink, FiGithub } from "react-icons/fi";
 
 const projects = [
@@ -10,7 +10,12 @@ const projects = [
     tech: ["React", "Node.js", "MongoDB", "Groq AI"],
     live: "https://resume-builder-saas-rsdeepakg.vercel.app/",
     github: "https://github.com/deepakkandpal004/resume-builder-SaaS",
-    image: "/images/resume-builder.png", wip: true,
+    images: [
+      { src: "/images/dashboard.png", alt: "ResumeAI dashboard showing resume management and ATS insights" },
+      { src: "/images/resumeBuilder.png", alt: "ResumeAI resume editor and live document preview" },
+      { src: "/images/resume.png", alt: "ResumeAI landing page" },
+    ],
+    wip: true,
   },
   {
     n: "02", title: "URL Shortener",
@@ -18,7 +23,8 @@ const projects = [
     tech: ["Next.js", "PostgreSQL", "Drizzle", "JWT"],
     live: "https://url-shortener-lyart-two.vercel.app",
     github: "https://github.com/deepakkandpal004/URL-Shortener",
-    image: "/images/Url-shortener.png", wip: false,
+    images: [{ src: "/images/Url-shortener.png", alt: "ShortLink URL shortener dashboard" }],
+    wip: false,
   },
   {
     n: "03", title: "AI Expense Tracker",
@@ -26,7 +32,11 @@ const projects = [
     tech: ["Next.js", "PostgreSQL", "Clerk", "OpenRouter"],
     live: "https://next-expense-tracker-rsdeepakg.vercel.app",
     github: "https://github.com/deepakkandpal004/next-expense-tracker",
-    image: "/images/expense-tracker.png", wip: true,
+    images: [
+      { src: "/images/expenseDashboard.png", alt: "Expense AI dashboard with balance, transactions, and AI insights" },
+      { src: "/images/expense.png", alt: "Expense AI landing page" },
+    ],
+    wip: true,
   },
   {
     n: "04", title: "MacOS Portfolio",
@@ -34,12 +44,14 @@ const projects = [
     tech: ["React", "Vite", "CSS"],
     live: "https://macos-portfolio-sepia.vercel.app",
     github: "https://github.com/deepakkandpal004/MacOS-Portfolio",
-    image: "/images/macos-portfolio.png", wip: false,
+    images: [{ src: "/images/macos-portfolio.png", alt: "macOS-inspired portfolio desktop interface" }],
+    wip: false,
   },
 ];
 
 const ProjectRow = ({ p, i }: { p: typeof projects[0]; i: number }) => {
   const cardRef = useRef<HTMLDivElement>(null);
+  const [selectedImage, setSelectedImage] = useState(0);
 
   useEffect(() => {
     const el = cardRef.current; if (!el) return;
@@ -130,7 +142,7 @@ const ProjectRow = ({ p, i }: { p: typeof projects[0]; i: number }) => {
         className="project-image-wrapper"
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={p.image} alt={p.title} loading="lazy" style={{
+        <img src={p.images[selectedImage].src} alt={p.images[selectedImage].alt} loading="lazy" decoding="async" width={400} height={240} style={{
           width: "100%", height: 240,
           objectFit: "cover", objectPosition: "top", display: "block",
           transition: "transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)",
@@ -142,6 +154,39 @@ const ProjectRow = ({ p, i }: { p: typeof projects[0]; i: number }) => {
             e.currentTarget.style.transform = "scale(1) translateY(0)";
           }}
         />
+        {p.images.length > 1 && (
+          <div
+            aria-label={`${p.title} screenshots`}
+            style={{ display: "flex", gap: 8, padding: 10, borderTop: "1px solid var(--bdr)" }}
+          >
+            {p.images.map((image, index) => {
+              const isSelected = index === selectedImage;
+              return (
+                <button
+                  key={image.src}
+                  type="button"
+                  onClick={() => setSelectedImage(index)}
+                  aria-label={`Show ${image.alt}`}
+                  aria-pressed={isSelected}
+                  style={{
+                    padding: 0,
+                    width: 56,
+                    height: 36,
+                    overflow: "hidden",
+                    cursor: "pointer",
+                    borderRadius: 5,
+                    border: `1px solid ${isSelected ? "var(--acc)" : "var(--bdr)"}`,
+                    opacity: isSelected ? 1 : 0.58,
+                    background: "var(--bg)",
+                    transition: "opacity 0.2s, border-color 0.2s",
+                  }}
+                >
+                  <img src={image.src} alt="" width={56} height={36} style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );

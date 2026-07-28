@@ -2,7 +2,7 @@
 
 Personal portfolio website built with React, TypeScript, and Vite. Features a dark/light theme, GitHub activity dashboard, project showcase, and a working contact form powered by Resend.
 
-**Live:** https://portfolio-website-khaki-six-88.vercel.app
+**Live:** https://deepakkandpal.me
 
 ## Tech Stack
 

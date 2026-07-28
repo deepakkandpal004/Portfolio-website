@@ -19,7 +19,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const siteUrl = "https://portfolio-website-khaki-six-88.vercel.app";
+const siteUrl = "https://deepakkandpal.me";
 
 export const metadata: Metadata = {
   title: {
@@ -89,6 +89,23 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${siteUrl}/#person`,
+    name: "Deepak Kandpal",
+    url: siteUrl,
+    image: `${siteUrl}/images/deepak.png`,
+    jobTitle: "Full Stack Developer",
+    description:
+      "Full Stack Developer specialising in React, Next.js, Node.js, and TypeScript.",
+    sameAs: [
+      "https://github.com/deepakkandpal004",
+      "https://www.linkedin.com/in/deepakkandpal",
+      "https://x.com/rsdeepakg1",
+    ],
+  };
+
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
@@ -104,6 +121,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
       </head>
       <body className={`${outfit.variable} ${inter.variable}`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <ThemeProviderWrapper>
           <Navbar />
           <SocialSidebar />
