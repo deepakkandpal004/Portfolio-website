@@ -9,8 +9,9 @@ export const metadata: Metadata = {
     title: "Blog — Deepak Kandpal",
     description:
       "Deep dives into Next.js architectures, TypeScript advanced systems, and web performance optimization.",
-    url: "https://portfolio-website-khaki-six-88.vercel.app/blog",
+    url: "https://deepakkandpal.me/blog",
   },
+  alternates: { canonical: "/blog" },
 };
 
 export default function BlogPage() {

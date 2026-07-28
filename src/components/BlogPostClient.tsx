@@ -9,7 +9,7 @@ interface Props {
   post: BlogPostData;
 }
 
-const siteUrl = "https://portfolio-website-khaki-six-88.vercel.app";
+const siteUrl = "https://deepakkandpal.me";
 
 const BlogPostClient = ({ post }: Props) => {
   const postUrl = `${siteUrl}/blog/${post.slug}`;
@@ -38,11 +38,12 @@ const BlogPostClient = ({ post }: Props) => {
     image: post.coverImage,
     datePublished: new Date(post.date).toISOString(),
     dateModified: new Date(post.date).toISOString(),
-    author: { "@type": "Person", name: "Deepak Kandpal", url: siteUrl },
+    author: { "@id": `${siteUrl}/#person`, "@type": "Person", name: "Deepak Kandpal", url: siteUrl },
     publisher: {
       "@type": "Organization", name: "Deepak Kandpal",
       logo: { "@type": "ImageObject", url: `${siteUrl}/icon.png` },
     },
+    inLanguage: "en",
   };
 
   return (

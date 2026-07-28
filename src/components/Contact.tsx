@@ -98,7 +98,7 @@ const Contact = () => {
             © {new Date().getFullYear()} Deepak Kandpal
           </span>
           <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--fg3)", fontWeight: 400 }}>
-            Built with React + TypeScript + Vite
+            Built with Next.js + TypeScript
           </span>
         </div>
       </div>

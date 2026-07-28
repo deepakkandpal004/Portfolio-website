@@ -17,7 +17,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const post = blogPosts.find((p) => p.slug === slug);
   if (!post) return { title: "Post not found" };
 
-  const siteUrl = "https://portfolio-website-khaki-six-88.vercel.app";
+  const siteUrl = "https://deepakkandpal.me";
   const postUrl = `${siteUrl}/blog/${post.slug}`;
 
   return {
@@ -30,6 +30,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title: `${post.title} — Deepak Kandpal`,
       description: post.description,
       images: [{ url: post.coverImage, alt: post.title }],
+      publishedTime: new Date(post.date).toISOString(),
+      authors: ["Deepak Kandpal"],
     },
     twitter: {
       card: "summary_large_image",

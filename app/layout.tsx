@@ -19,69 +19,116 @@ const inter = Inter({
   display: "swap",
 });
 
-const siteUrl = "https://portfolio-website-khaki-six-88.vercel.app";
+const siteUrl = "https://deepakkandpal.me";
 
 export const metadata: Metadata = {
-  title: {
-    default: "Deepak Kandpal — Full Stack Developer",
-    template: "%s — Deepak Kandpal",
-  },
-  description:
-    "Full Stack Developer specialising in React, Next.js, Node.js and TypeScript. I build scalable, production-ready web applications — from idea to deployed.",
-  keywords: [
-    "Deepak Kandpal", "Full Stack Developer", "React Developer",
-    "Next.js", "Node.js", "TypeScript", "PostgreSQL", "MongoDB",
-    "MERN Stack", "Web Developer India", "Software Engineer", "Portfolio",
-  ],
-  authors: [{ name: "Deepak Kandpal", url: siteUrl }],
-  creator: "Deepak Kandpal",
   metadataBase: new URL(siteUrl),
-  alternates: { canonical: "/" },
+
+  title: {
+    default: "Deepak Kandpal | Full Stack Developer",
+    template: "%s | Deepak Kandpal",
+  },
+
+  description:
+    "Deepak Kandpal is a Full Stack Developer specializing in React, Next.js, Node.js, TypeScript, PostgreSQL, Prisma, and modern web technologies. Explore my projects, skills, and experience.",
+
+  applicationName: "Deepak Kandpal Portfolio",
+
+  keywords: [
+    "Deepak Kandpal",
+    "Deepak Kandpal Portfolio",
+    "Full Stack Developer",
+    "React Developer",
+    "Next.js Developer",
+    "Node.js",
+    "Express.js",
+    "TypeScript",
+    "JavaScript",
+    "Tailwind CSS",
+    "PostgreSQL",
+    "Prisma",
+    "MongoDB",
+    "Web Developer",
+    "Software Engineer",
+    "Portfolio",
+  ],
+
+  authors: [
+    {
+      name: "Deepak Kandpal",
+      url: siteUrl,
+    },
+  ],
+
+  creator: "Deepak Kandpal",
+  publisher: "Deepak Kandpal",
+
+  category: "technology",
+
+  alternates: {
+    canonical: siteUrl,
+  },
+
   openGraph: {
-    type: "website",
+    title: "Deepak Kandpal | Full Stack Developer",
+    description:
+      "Full Stack Developer specializing in React, Next.js, Node.js, TypeScript, PostgreSQL and scalable web applications.",
     url: siteUrl,
     siteName: "Deepak Kandpal",
-    title: "Deepak Kandpal — Full Stack Developer",
-    description:
-      "Full Stack Developer specialising in React, Next.js, Node.js and TypeScript.",
+    locale: "en_US",
+    type: "website",
+
     images: [
       {
-        url: "/images/deepak.png",
-        width: 800,
-        height: 1000,
-        alt: "Deepak Kandpal — Full Stack Developer",
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Deepak Kandpal Portfolio",
       },
     ],
-    locale: "en_US",
   },
+
   twitter: {
     card: "summary_large_image",
-    site: "@rsdeepakg1",
-    creator: "@rsdeepakg1",
-    title: "Deepak Kandpal — Full Stack Developer",
+    title: "Deepak Kandpal | Full Stack Developer",
     description:
-      "Full Stack Developer specialising in React, Next.js, Node.js and TypeScript.",
-    images: ["/images/deepak.png"],
+      "Full Stack Developer specializing in React, Next.js, Node.js and TypeScript.",
+
+    creator: "@rsdeepakg1",
+    site: "@rsdeepakg1",
+
+    images: ["/og-image.png"],
   },
+
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
-      "max-snippet": -1,
       "max-image-preview": "large",
+      "max-snippet": -1,
       "max-video-preview": -1,
     },
   },
+
   icons: {
     icon: "/icon.png",
-    apple: "/icon.png",
     shortcut: "/icon.png",
+    apple: "/icon.png",
   },
+
+  manifest: "/manifest.webmanifest",
+
   other: {
     "theme-color": "#06070a",
   },
+
+  // Add after verifying Google Search Console
+  // verification: {
+  //   google: "YOUR_GOOGLE_VERIFICATION_CODE",
+  // },
 };
 
 export default function RootLayout({
@@ -89,21 +136,51 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "@id": `${siteUrl}/#person`,
+    name: "Deepak Kandpal",
+    url: siteUrl,
+    image: `${siteUrl}/images/deepak.png`,
+    jobTitle: "Full Stack Developer",
+    description:
+      "Full Stack Developer specialising in React, Next.js, Node.js, and TypeScript.",
+    sameAs: [
+      "https://github.com/deepakkandpal004",
+      "https://www.linkedin.com/in/deepakkandpal",
+      "https://x.com/rsdeepakg1",
+    ],
+  };
+
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
-        {/* Theme flash prevention — must run before paint */}
+        {/* Prevent theme flash */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `try{const t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t);}catch(e){}`,
+            __html: `
+              try {
+                const t = localStorage.getItem("theme");
+                if (t === "light" || t === "dark") {
+                  document.documentElement.setAttribute("data-theme", t);
+                }
+              } catch {}
+            `,
           }}
         />
-        {/* Preconnect for devicons CDN */}
+
+        {/* DNS Prefetch */}
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://api.github.com" />
         <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
       </head>
+
       <body className={`${outfit.variable} ${inter.variable}`}>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         <ThemeProviderWrapper>
           <Navbar />
           <SocialSidebar />
