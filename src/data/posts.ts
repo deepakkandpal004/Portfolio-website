@@ -52,7 +52,7 @@ export const blogPosts: BlogPostData[] = [
     description: "Explore advanced utility types, mapped types, conditional assertions, and type narrowing tricks that make type-safe applications robust.",
     date: "June 28, 2026",
     readTime: "7 min read",
-    coverImage: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=60",
+    coverImage: "https://images.unsplash.com/photo-1516116216624-53e697fedbea?w=800&auto=format&fit=crop&q=60",
     tags: ["TypeScript", "Programming", "Clean Code"],
     content: `
       <p>TypeScript has evolved far beyond standard interfaces and static type annotations. In large-scale React and Node.js codebases, utilizing advanced type patterns is essential to write self-documenting code that prevents run-time crashes.</p>
@@ -86,7 +86,7 @@ type Result = UnwrapPromise&lt;Promise&lt;string&gt;&gt;; // Resolves to: string
     description: "A deep dive into the server/client component paradigm, explaining streaming, rendering lifecycles, and data-fetching patterns.",
     date: "June 15, 2026",
     readTime: "6 min read",
-    coverImage: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&auto=format&fit=crop&q=60",
+    coverImage: "https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800&auto=format&fit=crop&q=60",
     tags: ["React", "Next.js", "Architecture", "Web Dev"],
     content: `
       <p>React Server Components (RSC) represent the biggest paradigm shift in frontend development since hooks. By separating rendering tasks into server-only and client-interactive phases, RSCs deliver faster initial page loads and zero bundle-size overhead for static code libraries.</p>

@@ -9,10 +9,10 @@ import Contact from "./Contact";
 const MainContainer = () => (
   <main>
     <Hero />
+    <Work />
     <About />
     <Skills />
     <GitHubDashboard />
-    <Work />
     <BlogPreview />
     <Contact />
   </main>

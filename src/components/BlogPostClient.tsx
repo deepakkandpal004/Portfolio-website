@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BlogPostData } from "@/src/data/posts";
-import { FiArrowLeft, FiClock, FiCalendar, FiShare2, FiTwitter, FiLinkedin, FiLink } from "react-icons/fi";
+import { FiArrowLeft, FiClock, FiCalendar, FiShare2, FiTwitter, FiLinkedin, FiLink, FiArrowUpRight } from "react-icons/fi";
 
 interface Props {
   post: BlogPostData;
@@ -13,18 +13,31 @@ const siteUrl = "https://deepakkandpal.me";
 
 const BlogPostClient = ({ post }: Props) => {
   const postUrl = `${siteUrl}/blog/${post.slug}`;
+  const [readProgress, setReadProgress] = useState(0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [post.slug]);
 
+  useEffect(() => {
+    const updateProgress = () => {
+      const el = document.querySelector(".bp-content");
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const total = el.scrollHeight - window.innerHeight;
+      const scrolled = -rect.top;
+      setReadProgress(Math.min(Math.max(scrolled / total, 0), 1));
+    };
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    return () => window.removeEventListener("scroll", updateProgress);
+  }, []);
+
   const copyLink = () => {
     navigator.clipboard.writeText(postUrl).then(() => {
-      // Use a subtle visual cue instead of alert()
       const btn = document.getElementById("copy-btn");
       if (btn) {
-        btn.textContent = "Copied!";
-        setTimeout(() => { btn.textContent = ""; btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>`; }, 2000);
+        btn.innerHTML = "Copied!";
+        setTimeout(() => { btn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>`; }, 2000);
       }
     });
   };
@@ -48,123 +61,263 @@ const BlogPostClient = ({ post }: Props) => {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <article style={{ minHeight: "100vh", paddingTop: "140px", paddingBottom: "100px" }}>
-        <div className="container" style={{ maxWidth: "760px", animation: "fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-          <Link href="/blog" style={{
-            display: "inline-flex", alignItems: "center", gap: 8,
-            fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 500,
-            color: "var(--acc)", marginBottom: 32, transition: "transform 0.2s",
-          }}
-            onMouseEnter={e => (e.currentTarget.style.transform = "translateX(-4px)")}
-            onMouseLeave={e => (e.currentTarget.style.transform = "none")}
-          >
+      {/* Reading progress */}
+      <div className="bp-progress-track">
+        <div className="bp-progress-fill" style={{ width: `${readProgress * 100}%` }} />
+      </div>
+
+      <article className="bp-article">
+        <div className="container bp-container">
+
+          <Link href="/blog" className="bp-back">
             <FiArrowLeft size={14} /> Back to articles
           </Link>
 
-          <header style={{ marginBottom: 36 }}>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
+          {/* Hero */}
+          <header className="bp-hero">
+            <div className="bp-hero-tags">
               {post.tags.map(t => (
-                <span key={t} style={{
-                  fontFamily: "var(--font-body)", fontSize: 11.5, fontWeight: 600,
-                  padding: "4px 10px", background: "var(--bg3)",
-                  border: "1px solid var(--bdr)", borderRadius: "var(--r)",
-                  color: "var(--acc)", textTransform: "uppercase", letterSpacing: "0.5px",
-                }}>{t}</span>
+                <span key={t} className="bp-hero-tag">{t}</span>
               ))}
             </div>
-            <h1 className="t-hero" style={{
-              fontSize: "clamp(30px, 5vw, 44px)", lineHeight: 1.25,
-              letterSpacing: "-1px", marginBottom: 20, color: "var(--fg)",
-            }}>
-              {post.title}
-            </h1>
-            <div style={{ display: "flex", gap: 16, fontSize: 13, color: "var(--fg3)" }}>
-              <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                <FiCalendar size={13} style={{ color: "var(--acc)" }} /> {post.date}
-              </span>
-              <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                <FiClock size={13} style={{ color: "var(--acc)" }} /> {post.readTime}
-              </span>
+
+            <h1 className="bp-hero-title">{post.title}</h1>
+
+            <div className="bp-hero-meta">
+              <div className="bp-author">
+                <div className="bp-author-avatar">DK</div>
+                <div>
+                  <p className="bp-author-name">Deepak Kandpal</p>
+                  <p className="bp-author-role">Full Stack Developer</p>
+                </div>
+              </div>
+              <div className="bp-hero-stats">
+                <span><FiCalendar size={13} /> {post.date}</span>
+                <span><FiClock size={13} /> {post.readTime}</span>
+              </div>
             </div>
           </header>
 
-          <div style={{
-            width: "100%", height: "clamp(220px, 40vw, 380px)",
-            borderRadius: "var(--r-lg)", overflow: "hidden",
-            border: "1px solid var(--bdr)", marginBottom: 40,
-            boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
-          }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={post.coverImage} alt={post.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          {/* Cover */}
+          <div className="bp-cover">
+            <img src={post.coverImage} alt={post.title} />
           </div>
 
+          {/* Content */}
           <div
-            className="blog-post-content"
+            className="bp-content blog-post-content"
             dangerouslySetInnerHTML={{ __html: post.content }}
-            style={{ fontFamily: "var(--font-body)", fontSize: 16, lineHeight: 1.85, color: "var(--fg2)" }}
           />
 
-          <div style={{ height: 1, background: "var(--bdr)", margin: "48px 0" }} />
-
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <FiShare2 size={15} style={{ color: "var(--acc)" }} />
-              <span style={{ fontFamily: "var(--font-body)", fontSize: 14, fontWeight: 600, color: "var(--fg)" }}>
-                Share this article
-              </span>
+          {/* Share */}
+          <div className="bp-share">
+            <div className="bp-share-label">
+              <FiShare2 size={15} />
+              <span>Share this article</span>
             </div>
-            <div style={{ display: "flex", gap: 8 }}>
-              {[
-                { href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(postUrl)}`, icon: FiTwitter, label: "Share on Twitter" },
-                { href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`, icon: FiLinkedin, label: "Share on LinkedIn" },
-              ].map(s => (
-                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
-                  style={{
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    width: 38, height: 38, border: "1px solid var(--bdr)",
-                    borderRadius: "var(--r-md)", color: "var(--fg3)", transition: "all 0.2s",
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.color = "var(--acc)"; e.currentTarget.style.borderColor = "var(--acc)"; e.currentTarget.style.background = "var(--acc-glow2)"; }}
-                  onMouseLeave={e => { e.currentTarget.style.color = "var(--fg3)"; e.currentTarget.style.borderColor = "var(--bdr)"; e.currentTarget.style.background = "transparent"; }}
-                  aria-label={s.label}
-                >
-                  <s.icon size={15} />
-                </a>
-              ))}
-              <button id="copy-btn" onClick={copyLink}
-                style={{
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  width: 38, height: 38, border: "1px solid var(--bdr)",
-                  borderRadius: "var(--r-md)", color: "var(--fg3)",
-                  background: "transparent", cursor: "pointer", transition: "all 0.2s",
-                  fontSize: 11, fontFamily: "var(--font-body)",
-                }}
-                onMouseEnter={e => { e.currentTarget.style.color = "var(--acc)"; e.currentTarget.style.borderColor = "var(--acc)"; e.currentTarget.style.background = "var(--acc-glow2)"; }}
-                onMouseLeave={e => { e.currentTarget.style.color = "var(--fg3)"; e.currentTarget.style.borderColor = "var(--bdr)"; e.currentTarget.style.background = "transparent"; }}
-                aria-label="Copy Link"
+            <div className="bp-share-btns">
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.title)}&url=${encodeURIComponent(postUrl)}`}
+                target="_blank" rel="noopener noreferrer"
+                className="bp-share-btn"
+                aria-label="Share on Twitter"
               >
+                <FiTwitter size={15} />
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`}
+                target="_blank" rel="noopener noreferrer"
+                className="bp-share-btn"
+                aria-label="Share on LinkedIn"
+              >
+                <FiLinkedin size={15} />
+              </a>
+              <button id="copy-btn" onClick={copyLink} className="bp-share-btn" aria-label="Copy Link">
                 <FiLink size={15} />
               </button>
             </div>
+          </div>
+
+          {/* Author card */}
+          <div className="bp-author-card">
+            <div className="bp-author-card-avatar">DK</div>
+            <div className="bp-author-card-info">
+              <p className="bp-author-card-label">Written by</p>
+              <p className="bp-author-card-name">Deepak Kandpal</p>
+              <p className="bp-author-card-bio">Full Stack Developer building AI-assisted products, developer tools, and modern web experiences.</p>
+              <Link href="/" className="bp-author-card-link">
+                View portfolio <FiArrowUpRight size={13} />
+              </Link>
+            </div>
+          </div>
+
+          {/* Nav */}
+          <div className="bp-nav-bottom">
+            <Link href="/blog" className="bp-back-bottom">
+              <FiArrowLeft size={14} /> All articles
+            </Link>
           </div>
 
         </div>
       </article>
 
       <style>{`
-        .blog-post-content p { margin-bottom: 24px; }
-        .blog-post-content h2 { font-family: var(--font-head); font-size: 24px; font-weight: 700; color: var(--fg); margin-top: 36px; margin-bottom: 16px; letter-spacing: -0.5px; }
-        .blog-post-content h3 { font-family: var(--font-head); font-size: 20px; font-weight: 600; color: var(--fg); margin-top: 28px; margin-bottom: 12px; }
-        .blog-post-content ul, .blog-post-content ol { margin-bottom: 24px; padding-left: 20px; }
-        .blog-post-content li { margin-bottom: 8px; }
-        .blog-post-content pre { background: var(--bg2); border: 1px solid var(--bdr); border-radius: var(--r-md); padding: 16px; overflow-x: auto; margin-bottom: 24px; }
-        .blog-post-content code { font-family: monospace; font-size: 14px; color: var(--acc-light); }
-        .blog-post-content strong { color: var(--fg); font-weight: 600; }
+        .bp-progress-track {
+          position: fixed; top: 0; left: 0; right: 0; height: 3px;
+          background: var(--bdr); z-index: 1000;
+        }
+        .bp-progress-fill {
+          height: 100%; background: var(--acc);
+          transition: width 0.1s linear;
+        }
+
+        .bp-article { min-height: 100vh; padding: 140px 0 100px; }
+        .bp-container { max-width: 780px; }
+
+        .bp-back {
+          display: inline-flex; align-items: center; gap: 8px;
+          font-family: var(--font-body); font-size: 14px; font-weight: 500;
+          color: var(--acc); margin-bottom: 40px; transition: transform 0.2s;
+          text-decoration: none;
+        }
+        .bp-back:hover { transform: translateX(-4px); }
+
+        /* Hero */
+        .bp-hero { margin-bottom: 36px; }
+        .bp-hero-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+        .bp-hero-tag {
+          padding: 5px 12px; border-radius: 999px;
+          font-family: var(--font-body); font-size: 11.5px; font-weight: 600;
+          background: var(--acc-glow2); border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent);
+          color: var(--acc); text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .bp-hero-title {
+          font-family: var(--font-head); font-size: clamp(30px, 5vw, 44px);
+          font-weight: 800; line-height: 1.2; letter-spacing: -1.5px;
+          color: var(--fg); margin-bottom: 28px;
+        }
+        .bp-hero-meta {
+          display: flex; align-items: center; justify-content: space-between;
+          flex-wrap: wrap; gap: 20px;
+        }
+        .bp-author {
+          display: flex; align-items: center; gap: 12px;
+        }
+        .bp-author-avatar {
+          width: 44px; height: 44px; border-radius: 50%;
+          background: linear-gradient(135deg, var(--acc), color-mix(in srgb, var(--acc) 60%, #8b5cf6));
+          display: flex; align-items: center; justify-content: center;
+          font-family: var(--font-head); font-size: 14px; font-weight: 700;
+          color: #07100e;
+        }
+        .bp-author-name {
+          font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--fg);
+        }
+        .bp-author-role {
+          font-family: var(--font-body); font-size: 12px; color: var(--fg3);
+        }
+        .bp-hero-stats {
+          display: flex; gap: 16px; font-family: var(--font-body);
+          font-size: 13px; color: var(--fg3);
+        }
+        .bp-hero-stats span { display: flex; align-items: center; gap: 5px; }
+        .bp-hero-stats svg { color: var(--acc); }
+
+        /* Cover */
+        .bp-cover {
+          width: 100%; border-radius: 20px; overflow: hidden;
+          border: 1px solid var(--bdr); margin-bottom: 48px;
+          box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+          aspect-ratio: 16 / 8;
+        }
+        .bp-cover img {
+          width: 100%; height: 100%; object-fit: cover;
+        }
+
+        /* Content */
+        .bp-content {
+          font-family: var(--font-body); font-size: 17px;
+          line-height: 1.9; color: var(--fg2);
+        }
+
+        /* Share */
+        .bp-share {
+          display: flex; align-items: center; justify-content: space-between;
+          flex-wrap: wrap; gap: 16px; margin-top: 52px;
+          padding: 24px 28px; border-radius: 16px;
+          border: 1px solid var(--bdr); background: var(--bg2);
+        }
+        .bp-share-label {
+          display: flex; align-items: center; gap: 8px;
+          font-family: var(--font-body); font-size: 14px; font-weight: 600; color: var(--fg);
+        }
+        .bp-share-label svg { color: var(--acc); }
+        .bp-share-btns { display: flex; gap: 8px; }
+        .bp-share-btn {
+          display: flex; align-items: center; justify-content: center;
+          width: 40px; height: 40px; border-radius: 12px;
+          border: 1px solid var(--bdr); background: var(--bg);
+          color: var(--fg3); cursor: pointer; transition: all 0.2s;
+          text-decoration: none; font-size: 11; font-family: var(--font-body);
+        }
+        .bp-share-btn:hover {
+          color: var(--acc); border-color: var(--acc); background: var(--acc-glow2);
+        }
+
+        /* Author card */
+        .bp-author-card {
+          display: flex; gap: 20px; align-items: flex-start;
+          margin-top: 48px; padding: 28px;
+          border-radius: 16px; border: 1px solid var(--bdr);
+          background: var(--bg2);
+        }
+        .bp-author-card-avatar {
+          width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
+          background: linear-gradient(135deg, var(--acc), color-mix(in srgb, var(--acc) 60%, #8b5cf6));
+          display: flex; align-items: center; justify-content: center;
+          font-family: var(--font-head); font-size: 18px; font-weight: 700;
+          color: #07100e;
+        }
+        .bp-author-card-label {
+          font-family: var(--font-body); font-size: 11px; font-weight: 600;
+          text-transform: uppercase; letter-spacing: 1.5px;
+          color: var(--fg3); margin-bottom: 4px;
+        }
+        .bp-author-card-name {
+          font-family: var(--font-head); font-size: 18px; font-weight: 700;
+          color: var(--fg); margin-bottom: 6px;
+        }
+        .bp-author-card-bio {
+          font-family: var(--font-body); font-size: 14px; line-height: 1.6;
+          color: var(--fg2); margin-bottom: 12px;
+        }
+        .bp-author-card-link {
+          display: inline-flex; align-items: center; gap: 6px;
+          font-family: var(--font-body); font-size: 13px; font-weight: 600;
+          color: var(--acc); text-decoration: none; transition: gap 0.2s;
+        }
+        .bp-author-card-link:hover { gap: 10px; }
+
+        /* Bottom nav */
+        .bp-nav-bottom {
+          margin-top: 48px; padding-top: 24px;
+          border-top: 1px solid var(--bdr);
+        }
+        .bp-back-bottom {
+          display: inline-flex; align-items: center; gap: 8px;
+          font-family: var(--font-body); font-size: 14px; font-weight: 500;
+          color: var(--acc); transition: transform 0.2s; text-decoration: none;
+        }
+        .bp-back-bottom:hover { transform: translateX(-4px); }
+
+        @media (max-width: 600px) {
+          .bp-hero-meta { flex-direction: column; align-items: flex-start; }
+          .bp-cover { aspect-ratio: 16 / 10; border-radius: 14px; }
+          .bp-author-card { flex-direction: column; }
+          .bp-share { flex-direction: column; align-items: flex-start; }
+        }
       `}</style>
     </>
   );

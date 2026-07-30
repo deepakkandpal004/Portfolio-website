@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Outfit, Inter } from "next/font/google";
+import { Manrope, Inter } from "next/font/google";
 import "../src/index.css";
 import { ThemeProviderWrapper } from "@/src/components/ThemeProviderWrapper";
 import Navbar from "@/src/components/Navbar";
 import SocialSidebar from "@/src/components/SocialSidebar";
 
-const outfit = Outfit({
+const manrope = Manrope({
   subsets: ["latin"],
   variable: "--font-head-next",
   weight: ["400", "500", "600", "700", "800"],
@@ -176,7 +176,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
       </head>
 
-      <body className={`${outfit.variable} ${inter.variable}`}>
+      <body className={`${manrope.variable} ${inter.variable}`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

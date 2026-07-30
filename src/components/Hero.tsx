@@ -4,16 +4,15 @@ import { FiArrowRight, FiDownload } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 
 const roles = [
-  "Building scalable products with React & Next.js",
-  "Developing robust APIs with Node.js & TypeScript",
-  "Creating fast and intuitive user experiences",
-  "Turning ideas into production-ready software",
+  "Building scalable REST APIs with Node.js & Express",
+  "Designing secure JWT authentication systems",
+  "Optimizing PostgreSQL queries with Prisma & Drizzle",
+  "Integrating AI models via Groq & OpenRouter",
+  "Shipping full-stack apps with React & Next.js",
 ];
 
 const Hero = () => {
   const [idx, setIdx] = useState(0);
-  const [text, setText] = useState("");
-  const [del, setDel] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
@@ -24,13 +23,11 @@ const Hero = () => {
   }, []);
 
   useEffect(() => {
-    const cur = roles[idx];
-    let t: ReturnType<typeof setTimeout>;
-    if (!del && text === cur) { t = setTimeout(() => setDel(true), 2800); return () => clearTimeout(t); }
-    if (del && text === "") { setDel(false); setIdx(i => (i + 1) % roles.length); return; }
-    t = setTimeout(() => setText(del ? cur.slice(0, text.length - 1) : cur.slice(0, text.length + 1)), del ? 28 : 55);
-    return () => clearTimeout(t);
-  }, [text, del, idx]);
+    const t = setInterval(() => {
+      setIdx(i => (i + 1) % roles.length);
+    }, 4000);
+    return () => clearInterval(t);
+  }, []);
 
   // Track mouse position over Hero section
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -172,20 +169,33 @@ const Hero = () => {
             <span>Production Development</span>
           </div>
 
-          {/* Typewriter subtitle */}
+          {/* Rotating role text */}
           <div className="a5" style={{
             marginBottom: 24,
-            minHeight: 32,
+            height: 36,
             display: "flex", alignItems: "center", justifyContent: "center",
+            overflow: "hidden",
+            position: "relative",
           }}>
-            <span style={{
-              fontFamily: "var(--font-body)", fontSize: 17,
-              fontWeight: 400, letterSpacing: "0.2px",
-              color: "var(--fg2)",
-            }}>
-              {text}
-            </span>
-            <span className="cursor" />
+            <div className="role-rotator" style={{ position: "relative", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              {roles.map((role, i) => (
+                <span
+                  key={role}
+                  className={`role-text ${i === idx ? "active" : ""} ${i === (idx - 1 + roles.length) % roles.length ? "prev" : ""}`}
+                  style={{
+                    position: "absolute",
+                    whiteSpace: "nowrap",
+                    fontFamily: "var(--font-head)",
+                    fontSize: 18,
+                    fontWeight: 600,
+                    letterSpacing: "0.3px",
+                    color: "var(--fg2)",
+                  }}
+                >
+                  {role}
+                </span>
+              ))}
+            </div>
           </div>
 
           {/* Tagline */}
@@ -201,7 +211,7 @@ const Hero = () => {
             display: "flex", justifyContent: "center", gap: 56, marginBottom: 48,
             flexWrap: "wrap",
           }}>
-            {[["1+", "Years exp."], ["5+", "Projects shipped"], ["5+", "Tech stacks"]].map(([v, l]) => (
+            {[["33+", "API endpoints"], ["3", "Databases designed"], ["3", "AI providers integrated"]].map(([v, l]) => (
               <div key={l} style={{ textAlign: "center" }}>
                 <div style={{
                   fontFamily: "var(--font-head)", fontSize: 28, fontWeight: 700,
