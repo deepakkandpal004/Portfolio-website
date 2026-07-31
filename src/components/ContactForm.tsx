@@ -147,10 +147,10 @@ const ContactForm = () => {
             cursor: can ? "pointer" : "not-allowed",
             opacity: can ? 1 : 0.45,
             transition: "background 0.25s, transform 0.2s, opacity 0.2s, box-shadow 0.2s",
-            boxShadow: can ? "0 4px 16px var(--acc-glow)" : "none",
+            boxShadow: can ? "0 4px 20px var(--acc-glow), 0 0 0 1px rgba(245, 158, 11, 0.15)" : "none",
           }}
-          onMouseEnter={e => { if (can && status !== "success") { e.currentTarget.style.background = "var(--acc-light)"; e.currentTarget.style.transform = "translateY(-2px)"; } }}
-          onMouseLeave={e => { e.currentTarget.style.background = status === "success" ? "#16a34a" : "var(--acc)"; e.currentTarget.style.transform = "translateY(0)"; }}
+          onMouseEnter={e => { if (can && status !== "success") { e.currentTarget.style.background = "var(--acc-light)"; e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 28px var(--acc-glow), 0 0 0 1px rgba(245, 158, 11, 0.2)"; } }}
+          onMouseLeave={e => { e.currentTarget.style.background = status === "success" ? "#16a34a" : "var(--acc)"; e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = can ? "0 4px 20px var(--acc-glow), 0 0 0 1px rgba(245, 158, 11, 0.15)" : "none"; }}
         >
           {status === "loading"
             ? "Sending…"

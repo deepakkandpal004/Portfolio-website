@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiArrowUpRight } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiArrowUpRight, FiInstagram } from "react-icons/fi";
 import ContactForm from "./ContactForm";
 
 const socials = [
-  { icon: FiMail,     label: "Email",    detail: "d.kandpal1832@gmail.com",   href: "mailto:d.kandpal1832@gmail.com" },
+  { icon: FiMail,     label: "Email",    detail: "deepakkandpal.tech@gmail.com",   href: "mailto:deepakkandpal.tech@gmail.com" },
   { icon: FiGithub,   label: "GitHub",   detail: "deepakkandpal004",          href: "https://github.com/deepakkandpal004" },
   { icon: FiLinkedin, label: "LinkedIn", detail: "/in/deepakkandpal",         href: "https://www.linkedin.com/in/deepakkandpal" },
-  { icon: FiTwitter,  label: "Twitter",  detail: "@rsdeepakg1",               href: "https://x.com/rsdeepakg1" },
+  { icon: FiTwitter,  label: "Twitter",  detail: "@codedbydeepak",               href: "https://x.com/codedbydeepak" },
+  { icon: FiInstagram, label: "Instagram", detail: "@codedbydeepak",             href: "https://instagram.com/codedbydeepak" },
 ];
 
 const Contact = () => {
@@ -50,16 +51,20 @@ const Contact = () => {
                   display: "flex", alignItems: "center", gap: 12,
                   padding: "12px 14px",
                   borderRadius: "var(--r-md)",
-                  transition: "background 0.2s, padding-left 0.2s",
+                  transition: "background 0.25s, padding-left 0.25s, box-shadow 0.25s, border-color 0.25s",
                 }}
                   className="contact-social-row"
                   onMouseEnter={e => {
                     e.currentTarget.style.background = "var(--bg2)";
                     e.currentTarget.style.paddingLeft = "20px";
+                    e.currentTarget.style.boxShadow = "0 4px 20px rgba(245, 158, 11, 0.1)";
+                    e.currentTarget.style.borderColor = "var(--acc)";
                   }}
                   onMouseLeave={e => {
                     e.currentTarget.style.background = "transparent";
                     e.currentTarget.style.paddingLeft = "14px";
+                    e.currentTarget.style.boxShadow = "none";
+                    e.currentTarget.style.borderColor = "var(--bdr)";
                   }}
                 >
                   <div style={{

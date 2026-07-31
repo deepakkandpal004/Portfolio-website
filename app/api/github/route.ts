@@ -8,16 +8,14 @@ export async function GET() {
       Accept: "application/vnd.github+json",
     };
 
-    const [reposRes, userRes, contribRes] = await Promise.all([
+    // Fetch repos and user first (fast, from GitHub API)
+    const [reposRes, userRes] = await Promise.all([
       fetch(
         `https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100&type=owner`,
         { headers, next: { revalidate: 3600 } }
       ),
       fetch(`https://api.github.com/users/${GITHUB_USER}`, {
         headers,
-        next: { revalidate: 3600 },
-      }),
-      fetch(`https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}`, {
         next: { revalidate: 3600 },
       }),
     ]);
@@ -53,19 +51,24 @@ export async function GET() {
       0
     );
 
-    // Fetch contribution data
+    // Fetch contribution data separately (don't block repos)
     let contributions = 0;
     let contribLevels: number[] = [];
 
-    if (contribRes.ok) {
-      const contribData = await contribRes.json();
-      const currentYear = new Date().getFullYear();
-      contributions = contribData.total?.[currentYear] ?? 0;
-      // Get last 365 days of levels
-      contribLevels = (contribData.contributions || [])
-        .slice(-365)
-        .map((c: any) => c.level);
-    }
+    try {
+      const contribRes = await fetch(
+        `https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}`,
+        { next: { revalidate: 3600 } }
+      );
+      if (contribRes.ok) {
+        const contribData = await contribRes.json();
+        const currentYear = new Date().getFullYear();
+        contributions = contribData.total?.[currentYear] ?? 0;
+        contribLevels = (contribData.contributions || [])
+          .slice(-365)
+          .map((c: any) => c.level);
+      }
+    } catch { /* contribution API is optional */ }
 
     return NextResponse.json({
       repoCount: userData?.public_repos ?? null,

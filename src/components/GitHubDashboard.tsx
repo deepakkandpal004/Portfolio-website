@@ -88,7 +88,6 @@ const GitHubDashboard = () => {
   return (
     <section id="github" style={{ background: "var(--bg2)", position: "relative", overflow: "hidden" }}>
       <div className="gh-bg-glow" />
-      <div className="gh-scanner-beam" />
 
       <div className="container reveal" ref={ref} style={{ position: "relative", zIndex: 10 }}>
 
@@ -253,23 +252,6 @@ const GitHubDashboard = () => {
           pointer-events: none;
           background: radial-gradient(circle at 50% 30%, rgba(99,102,241,0.05), transparent 70%);
           filter: blur(100px);
-        }
-        .gh-scanner-beam {
-          position: absolute;
-          left: 0;
-          width: 100%;
-          height: 2px;
-          background: linear-gradient(90deg, transparent, var(--acc-light), transparent);
-          opacity: 0.3;
-          animation: gh-scanner-sweep 5s linear infinite;
-          pointer-events: none;
-          z-index: 1;
-        }
-        @keyframes gh-scanner-sweep {
-          0% { top: 0%; opacity: 0; }
-          10% { opacity: 0.3; }
-          90% { opacity: 0.3; }
-          100% { top: 100%; opacity: 0; }
         }
         .gh-header {
           max-width: 760px;

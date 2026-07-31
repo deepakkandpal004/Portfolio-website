@@ -211,7 +211,7 @@ const Hero = () => {
             display: "flex", justifyContent: "center", gap: 56, marginBottom: 48,
             flexWrap: "wrap",
           }}>
-            {[["33+", "API endpoints"], ["3", "Databases designed"], ["3", "AI providers integrated"]].map(([v, l]) => (
+            {[["35+", "REST APIs Built"], ["3", "Database Technologies"], ["3", "AI Integrations"], ["4+", "Production Projects"]].map(([v, l]) => (
               <div key={l} style={{ textAlign: "center" }}>
                 <div style={{
                   fontFamily: "var(--font-head)", fontSize: 28, fontWeight: 700,

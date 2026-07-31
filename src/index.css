@@ -1,28 +1,28 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 /* ─── Design tokens — DARK (default) ─────────── */
 :root {
-  /* Accent — premium royal indigo */
-  --acc:       #6366f1;
-  --acc-light: #818cf8;
-  --acc-dim:   #4f46e5;
-  --acc-glow:  rgba(99, 102, 241, 0.15);
-  --acc-glow2: rgba(99, 102, 241, 0.06);
+  /* Accent — warm amber */
+  --acc:       #f59e0b;
+  --acc-light: #fbbf24;
+  --acc-dim:   #d97706;
+  --acc-glow:  rgba(245, 158, 11, 0.15);
+  --acc-glow2: rgba(245, 158, 11, 0.06);
 
-  /* Dark surfaces — rich obsidian/carbon black */
-  --bg:   #06070a;
-  --bg2:  #0b0d16;
-  --bg3:  #121524;
-  --bg4:  #191e32;
-  --bdr:  #16192b;
-  --bdr2: #212642;
+  /* Dark surfaces */
+  --bg:   #07080c;
+  --bg2:  #0c0e14;
+  --bg3:  #13161f;
+  --bg4:  #1a1e2a;
+  --bdr:  #1a1d28;
+  --bdr2: #252a38;
 
-  /* Text — clean slates */
+  /* Text */
   --fg:   #f8fafc;
   --fg2:  #94a3b8;
   --fg3:  #64748b;
 
-  --grid-color: rgba(99, 102, 241, 0.045);
+  --grid-color: rgba(245, 158, 11, 0.045);
 
   /* Utility */
   --err:  #f87171;
@@ -34,7 +34,7 @@
   --r-lg: 20px;
 
   /* Typography */
-  --font-head: 'Manrope', sans-serif;
+  --font-head: 'Inter', sans-serif;
   --font-body: 'Inter', sans-serif;
 
   /* Layout */
@@ -48,24 +48,24 @@
 
 /* ─── Light mode ──────────────────────────────── */
 [data-theme="light"] {
-  --acc:       #4f46e5;
-  --acc-light: #6366f1;
-  --acc-dim:   #3730a3;
-  --acc-glow:  rgba(79, 70, 229, 0.12);
-  --acc-glow2: rgba(79, 70, 229, 0.05);
+  --acc:       #d97706;
+  --acc-light: #f59e0b;
+  --acc-dim:   #b45309;
+  --acc-glow:  rgba(217, 119, 6, 0.12);
+  --acc-glow2: rgba(217, 119, 6, 0.05);
 
-  --bg:   #fafbfe;
-  --bg2:  #f1f3f9;
-  --bg3:  #e2e6f0;
-  --bg4:  #d4dae8;
-  --bdr:  #e5e8f3;
-  --bdr2: #cbd2e6;
+  --bg:   #faf9f7;
+  --bg2:  #f5f3ef;
+  --bg3:  #ebe8e2;
+  --bg4:  #ddd9d1;
+  --bdr:  #e8e5de;
+  --bdr2: #d4d0c8;
 
-  --fg:   #0f1225;
-  --fg2:  #4a5078;
-  --fg3:  #8389ad;
+  --fg:   #1a1612;
+  --fg2:  #5c5347;
+  --fg3:  #8a8078;
 
-  --grid-color: rgba(79, 70, 229, 0.04);
+  --grid-color: rgba(217, 119, 6, 0.04);
 }
 
 /* ─── Reset ───────────────────────────────────── */

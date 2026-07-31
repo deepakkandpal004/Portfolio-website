@@ -1,16 +1,9 @@
 import type { Metadata } from "next";
-import { Manrope, Inter } from "next/font/google";
+import { Inter } from "next/font/google";
 import "../src/index.css";
 import { ThemeProviderWrapper } from "@/src/components/ThemeProviderWrapper";
 import Navbar from "@/src/components/Navbar";
 import SocialSidebar from "@/src/components/SocialSidebar";
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-head-next",
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -94,8 +87,8 @@ export const metadata: Metadata = {
     description:
       "Full Stack Developer specializing in React, Next.js, Node.js and TypeScript.",
 
-    creator: "@rsdeepakg1",
-    site: "@rsdeepakg1",
+    creator: "@codedbydeepak",
+    site: "@codedbydeepak",
 
     images: ["/og-image.png"],
   },
@@ -149,7 +142,8 @@ export default function RootLayout({
     sameAs: [
       "https://github.com/deepakkandpal004",
       "https://www.linkedin.com/in/deepakkandpal",
-      "https://x.com/rsdeepakg1",
+      "https://x.com/codedbydeepak",
+      "https://instagram.com/codedbydeepak",
     ],
   };
 
@@ -176,7 +170,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
       </head>
 
-      <body className={`${manrope.variable} ${inter.variable}`}>
+      <body className={inter.variable}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}

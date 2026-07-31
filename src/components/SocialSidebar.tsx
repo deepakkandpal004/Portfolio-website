@@ -1,12 +1,13 @@
 "use client";
 
-import { FiGithub, FiLinkedin, FiTwitter, FiMail } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiInstagram } from "react-icons/fi";
 
 const socials = [
   { icon: FiGithub,   label: "GitHub",   href: "https://github.com/deepakkandpal004" },
   { icon: FiLinkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/deepakkandpal" },
-  { icon: FiTwitter,  label: "Twitter",  href: "https://x.com/rsdeepakg1" },
-  { icon: FiMail,     label: "Email",    href: "mailto:d.kandpal1832@gmail.com" },
+  { icon: FiTwitter,  label: "Twitter",  href: "https://x.com/codedbydeepak" },
+  { icon: FiInstagram, label: "Instagram", href: "https://instagram.com/codedbydeepak" },
+  { icon: FiMail,     label: "Email",    href: "mailto:deepakkandpal.tech@gmail.com" },
 ];
 
 const SocialSidebar = () => {
@@ -32,15 +33,19 @@ const SocialSidebar = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                transition: "color 0.2s, transform 0.2s",
+                transition: "color 0.25s, transform 0.25s, box-shadow 0.25s",
+                borderRadius: "10px",
+                padding: "6px",
               }}
               onMouseEnter={e => {
                 e.currentTarget.style.color = "var(--acc)";
                 e.currentTarget.style.transform = "translateY(-3px)";
+                e.currentTarget.style.boxShadow = "0 4px 16px rgba(245, 158, 11, 0.2)";
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.color = "var(--fg3)";
                 e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "none";
               }}
             >
               <s.icon size={18} />

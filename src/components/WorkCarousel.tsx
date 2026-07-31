@@ -35,8 +35,8 @@ const projects: Project[] = [
     tech: ["React 19", "Vite 7", "Express 5", "MongoDB", "Groq AI"],
     live: "https://resume-builder-saas-rsdeepakg.vercel.app/",
     github: "https://github.com/deepakkandpal004/Resume-Builder-SaaS",
-    accent: "#22d3a7",
-    accentSoft: "rgba(34, 211, 167, 0.12)",
+    accent: "#f59e0b",
+    accentSoft: "rgba(245, 158, 11, 0.12)",
     screenshots: [
       { src: "/images/dashboard.png", alt: "ResumeAI dashboard", label: "Dashboard" },
       { src: "/images/resumeBuilder.png", alt: "ResumeAI editor", label: "Resume editor" },
@@ -57,8 +57,8 @@ const projects: Project[] = [
     tech: ["Next.js 15", "React 19", "Prisma", "PostgreSQL", "OpenRouter"],
     live: "https://next-expense-tracker-rsdeepakg.vercel.app/",
     github: "https://github.com/deepakkandpal004/next-expense-tracker",
-    accent: "#22d3ee",
-    accentSoft: "rgba(34, 211, 238, 0.12)",
+    accent: "#f59e0b",
+    accentSoft: "rgba(245, 158, 11, 0.12)",
     screenshots: [
       { src: "/images/expenseDashboard.png", alt: "Expense AI dashboard", label: "Dashboard" },
       { src: "/images/expense.png", alt: "Expense AI landing", label: "Landing page" },
@@ -78,8 +78,8 @@ const projects: Project[] = [
     tech: ["Next.js 16", "PostgreSQL", "Drizzle", "JWT", "Vitest"],
     live: "https://url-shortener-lyart-two.vercel.app",
     github: "https://github.com/deepakkandpal004/URL-Shortener",
-    accent: "#a78bfa",
-    accentSoft: "rgba(167, 139, 250, 0.12)",
+    accent: "#f59e0b",
+    accentSoft: "rgba(245, 158, 11, 0.12)",
     screenshots: [
       { src: "/images/Url-shortener.png", alt: "ShortLink dashboard", label: "Dashboard" },
     ],
@@ -98,8 +98,8 @@ const projects: Project[] = [
     tech: ["React 19", "Vite 7", "GSAP", "Zustand", "Tailwind CSS v4"],
     live: "https://macos-portfolio-sepia.vercel.app",
     github: "https://github.com/deepakkandpal004/MacOS-Portfolio",
-    accent: "#8b9dff",
-    accentSoft: "rgba(139, 157, 255, 0.12)",
+    accent: "#f59e0b",
+    accentSoft: "rgba(245, 158, 11, 0.12)",
     screenshots: [
       { src: "/images/macos-portfolio.png", alt: "macOS portfolio", label: "Desktop" },
     ],
@@ -344,7 +344,8 @@ export default function WorkCarousel() {
           font-family: var(--font-head);
           font-size: 20px;
           font-weight: 700;
-          color: var(--fg);
+          color: var(--acc);
+          opacity: 0.9;
           letter-spacing: -0.5px;
         }
         .wc-topbar-nav {
@@ -368,6 +369,7 @@ export default function WorkCarousel() {
           border-color: var(--pa, var(--acc));
           color: var(--fg);
           background: var(--acc-glow2);
+          box-shadow: 0 4px 16px color-mix(in srgb, var(--pa, var(--acc)) 20%, transparent);
         }
 
         /* Progress segments */
@@ -482,7 +484,7 @@ export default function WorkCarousel() {
         }
         .wc-btn-primary:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px color-mix(in srgb, var(--pa, var(--acc)) 30%, transparent);
+          box-shadow: 0 8px 28px color-mix(in srgb, var(--pa, var(--acc)) 35%, transparent);
         }
         .wc-btn-secondary {
           border: 1px solid var(--bdr);
@@ -493,6 +495,7 @@ export default function WorkCarousel() {
           border-color: var(--pa, var(--acc));
           color: var(--fg);
           transform: translateY(-2px);
+          box-shadow: 0 6px 20px color-mix(in srgb, var(--pa, var(--acc)) 20%, transparent);
         }
 
         /* Right image */

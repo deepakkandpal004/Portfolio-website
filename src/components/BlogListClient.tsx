@@ -206,11 +206,12 @@ const BlogListClient = () => {
           border-radius: 20px; border: 1px solid var(--bdr);
           background: var(--bg); overflow: hidden;
           margin-bottom: 32px;
-          transition: border-color 0.3s, box-shadow 0.3s;
+          transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
         }
         .bl-featured:hover {
-          border-color: var(--bdr2);
-          box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+          border-color: var(--acc);
+          box-shadow: 0 12px 40px rgba(245, 158, 11, 0.15), 0 0 0 1px rgba(245, 158, 11, 0.1);
+          transform: translateY(-4px);
         }
         .bl-featured-link {
           display: grid; grid-template-columns: 1fr 1fr;
@@ -274,11 +275,11 @@ const BlogListClient = () => {
         .bl-card {
           border-radius: 16px; border: 1px solid var(--bdr);
           background: var(--bg); overflow: hidden;
-          transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+          transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
         }
         .bl-card:hover {
-          border-color: var(--bdr2);
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+          border-color: var(--acc);
+          box-shadow: 0 10px 35px rgba(245, 158, 11, 0.12), 0 0 0 1px rgba(245, 158, 11, 0.08);
           transform: translateY(-4px);
         }
         .bl-card-link { display: flex; flex-direction: column; height: 100%; text-decoration: none; }
