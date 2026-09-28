@@ -42,7 +42,7 @@ const About = () => {
   }, []);
 
   return (
-    <section id="about" style={{ background: "var(--bg2)", position: "relative", overflow: "hidden" }}>
+    <section id="about" style={{ background: "transparent", position: "relative", overflow: "hidden" }}>
       <div className="about-bg-glow" />
 
       {/* Slow background gradient shift */}
@@ -135,7 +135,7 @@ const About = () => {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          background: radial-gradient(circle at 50% 30%, rgba(99,102,241,0.04), transparent 70%);
+          background: radial-gradient(circle at 50% 30%, var(--violet-glow), transparent 70%);
           filter: blur(100px);
         }
         .about-bg-gradient {
@@ -189,8 +189,8 @@ const About = () => {
           padding: 10px 22px;
           border-radius: 999px;
           border: 1px solid var(--bdr);
-          background: var(--bg);
-          color: var(--acc);
+          background: var(--bg2);
+          color: var(--acc-light);
           font-family: var(--font-body);
           font-size: 12px;
           font-weight: 600;
@@ -279,25 +279,27 @@ const About = () => {
           padding: 36px 30px;
           border-radius: 22px;
           border: 1px solid var(--bdr);
-          background: var(--bg);
+          background: var(--bg2);
           transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
         }
         .about-trait-card:hover {
-          border-color: var(--acc);
-          box-shadow: 0 16px 48px var(--acc-glow2);
+          border-color: var(--bdr2);
+          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
           transform: translateY(-4px);
         }
+        /* Signature top-line glow reveal on hover (replaces the old shine sweep) */
         .about-trait-shine {
           position: absolute;
           top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
+          left: 10%;
+          right: 10%;
+          height: 1px;
           pointer-events: none;
-          background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 55%, transparent 60%);
-          transition: left 0.6s ease;
+          background: linear-gradient(90deg, transparent, var(--acc), transparent);
+          opacity: 0;
+          transition: opacity 0.45s ease;
         }
-        .about-trait-card:hover .about-trait-shine { left: 100%; }
+        .about-trait-card:hover .about-trait-shine { opacity: 1; }
         .about-trait-number {
           font-family: var(--font-head);
           font-size: 48px;

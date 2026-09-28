@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiArrowUpRight, FiInstagram } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiArrowUpRight, FiInstagram, FiCalendar } from "react-icons/fi";
 import ContactForm from "./ContactForm";
+
+const CALENDLY_URL = "https://calendly.com/deepakkandpal-tech/30min";
 
 const socials = [
   { icon: FiMail,     label: "Email",    detail: "deepakkandpal.tech@gmail.com",   href: "mailto:deepakkandpal.tech@gmail.com" },
@@ -32,6 +34,27 @@ const Contact = () => {
           Open to new projects, collaborations, or just a good conversation.
           Send a message and I&apos;ll get back to you.
         </p>
+
+        {/* Book a call banner */}
+        <a
+          href={CALENDLY_URL || "#contact"}
+          target={CALENDLY_URL ? "_blank" : undefined}
+          rel="noopener noreferrer"
+          className="book-call-banner"
+        >
+          <div className="book-call-icon">
+            <FiCalendar size={18} />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div className="book-call-title">Prefer talking over typing?</div>
+            <div className="book-call-sub">
+              Grab a 15-min intro call straight on my calendar — no back-and-forth emails.
+            </div>
+          </div>
+          <span className="book-call-btn">
+            Book a call <FiArrowUpRight size={14} />
+          </span>
+        </a>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "0 80px", alignItems: "start" }} className="contact-grid">
 
@@ -109,6 +132,70 @@ const Contact = () => {
       </div>
 
       <style>{`
+        .book-call-banner {
+          display: flex;
+          align-items: center;
+          gap: 18px;
+          padding: 22px 26px;
+          margin-bottom: 56px;
+          border-radius: var(--r-lg);
+          border: 1px solid color-mix(in srgb, var(--acc) 35%, transparent);
+          background: linear-gradient(135deg, var(--acc-glow2), transparent 60%), var(--bg2);
+          transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+        }
+        .book-call-banner:hover {
+          transform: translateY(-3px);
+          border-color: color-mix(in srgb, var(--acc) 60%, transparent);
+          box-shadow: 0 16px 48px -12px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.45);
+        }
+        .book-call-icon {
+          width: 48px;
+          height: 48px;
+          flex-shrink: 0;
+          border-radius: var(--r-md);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--acc-glow);
+          border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent);
+          color: var(--acc);
+        }
+        .book-call-title {
+          font-family: var(--font-head);
+          font-size: 17px;
+          font-weight: 700;
+          color: var(--fg);
+          letter-spacing: -0.3px;
+          margin-bottom: 4px;
+        }
+        .book-call-sub {
+          font-family: var(--font-body);
+          font-size: 13.5px;
+          color: var(--fg2);
+          line-height: 1.55;
+        }
+        .book-call-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          flex-shrink: 0;
+          padding: 12px 24px;
+          border-radius: 12px;
+          background: var(--acc);
+          color: #07100e;
+          font-family: var(--font-body);
+          font-size: 13.5px;
+          font-weight: 700;
+          transition: transform 0.2s, box-shadow 0.2s;
+          box-shadow: 0 10px 28px -8px var(--acc-glow);
+        }
+        .book-call-banner:hover .book-call-btn {
+          box-shadow: 0 14px 36px -8px var(--acc-glow);
+        }
+        @media (max-width: 640px) {
+          .book-call-banner { flex-wrap: wrap; }
+          .book-call-btn { width: 100%; justify-content: center; }
+        }
         @media (max-width: 768px) {
           .contact-grid { grid-template-columns: 1fr !important; gap: 48px 0 !important; }
           .contact-social-row:hover { padding-left: 14px !important; }

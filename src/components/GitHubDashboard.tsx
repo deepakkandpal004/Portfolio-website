@@ -86,7 +86,7 @@ const GitHubDashboard = () => {
   ];
 
   return (
-    <section id="github" style={{ background: "var(--bg2)", position: "relative", overflow: "hidden" }}>
+    <section id="github" style={{ background: "transparent", position: "relative", overflow: "hidden" }}>
       <div className="gh-bg-glow" />
 
       <div className="container reveal" ref={ref} style={{ position: "relative", zIndex: 10 }}>
@@ -250,7 +250,7 @@ const GitHubDashboard = () => {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          background: radial-gradient(circle at 50% 30%, rgba(99,102,241,0.05), transparent 70%);
+          background: radial-gradient(circle at 50% 30%, var(--violet-glow), transparent 70%);
           filter: blur(100px);
         }
         .gh-header {
@@ -265,8 +265,8 @@ const GitHubDashboard = () => {
           padding: 10px 22px;
           border-radius: 999px;
           border: 1px solid var(--bdr);
-          background: var(--bg);
-          color: var(--acc);
+          background: var(--bg2);
+          color: var(--acc-light);
           font-family: var(--font-body);
           font-size: 12px;
           font-weight: 600;
@@ -283,7 +283,7 @@ const GitHubDashboard = () => {
         .gh-skel {
           border-radius: var(--r-md);
           padding: 20px;
-          background: var(--bg);
+          background: var(--bg2);
           border: 1px solid var(--bdr);
         }
         .gh-stats-grid {
@@ -297,12 +297,12 @@ const GitHubDashboard = () => {
           padding: 28px 20px;
           border-radius: 20px;
           border: 1px solid var(--bdr);
-          background: var(--bg);
+          background: var(--bg2);
           transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
         }
         .gh-stat-card:hover {
-          border-color: var(--acc);
-          box-shadow: 0 12px 32px var(--acc-glow2);
+          border-color: var(--bdr2);
+          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
           transform: translateY(-4px);
         }
         .gh-stat-icon-wrap {
@@ -344,15 +344,15 @@ const GitHubDashboard = () => {
         }
         .gh-chart-card {
           border-radius: var(--r-md);
-          background: var(--bg);
+          background: var(--bg2);
           border: 1px solid var(--bdr);
           padding: 28px 28px 24px;
           margin-bottom: 32px;
           transition: border-color 0.4s ease, box-shadow 0.4s ease;
         }
         .gh-chart-card:hover {
-          border-color: var(--acc);
-          box-shadow: 0 10px 30px var(--acc-glow2);
+          border-color: var(--bdr2);
+          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
         }
         .gh-chart-header {
           display: flex;
@@ -397,8 +397,8 @@ const GitHubDashboard = () => {
           transition: all 0.2s;
         }
         .gh-chart-link:hover {
-          color: var(--acc);
-          border-color: var(--acc);
+          color: var(--acc-light);
+          border-color: color-mix(in srgb, var(--acc) 45%, transparent);
         }
         .gh-months {
           display: flex;
@@ -475,7 +475,7 @@ const GitHubDashboard = () => {
           flex-direction: column;
           gap: 12px;
           padding: 24px;
-          background: var(--bg);
+          background: var(--bg2);
           border: 1px solid var(--bdr);
           border-radius: var(--r-md);
           transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
@@ -486,20 +486,22 @@ const GitHubDashboard = () => {
         .gh-repo-card:hover {
           background: var(--bg3);
           transform: translateY(-4px);
-          border-color: var(--acc);
-          box-shadow: 0 10px 24px var(--acc-glow2);
+          border-color: var(--bdr2);
+          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
         }
+        /* Signature top-line glow reveal on hover (replaces the old shine sweep) */
         .gh-repo-card-shine {
           position: absolute;
           top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
+          left: 10%;
+          right: 10%;
+          height: 1px;
           pointer-events: none;
-          background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 55%, transparent 60%);
-          transition: left 0.6s ease;
+          background: linear-gradient(90deg, transparent, var(--acc), transparent);
+          opacity: 0;
+          transition: opacity 0.45s ease;
         }
-        .gh-repo-card:hover .gh-repo-card-shine { left: 100%; }
+        .gh-repo-card:hover .gh-repo-card-shine { opacity: 1; }
         .gh-repo-icon-wrap {
           width: 30px;
           height: 30px;

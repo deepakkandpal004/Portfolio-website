@@ -1,0 +1,18 @@
+{
+  "name": "Deepak Kandpal — Full Stack Developer",
+  "short_name": "Deepak Kandpal",
+  "description": "Portfolio of Deepak Kandpal, Full Stack Developer specializing in React, Next.js, Node.js and TypeScript.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#07080c",
+  "theme_color": "#07080c",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

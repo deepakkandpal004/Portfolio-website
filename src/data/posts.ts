@@ -11,6 +11,133 @@ export interface BlogPostData {
 
 export const blogPosts: BlogPostData[] = [
   {
+    slug: "auth-from-scratch-scrypt-jwt-refresh-tokens",
+    title: "Auth From Scratch: scrypt, Short-Lived JWTs and Rotating Refresh Tokens",
+    description: "Why I skipped the auth library for my URL shortener — and how scrypt hashing, 15-minute access tokens and rotating refresh tokens in HttpOnly cookies actually work.",
+    date: "September 26, 2026",
+    readTime: "8 min read",
+    coverImage: "https://images.unsplash.com/photo-1555949963-aa79dcee981c?w=800&auto=format&fit=crop&q=60",
+    tags: ["Auth", "Node.js", "Security", "JWT"],
+    content: `
+      <p>For my URL shortener Trim, I made a deliberate decision: no auth library. Not because libraries are bad — but because auth is one of those things every developer uses and few truly understand. Here's what building it from scratch taught me.</p>
+
+      <h2>1. Hashing passwords with scrypt</h2>
+      <p>Most tutorials reach for bcrypt. It's fine — but Node.js ships <code>scrypt</code> in the <code>crypto</code> module, and it's memory-hard by design, which makes GPU-based brute forcing much more expensive:</p>
+      <pre><code>import { scrypt, randomBytes, timingSafeEqual } from "node:crypto";
+
+function hashPassword(password: string): Promise&lt;string&gt; {
+  return new Promise((resolve, reject) =&gt; {
+    const salt = randomBytes(16).toString("hex");
+    scrypt(password, salt, 64, (err, derived) =&gt; {
+      if (err) reject(err);
+      else resolve(salt + ":" + derived.toString("hex"));
+    });
+  });
+}</code></pre>
+      <p>Two details matter: a unique random salt per user (so rainbow tables are useless), and <code>timingSafeEqual</code> when comparing hashes (so attackers can't measure response times to guess the hash byte-by-byte).</p>
+
+      <h2>2. Short-lived access tokens</h2>
+      <p>The access JWT lives for 15 minutes. That's it. If a token leaks — via logs, a compromised tab, anything — its blast radius is a quarter of an hour, not a month. The JWT carries only the user id and nothing sensitive.</p>
+
+      <h2>3. Rotating refresh tokens in HttpOnly cookies</h2>
+      <p>This is the part most tutorials skip. The refresh token lives in an HttpOnly, Secure, SameSite cookie — JavaScript can never read it, which kills XSS theft. And it <strong>rotates</strong>: every time you use a refresh token, the server verifies it, deletes it, and issues a brand-new pair.</p>
+      <p>Why rotation? Theft detection. If an attacker steals a refresh token and uses it, the legitimate user's copy stops working — the server sees a reused token and can invalidate the whole session family. That reuse signal is something non-rotating tokens can never give you.</p>
+      <pre><code>// refresh flow (simplified)
+const stored = await db.refreshToken.findUnique({ where: { hash } });
+if (!stored) throw new Error("reuse detected - kill all sessions");
+await db.refreshToken.delete({ where: { hash } }); // one-time use
+const next = createRefreshToken(userId);
+await db.refreshToken.create({ data: { hash: sha256(next), userId } });
+setCookie(res, "refresh", next, { httpOnly: true, secure: true, sameSite: "strict" });</code></pre>
+      <p>Note the tokens are stored hashed (SHA-256) — a database leak shouldn't hand out live sessions.</p>
+
+      <h2>What I'd do differently</h2>
+      <p>For a client project with deadlines, I'd still reach for a battle-tested library. But building it once from scratch means I now read auth code with understanding instead of trust. That's worth a weekend.</p>
+    `
+  },
+  {
+    slug: "prisma-query-optimization-dashboard",
+    title: "3 Prisma Query Fixes That Made My Dashboard Actually Fast",
+    description: "Composite indexes, select over include, and cursor pagination — the three changes that took my expense tracker dashboard from sluggish to instant.",
+    date: "September 20, 2026",
+    readTime: "7 min read",
+    coverImage: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&auto=format&fit=crop&q=60",
+    tags: ["Prisma", "PostgreSQL", "Performance"],
+    content: `
+      <p>Finora's dashboard was fine with 50 transactions. At 2,000, it felt broken. Three Prisma changes fixed it — no caching layer, no rewrite.</p>
+
+      <h2>1. A composite index that matches the query</h2>
+      <p>Every dashboard query looked like this: <em>this user's transactions, newest first, in a date range.</em> Without an index, PostgreSQL scans the whole table. The fix is one line in the Prisma schema:</p>
+      <pre><code>model Transaction {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  amount    Decimal
+  // ...
+  @@index([userId, date(sort: Desc)])
+}</code></pre>
+      <p>Column order matters: <code>userId</code> first because every query filters by user (equality), then <code>date</code> descending because every query sorts by it. An index on <code>(date, userId)</code> would be nearly useless here. Verify with <code>EXPLAIN ANALYZE</code> — look for "Index Scan" instead of "Seq Scan".</p>
+
+      <h2>2. select instead of include</h2>
+      <p>My dashboard cards needed four fields. I was fetching entire rows plus relations:</p>
+      <pre><code>// before: fetches everything, including the category relation
+const txs = await prisma.transaction.findMany({ where, include: { category: true } });
+
+// after: fetches exactly what the UI renders
+const txs = await prisma.transaction.findMany({
+  where,
+  select: { id: true, amount: true, date: true, category: { select: { name: true } } },
+});</code></pre>
+      <p>Less data over the wire, less memory, faster serialization. Boring — and effective.</p>
+
+      <h2>3. Cursor pagination for infinite lists</h2>
+      <p>Offset pagination (<code>skip: page * 20</code>) gets slower the deeper you go — the database still walks every skipped row. Cursor pagination doesn't:</p>
+      <pre><code>const txs = await prisma.transaction.findMany({
+  where,
+  take: 20,
+  ...(cursor ? { cursor: { id: cursor }, skip: 1 } : {}),
+  orderBy: { date: "desc" },
+});</code></pre>
+      <p>Each page starts exactly where the last one ended. Constant-time pages, no matter how far you scroll.</p>
+
+      <p>The lesson: performance work is mostly about matching the database to the query pattern. Indexes, projections, pagination — in that order.</p>
+    `
+  },
+  {
+    slug: "ats-friendly-resume-pdf-generation",
+    title: "Making Resume PDFs That Survive ATS Parsers",
+    description: "What I learned building CareerForge: why most generated PDFs fail applicant tracking systems, and how structured data plus clean PDF generation fixes it.",
+    date: "September 12, 2026",
+    readTime: "6 min read",
+    coverImage: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=800&auto=format&fit=crop&q=60",
+    tags: ["PDF", "AI", "CareerForge"],
+    content: `
+      <p>Building CareerForge taught me an uncomfortable truth: a beautiful resume that an ATS can't parse is a resume that doesn't exist. Here's what actually matters.</p>
+
+      <h2>1. Why PDFs break parsers</h2>
+      <p>Most ATS parsers don't "see" your resume — they extract the text layer and guess the reading order. PDFs commonly break this three ways:</p>
+      <ul>
+        <li><strong>Text rendered as vector paths or images</strong> — looks perfect, extracts as nothing.</li>
+        <li><strong>Multi-column layouts</strong> — the parser reads across columns: "Senior Engineer 2024 React Company".</li>
+        <li><strong>Tables and text boxes</strong> — reading order becomes unpredictable.</li>
+      </ul>
+
+      <h2>2. Structured data first, PDF second</h2>
+      <p>The fix that worked in CareerForge: never treat the PDF as the source of truth. The resume lives as structured JSON — name, title, experience array, skills array — and the PDF is just a render target:</p>
+      <ul>
+        <li>Single-column layout, standard section headings ("Experience", "Education", "Skills").</li>
+        <li>Real selectable text — no rasterized sections, no text-as-image.</li>
+        <li>Standard fonts, chronological order, dates in the same text flow.</li>
+      </ul>
+      <p>Because the data is structured, the ATS score checker can do exact keyword matching against a job description — the same structured data powers both the PDF and the score.</p>
+
+      <h2>3. Scoring honestly</h2>
+      <p>Our ATS score is deliberately simple: keyword coverage from the job description, weighted by section (skills and titles weigh more than summaries), plus checks for contact info, quantifiable achievements and standard headings. It's an estimate, not a guarantee — and the UI says so. A score that cries wolf trains users to ignore it.</p>
+
+      <p>The takeaway: design for the parser first, the human second. The human only ever sees the resumes the parser let through.</p>
+    `
+  },
+  {
     slug: "optimising-lcp-web-performance",
     title: "Optimising Largest Contentful Paint (LCP) in Modern Web Apps",
     description: "Practical performance tips to diagnose, resolve, and maintain Core Web Vitals to improve search engine rankings and user retention.",

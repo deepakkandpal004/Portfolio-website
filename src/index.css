@@ -6,23 +6,24 @@
   --acc:       #f59e0b;
   --acc-light: #fbbf24;
   --acc-dim:   #d97706;
-  --acc-glow:  rgba(245, 158, 11, 0.15);
-  --acc-glow2: rgba(245, 158, 11, 0.06);
+  --acc-glow:  rgba(245, 158, 11, 0.16);
+  --acc-glow2: rgba(245, 158, 11, 0.07);
 
   /* Dark surfaces */
-  --bg:   #07080c;
-  --bg2:  #0c0e14;
-  --bg3:  #13161f;
-  --bg4:  #1a1e2a;
-  --bdr:  #1a1d28;
-  --bdr2: #252a38;
+  --bg:   #05070c;
+  --bg2:  #0a0e16;
+  --bg3:  #10151f;
+  --bg4:  #161c29;
+  --bdr:  #1b2130;
+  --bdr2: #2a3348;
 
   /* Text */
-  --fg:   #f8fafc;
-  --fg2:  #94a3b8;
-  --fg3:  #64748b;
+  --fg:   #f4f6fb;
+  --fg2:  #9aa4b8;
+  --fg3:  #5f6b82;
 
-  --grid-color: rgba(245, 158, 11, 0.045);
+  --violet-glow: rgba(139, 92, 246, 0.10);
+  --grid-color: rgba(139, 92, 246, 0.05);
 
   /* Utility */
   --err:  #f87171;
@@ -88,7 +89,11 @@ html::-webkit-scrollbar {
 
 body {
   font-family: var(--font-body);
-  background: var(--bg);
+  background:
+    radial-gradient(900px 520px at 10% -6%, rgba(139, 92, 246, 0.10), transparent 60%),
+    radial-gradient(820px 500px at 90% 6%, rgba(245, 158, 11, 0.07), transparent 60%),
+    radial-gradient(1000px 700px at 50% 110%, rgba(139, 92, 246, 0.06), transparent 60%),
+    var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -123,8 +128,7 @@ button { font-family: var(--font-body); }
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  color: var(--acc);
-  opacity: 0.9;
+  color: var(--acc-light);
 }
 
 /* Hero title */
@@ -307,13 +311,13 @@ section {
   cursor: pointer;
   border-radius: var(--r-md);
   transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 4px 16px var(--acc-glow);
+  box-shadow: 0 10px 28px -8px var(--acc-glow);
   letter-spacing: 0.2px;
 }
 .btn-acc:hover {
   background: var(--acc-light);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px var(--acc-glow);
+  box-shadow: 0 16px 44px -10px var(--acc-glow), 0 8px 20px -8px rgba(0, 0, 0, 0.45);
 }
 
 .btn-outline {
@@ -333,10 +337,11 @@ section {
   letter-spacing: 0.2px;
 }
 .btn-outline:hover {
-  border-color: var(--acc);
-  color: var(--acc);
-  background: var(--acc-glow2);
+  border-color: var(--bdr2);
+  color: var(--acc-light);
+  background: var(--bg3);
   transform: translateY(-2px);
+  box-shadow: 0 10px 28px -12px var(--acc-glow);
 }
 
 /* ─── Forms ───────────────────────────────────── */
@@ -447,8 +452,8 @@ input:disabled, textarea:disabled {
 }
 
 .blog-card:hover .blog-card-img-wrap {
-  border-color: var(--acc);
-  box-shadow: 0 10px 30px var(--acc-glow2);
+  border-color: var(--bdr2);
+  box-shadow: 0 16px 40px -12px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
 }
 
 .blog-card img {
@@ -484,8 +489,8 @@ input:disabled, textarea:disabled {
 
 .tech-card:hover {
   transform: translateY(-4px);
-  border-color: var(--acc);
-  box-shadow: 0 12px 30px var(--acc-glow2);
+  border-color: var(--bdr2);
+  box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
 }
 
 .tech-pill {
@@ -505,7 +510,7 @@ input:disabled, textarea:disabled {
 }
 
 .tech-pill:hover {
-  border-color: var(--acc);
+  border-color: color-mix(in srgb, var(--acc) 45%, transparent);
   color: var(--fg);
   background: var(--bg3);
   transform: scale(1.04);
@@ -535,8 +540,8 @@ input:disabled, textarea:disabled {
 
 .github-stat-card:hover {
   transform: translateY(-3px);
-  border-color: var(--acc);
-  box-shadow: 0 8px 24px var(--acc-glow2);
+  border-color: var(--bdr2);
+  box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
 }
 
 .github-stat-card svg {
@@ -558,8 +563,8 @@ input:disabled, textarea:disabled {
 }
 
 .github-chart-card:hover {
-  border-color: var(--acc);
-  box-shadow: 0 10px 30px var(--acc-glow2);
+  border-color: var(--bdr2);
+  box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
 }
 
 .contribution-graph {
@@ -587,8 +592,8 @@ input:disabled, textarea:disabled {
 .github-repo-card:hover {
   background: var(--bg3);
   transform: translateY(-4px);
-  border-color: var(--acc);
-  box-shadow: 0 10px 24px var(--acc-glow2);
+  border-color: var(--bdr2);
+  box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
 }
 
 /* ─── Responsive ──────────────────────────────── */

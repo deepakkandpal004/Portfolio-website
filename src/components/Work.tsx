@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { motion } from "framer-motion";
-import WorkCarousel from "./WorkCarousel";
+import WorkGrid from "./WorkGrid";
 
 const Work = () => {
   const headerRef = useRef<HTMLDivElement>(null);
@@ -29,12 +29,12 @@ const Work = () => {
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
         >
-          <WorkCarousel />
+          <WorkGrid variant="teaser" />
         </motion.div>
       </div>
 
       <style>{`
-        .work-section { background: var(--bg2); padding: 128px 0; overflow: hidden; }
+        .work-section { background: transparent; padding: 128px 0; overflow: hidden; }
         .work-heading {
           max-width: 760px;
           margin: 0 auto 72px;
@@ -56,7 +56,7 @@ const Work = () => {
         .work-subtitle {
           font-size: 18px;
           line-height: 1.75;
-          color: var(--tx2);
+          color: var(--fg2);
           max-width: 560px;
           margin: 0 auto;
         }

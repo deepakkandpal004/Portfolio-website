@@ -9,6 +9,7 @@ import { useTheme } from "@/src/context/ThemeContext";
 
 const navItems = [
   { label: "About",   href: "#about" },
+  { label: "Experience", href: "#experience" },
   { label: "Skills",  href: "#skills" },
   { label: "GitHub",  href: "#github" },
   { label: "Work",    href: "#work" },
@@ -49,7 +50,7 @@ const Navbar = () => {
       return;
     }
 
-    const sections = ["about", "skills", "github", "work", "blog", "contact"];
+    const sections = ["about", "experience", "skills", "github", "work", "blog", "contact"];
     const observers = sections.map(id => {
       const el = document.getElementById(id);
       if (!el) return null;
@@ -84,7 +85,7 @@ const Navbar = () => {
 
   const navBg = scrolled
     ? theme === "dark"
-      ? "rgba(7, 8, 15, 0.82)"
+      ? "rgba(5, 7, 12, 0.82)"
       : "rgba(250, 251, 254, 0.82)"
     : "transparent";
 
@@ -124,13 +125,13 @@ const Navbar = () => {
             display: "flex", gap: 4, listStyle: "none", alignItems: "center",
           }}>
             {navItems.map(item => {
-              const isBlogLink = item.href === "/blog";
-              const isActive = isBlogLink
-                ? (pathname ?? "").startsWith("/blog")
+              const isRouteLink = item.href.startsWith("/");
+              const isActive = isRouteLink
+                ? (pathname ?? "").startsWith(item.href)
                 : isHome && `#${activeSection}` === item.href;
 
-              const linkHref = isBlogLink
-                ? "/blog"
+              const linkHref = isRouteLink
+                ? item.href
                 : (isHome ? item.href : `/${item.href}`);
 
               const linkContent = (
@@ -142,7 +143,8 @@ const Navbar = () => {
                   display: "block",
                   borderRadius: "var(--r)",
                   background: isActive ? "var(--acc-glow2)" : "transparent",
-                  transition: "color 0.2s, background 0.2s",
+                  boxShadow: isActive ? "0 0 18px var(--acc-glow2)" : "none",
+                  transition: "color 0.2s, background 0.2s, box-shadow 0.2s",
                 }}
                   onMouseEnter={e => {
                     if (!isActive) {
@@ -163,10 +165,8 @@ const Navbar = () => {
 
               return (
                 <li key={item.href}>
-                  {isBlogLink ? (
-                    <Link href="/blog" style={{ display: "block" }}>{linkContent}</Link>
-                  ) : isHome ? (
-                    <a href={linkHref} style={{ display: "block" }}>{linkContent}</a>
+                  {isRouteLink ? (
+                    <Link href={item.href} style={{ display: "block" }}>{linkContent}</Link>
                   ) : (
                     <a href={linkHref} style={{ display: "block" }}>{linkContent}</a>
                   )}
@@ -209,19 +209,19 @@ const Navbar = () => {
         transition: "opacity 0.25s, transform 0.25s",
       }}>
         {navItems.map(item => {
-          const isBlogLink = item.href === "/blog";
-          const isActive = isBlogLink
-            ? (pathname ?? "").startsWith("/blog")
+          const isRouteLink = item.href.startsWith("/");
+          const isActive = isRouteLink
+            ? (pathname ?? "").startsWith(item.href)
             : isHome && `#${activeSection}` === item.href;
 
-          const linkHref = isBlogLink
-            ? "/blog"
+          const linkHref = isRouteLink
+            ? item.href
             : (isHome ? item.href : `/${item.href}`);
 
           return (
             <li key={item.href} style={{ listStyle: "none" }}>
-              {isBlogLink ? (
-                <Link href="/blog" onClick={close} style={{
+              {isRouteLink ? (
+                <Link href={item.href} onClick={close} style={{
                   fontFamily: "var(--font-head)",
                   fontSize: 34, fontWeight: 700,
                   letterSpacing: "-0.5px",

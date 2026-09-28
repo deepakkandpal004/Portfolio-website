@@ -4,6 +4,7 @@ import "../src/index.css";
 import { ThemeProviderWrapper } from "@/src/components/ThemeProviderWrapper";
 import Navbar from "@/src/components/Navbar";
 import SocialSidebar from "@/src/components/SocialSidebar";
+import AskDeepak from "@/src/components/AskDeepak";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -73,7 +74,7 @@ export const metadata: Metadata = {
 
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Deepak Kandpal Portfolio",
@@ -90,7 +91,7 @@ export const metadata: Metadata = {
     creator: "@codedbydeepak",
     site: "@codedbydeepak",
 
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
   },
 
   robots: {
@@ -179,6 +180,7 @@ export default function RootLayout({
           <Navbar />
           <SocialSidebar />
           {children}
+          <AskDeepak />
         </ThemeProviderWrapper>
       </body>
     </html>

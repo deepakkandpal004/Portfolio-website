@@ -72,6 +72,15 @@ const Hero = () => {
         paddingBottom: 40,
       }}
     >
+      {/* Ambient violet/amber glows behind hero content */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        pointerEvents: "none",
+        zIndex: 0,
+        background: "radial-gradient(620px 420px at 18% 26%, rgba(139,92,246,0.12), transparent 65%), radial-gradient(700px 440px at 84% 24%, rgba(245,158,11,0.08), transparent 65%)",
+      }} />
+
       {/* Premium Tech Grid Background */}
       <div style={{
         position: "absolute",
@@ -143,7 +152,13 @@ const Hero = () => {
           </p>
 
           {/* Name */}
-          <h1 className="t-hero a3" style={{ color: "var(--fg)", marginBottom: 12 }}>
+          <h1 className="t-hero a3" style={{
+            marginBottom: 12,
+            background: "linear-gradient(180deg, #ffffff 20%, var(--acc-light) 130%)",
+            WebkitBackgroundClip: "text",
+            backgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}>
             Deepak<span className="acc"> Kandpal</span>
           </h1>
 

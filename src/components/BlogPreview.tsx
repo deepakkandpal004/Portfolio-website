@@ -92,7 +92,7 @@ const BlogPreview = () => {
       </div>
 
       <style>{`
-        .bp-section { background: var(--bg2); padding: 128px 0; }
+        .bp-section { background: transparent; padding: 128px 0; }
         .bp-header {
           max-width: 760px;
           margin: 0 auto 56px;
@@ -114,8 +114,8 @@ const BlogPreview = () => {
           justify-self: end; align-self: start;
         }
         .bp-view-all:hover {
-          color: var(--fg); border-color: var(--acc);
-          background: var(--acc-glow); transform: translateX(2px);
+          color: var(--fg); border-color: color-mix(in srgb, var(--acc) 45%, transparent);
+          background: var(--acc-glow2); transform: translateX(2px);
         }
 
         .bp-grid {
@@ -127,12 +127,12 @@ const BlogPreview = () => {
 
         .bp-card {
           border-radius: 16px; border: 1px solid var(--bdr);
-          background: var(--bg); overflow: hidden;
+          background: var(--bg2); overflow: hidden;
           transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
         }
         .bp-card:hover {
-          border-color: var(--acc);
-          box-shadow: 0 10px 35px rgba(245, 158, 11, 0.12), 0 0 0 1px rgba(245, 158, 11, 0.08);
+          border-color: var(--bdr2);
+          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
           transform: translateY(-4px);
         }
         .bp-card-link {
@@ -190,12 +190,12 @@ const BlogPreview = () => {
         /* Newsletter */
         .bp-newsletter {
           border-radius: 20px; border: 1px solid var(--bdr);
-          background: var(--bg); overflow: hidden;
+          background: var(--bg2); overflow: hidden;
           transition: border-color 0.35s, box-shadow 0.35s;
         }
         .bp-newsletter:hover {
-          border-color: var(--acc);
-          box-shadow: 0 10px 35px rgba(245, 158, 11, 0.1);
+          border-color: var(--bdr2);
+          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
         }
         .bp-newsletter-inner {
           display: flex; align-items: center; justify-content: space-between;
@@ -204,7 +204,7 @@ const BlogPreview = () => {
         .bp-newsletter-label {
           font-family: var(--font-body); font-size: 11px; font-weight: 700;
           text-transform: uppercase; letter-spacing: 2px;
-          color: var(--acc); margin-bottom: 8px;
+          color: var(--acc-light); margin-bottom: 8px;
         }
         .bp-newsletter-title {
           font-family: var(--font-head); font-size: 22px; font-weight: 700;
@@ -233,7 +233,7 @@ const BlogPreview = () => {
         }
         .bp-newsletter-btn:hover {
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3);
+          box-shadow: 0 12px 32px -6px var(--acc-glow);
         }
 
         @media (max-width: 900px) {

@@ -80,7 +80,7 @@ const Skills = () => {
   }, []);
 
   return (
-    <section id="skills" style={{ background: "var(--bg)", position: "relative", overflow: "hidden" }}>
+    <section id="skills" style={{ background: "transparent", position: "relative", overflow: "hidden" }}>
       {/* Subtle radial glow */}
       <div className="skills-bg-glow" />
 
@@ -184,7 +184,7 @@ const Skills = () => {
           position: absolute;
           inset: 0;
           pointer-events: none;
-          background: radial-gradient(circle at 50% 20%, rgba(99,102,241,0.05), transparent 70%);
+          background: radial-gradient(circle at 50% 20%, var(--violet-glow), transparent 70%);
           filter: blur(100px);
         }
         .skills-grid-pattern {
@@ -250,7 +250,7 @@ const Skills = () => {
           border-radius: 999px;
           border: 1px solid var(--bdr);
           background: var(--bg2);
-          color: var(--acc);
+          color: var(--acc-light);
           font-family: var(--font-body);
           font-size: 12px;
           font-weight: 600;
@@ -286,21 +286,23 @@ const Skills = () => {
         .skills-bento-card:nth-child(3) { grid-column: span 5; }
         .skills-bento-card:nth-child(4) { grid-column: span 7; }
         .skills-bento-card:hover {
-          border-color: var(--acc);
-          box-shadow: 0 16px 48px var(--acc-glow2);
+          border-color: var(--bdr2);
+          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
           transform: translateY(-4px);
         }
+        /* Signature top-line glow reveal on hover (replaces the old shine sweep) */
         .skills-shine {
           position: absolute;
           top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
+          left: 10%;
+          right: 10%;
+          height: 1px;
           pointer-events: none;
-          background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.08) 45%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.08) 55%, transparent 60%);
-          transition: left 0.6s ease;
+          background: linear-gradient(90deg, transparent, var(--acc), transparent);
+          opacity: 0;
+          transition: opacity 0.45s ease;
         }
-        .skills-bento-card:hover .skills-shine { left: 100%; }
+        .skills-bento-card:hover .skills-shine { opacity: 1; }
         .skills-accent-glow {
           position: absolute;
           top: -100px;
@@ -348,7 +350,7 @@ const Skills = () => {
           transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .skills-pill:hover {
-          border-color: var(--acc);
+          border-color: color-mix(in srgb, var(--acc) 45%, transparent);
           color: var(--fg);
           background: var(--bg3);
           transform: translateY(-2px);
