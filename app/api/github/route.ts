@@ -51,22 +51,54 @@ export async function GET() {
       0
     );
 
+    // Language breakdown across all owned repos (for the dashboard bar chart)
+    const langCounts: Record<string, number> = {};
+    owned.forEach((r: any) => {
+      if (r.language) langCounts[r.language] = (langCounts[r.language] || 0) + 1;
+    });
+    const languages = Object.entries(langCounts)
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 6);
+
     // Fetch contribution data separately (don't block repos)
+    // NOTE: the API returns years newest-first (2026, then 2025...), so we
+    // filter by actual date to get the real last 365 days — NOT .slice(-365)
+    // which would grab the oldest year.
     let contributions = 0;
     let contribLevels: number[] = [];
+    let contribDays: { date: string; count: number; level: number }[] = [];
 
     try {
       const contribRes = await fetch(
         `https://github-contributions-api.jogruber.de/v4/${GITHUB_USER}`,
-        { next: { revalidate: 3600 } }
+        { next: { revalidate: 600 } }
       );
       if (contribRes.ok) {
         const contribData = await contribRes.json();
-        const currentYear = new Date().getFullYear();
-        contributions = contribData.total?.[currentYear] ?? 0;
-        contribLevels = (contribData.contributions || [])
-          .slice(-365)
-          .map((c: any) => c.level);
+        const cutoff = new Date();
+        cutoff.setDate(cutoff.getDate() - 365);
+        const today = new Date();
+        const recent = (contribData.contributions || [])
+          .filter((c: any) => {
+            const dt = new Date(c.date);
+            return dt >= cutoff && dt <= today;
+          })
+          // API returns years newest-first — sort chronologically for the grid
+          .sort(
+            (a: any, b: any) =>
+              new Date(a.date).getTime() - new Date(b.date).getTime()
+          );
+        contribDays = recent.map((c: any) => ({
+          date: c.date,
+          count: c.count || 0,
+          level: c.level ?? 0,
+        }));
+        contributions = contribDays.reduce(
+          (sum: number, d: { count: number }) => sum + d.count,
+          0
+        );
+        contribLevels = contribDays.map((d) => d.level);
       }
     } catch { /* contribution API is optional */ }
 
@@ -74,8 +106,10 @@ export async function GET() {
       repoCount: userData?.public_repos ?? null,
       followers: userData?.followers ?? null,
       totalStars,
+      languages,
       contributions,
       contribLevels,
+      contribDays,
       repos: top,
     });
   } catch {

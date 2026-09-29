@@ -1,17 +1,10 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "../src/index.css";
-import { ThemeProviderWrapper } from "@/src/components/ThemeProviderWrapper";
 import Navbar from "@/src/components/Navbar";
 import SocialSidebar from "@/src/components/SocialSidebar";
 import AskDeepak from "@/src/components/AskDeepak";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-body-next",
-  weight: ["300", "400", "500", "600", "700"],
-  display: "swap",
-});
+import Footer from "@/src/components/Footer";
+import BackToTop from "@/src/components/BackToTop";
 
 const siteUrl = "https://deepakkandpal.me";
 
@@ -151,37 +144,30 @@ export default function RootLayout({
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
-        {/* Prevent theme flash */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              try {
-                const t = localStorage.getItem("theme");
-                if (t === "light" || t === "dark") {
-                  document.documentElement.setAttribute("data-theme", t);
-                }
-              } catch {}
-            `,
-          }}
-        />
-
         {/* DNS Prefetch */}
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://api.github.com" />
         <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
+        {/* Fonts — Space Grotesk (headings), Inter (body), JetBrains Mono (terminal/code) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          rel="stylesheet"
+        />
       </head>
 
-      <body className={inter.variable}>
+      <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
-        <ThemeProviderWrapper>
-          <Navbar />
-          <SocialSidebar />
-          {children}
-          <AskDeepak />
-        </ThemeProviderWrapper>
+        <Navbar />
+        <SocialSidebar />
+        {children}
+        <Footer />
+        <BackToTop />
+        <AskDeepak />
       </body>
     </html>
   );

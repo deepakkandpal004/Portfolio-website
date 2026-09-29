@@ -1,10 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { FiStar, FiGitBranch, FiExternalLink, FiGitPullRequest, FiUsers, FiActivity } from "react-icons/fi";
+import { FiStar, FiGitBranch, FiExternalLink, FiGitPullRequest, FiUsers, FiActivity, FiCode } from "react-icons/fi";
 import { motion } from "framer-motion";
 
 interface Repo { id: number; name: string; description: string; html_url: string; stargazers_count: number; language: string; }
+interface ContribDay { date: string; count: number; level: number; pad?: boolean }
+
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+// Parse YYYY-MM-DD as a local date (avoids UTC-midnight timezone shifts)
+const parseDay = (iso: string) => {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d);
+};
 
 const GITHUB = "deepakkandpal004";
 const langColors: Record<string, string> = {
@@ -13,6 +21,11 @@ const langColors: Record<string, string> = {
   CSS:        "#563d7c",
   HTML:       "#e34f26",
   Python:     "#3572a5",
+  EJS:        "#a91e50",
+  SCSS:       "#c6538c",
+  Shell:      "#89e051",
+  Dockerfile: "#384d54",
+  Vue:        "#41b883",
 };
 
 const Skel = () => (
@@ -47,7 +60,8 @@ const GitHubDashboard = () => {
   const [totalStars, setTotalStars] = useState(0);
   const [prs,     setPrs]     = useState<number | null>(null);
   const [contributions, setContributions] = useState(0);
-  const [contribLevels, setContribLevels] = useState<number[]>([]);
+  const [contribDays, setContribDays] = useState<ContribDay[]>([]);
+  const [languages, setLanguages] = useState<{ name: string; count: number }[]>([]);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -65,7 +79,8 @@ const GitHubDashboard = () => {
         if (ghData.followers !== undefined) setFollowers(ghData.followers);
         if (ghData.totalStars !== undefined) setTotalStars(ghData.totalStars);
         if (ghData.contributions !== undefined) setContributions(ghData.contributions);
-        if (ghData.contribLevels) setContribLevels(ghData.contribLevels);
+        if (ghData.contribDays) setContribDays(ghData.contribDays);
+        if (ghData.languages) setLanguages(ghData.languages);
         if (prData?.total_count !== undefined) setPrs(prData.total_count);
       } catch { /* ignore */ }
       setLoading(false);
@@ -84,6 +99,27 @@ const GitHubDashboard = () => {
     { label: "Followers",      value: followers,     icon: FiUsers },
     { label: "Pull requests",  value: prs,                 icon: FiGitPullRequest },
   ];
+
+  // Contribution calendar: weeks as columns (GitHub-style), starting on Sunday.
+  // Month labels are derived from the actual dates, so they're always correct.
+  const weeks: ContribDay[][] = [];
+  const weekLabels: string[] = [];
+  if (contribDays.length > 0) {
+    const days: ContribDay[] = [...contribDays];
+    const padCount = parseDay(days[0].date).getDay(); // 0 = Sunday
+    for (let i = 0; i < padCount; i++) {
+      days.unshift({ date: "", count: 0, level: 0, pad: true });
+    }
+    for (let i = 0; i < days.length; i += 7) {
+      weeks.push(days.slice(i, i + 7));
+    }
+    weeks.forEach((w) => {
+      const first = w.find((d) => !d.pad && parseDay(d.date).getDate() === 1);
+      weekLabels.push(first ? MONTHS[parseDay(first.date).getMonth()] : "");
+    });
+  }
+
+  const maxLang = languages.length > 0 ? languages[0].count : 1;
 
   return (
     <section id="github" style={{ background: "transparent", position: "relative", overflow: "hidden" }}>
@@ -151,36 +187,39 @@ const GitHubDashboard = () => {
             </a>
           </div>
 
-          {/* Month labels */}
-          <div className="gh-months">
-            {["Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"].map(m => (
-              <span key={m}>{m}</span>
-            ))}
-          </div>
+          {/* Contribution calendar — month labels + grid scroll together */}
+          <div className="gh-cal-scroll">
+            <div className="gh-months">
+              {weeks.length > 0 ? (
+                weekLabels.map((lbl, i) => <span key={i}>{lbl}</span>)
+              ) : (
+                Array.from({ length: 12 }).map((_, i) => <span key={i} />)
+              )}
+            </div>
 
-          {/* Contribution grid */}
-          <div className="gh-contrib-grid">
-            {contribLevels.length > 0 ? (
-              Array.from({ length: Math.ceil(contribLevels.length / 7) }).map((_, wi) => (
-                <div key={wi} className="gh-contrib-week">
-                  {contribLevels.slice(wi * 7, wi * 7 + 7).map((level, di) => (
-                    <div
-                      key={di}
-                      className={`gh-contrib-cell gh-level-${level}`}
-                      title={`${level} contribution${level !== 1 ? "s" : ""}`}
-                    />
-                  ))}
-                </div>
-              ))
-            ) : (
-              Array.from({ length: 52 }).map((_, wi) => (
-                <div key={wi} className="gh-contrib-week">
-                  {Array.from({ length: 7 }).map((_, di) => (
-                    <div key={di} className="gh-contrib-cell gh-level-0" />
-                  ))}
-                </div>
-              ))
-            )}
+            <div className="gh-contrib-grid">
+              {weeks.length > 0 ? (
+                weeks.map((week, wi) => (
+                  <div key={wi} className="gh-contrib-week">
+                    {week.map((d, di) => (
+                      <div
+                        key={di}
+                        className={`gh-contrib-cell gh-level-${d.level}`}
+                        title={d.pad ? undefined : `${d.count} contribution${d.count !== 1 ? "s" : ""} on ${parseDay(d.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}`}
+                      />
+                    ))}
+                  </div>
+                ))
+              ) : (
+                Array.from({ length: 52 }).map((_, wi) => (
+                  <div key={wi} className="gh-contrib-week">
+                    {Array.from({ length: 7 }).map((_, di) => (
+                      <div key={di} className="gh-contrib-cell gh-level-0" />
+                    ))}
+                  </div>
+                ))
+              )}
+            </div>
           </div>
 
           {/* Legend */}
@@ -199,6 +238,49 @@ const GitHubDashboard = () => {
             </div>
           </div>
         </motion.div>
+
+        {languages.length > 0 && (
+          <motion.div
+            className="gh-lang-card"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
+            <div className="gh-chart-header">
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <div className="gh-chart-icon">
+                  <FiCode size={16} style={{ color: "var(--acc)" }} />
+                </div>
+                <div>
+                  <span className="gh-chart-title">Top languages</span>
+                  <span className="gh-chart-sub">Most used across public repositories</span>
+                </div>
+              </div>
+            </div>
+            <div className="gh-lang-bars">
+              {languages.map((l) => (
+                <div key={l.name} className="gh-lang-row">
+                  <span className="gh-lang-name">
+                    <span style={{ width: 9, height: 9, borderRadius: "50%", background: langColors[l.name] || "#888", flexShrink: 0 }} />
+                    {l.name}
+                  </span>
+                  <div className="gh-lang-bar">
+                    <motion.div
+                      className="gh-lang-fill"
+                      style={{ background: langColors[l.name] || "var(--acc)" }}
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${(l.count / maxLang) * 100}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
+                    />
+                  </div>
+                  <span className="gh-lang-count">{l.count}</span>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
 
         <motion.div
           className="gh-repo-grid"
@@ -400,13 +482,21 @@ const GitHubDashboard = () => {
           color: var(--acc-light);
           border-color: color-mix(in srgb, var(--acc) 45%, transparent);
         }
+        .gh-cal-scroll {
+          overflow-x: auto;
+          padding-bottom: 4px;
+        }
         .gh-months {
           display: flex;
-          justify-content: space-between;
-          padding: 0 2px;
+          gap: 3px;
           margin-bottom: 8px;
+          min-width: max-content;
         }
         .gh-months span {
+          width: 13px;
+          flex: none;
+          overflow: visible;
+          white-space: nowrap;
           font-family: var(--font-body);
           font-size: 11px;
           color: var(--fg3);
@@ -415,8 +505,7 @@ const GitHubDashboard = () => {
         .gh-contrib-grid {
           display: flex;
           gap: 3px;
-          overflow-x: auto;
-          padding-bottom: 4px;
+          min-width: max-content;
         }
         .gh-contrib-week {
           display: flex;
@@ -434,11 +523,6 @@ const GitHubDashboard = () => {
         .gh-level-2 { background: #006d32; }
         .gh-level-3 { background: #26a641; }
         .gh-level-4 { background: #39d353; }
-        [data-theme="light"] .gh-level-0 { background: #ebedf0; }
-        [data-theme="light"] .gh-level-1 { background: #9be9a8; }
-        [data-theme="light"] .gh-level-2 { background: #40c463; }
-        [data-theme="light"] .gh-level-3 { background: #30a14e; }
-        [data-theme="light"] .gh-level-4 { background: #216e39; }
         .gh-chart-footer {
           display: flex;
           align-items: center;
@@ -462,6 +546,27 @@ const GitHubDashboard = () => {
           font-size: 11px;
           color: var(--fg3);
           margin: 0 4px;
+        }
+        .gh-lang-card {
+          border-radius: var(--r-md);
+          background: var(--bg2);
+          border: 1px solid var(--bdr);
+          padding: 28px;
+          margin-bottom: 32px;
+          transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        }
+        .gh-lang-card:hover {
+          border-color: var(--bdr2);
+          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+        }
+        .gh-lang-bars { display: grid; gap: 14px; margin-top: 6px; }
+        .gh-lang-row { display: grid; grid-template-columns: 130px 1fr 32px; align-items: center; gap: 14px; }
+        .gh-lang-name { display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--fg2); }
+        .gh-lang-bar { height: 8px; border-radius: 999px; background: var(--bdr); overflow: hidden; }
+        .gh-lang-fill { height: 100%; border-radius: 999px; }
+        .gh-lang-count { font-family: var(--font-body); font-size: 12px; color: var(--fg3); text-align: right; }
+        @media (max-width: 560px) {
+          .gh-lang-row { grid-template-columns: 100px 1fr 28px; gap: 10px; }
         }
         .gh-repo-grid {
           display: grid;
@@ -523,8 +628,6 @@ const GitHubDashboard = () => {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-        [data-theme="light"] #github { background: var(--bg2) !important; }
-        [data-theme="light"] .gh-bg-glow { background: radial-gradient(circle at 50% 30%, rgba(79,70,229,0.06), transparent 70%) !important; }
       `}</style>
     </section>
   );

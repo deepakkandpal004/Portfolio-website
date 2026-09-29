@@ -3,36 +3,59 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
-type Line = { text: string; kind: "cmd" | "out" | "sys" };
+type Line = { text: string; kind: "cmd" | "out" | "sys" | "art" };
 
-const PROMPT_USER = "deepak@portfolio";
+const PROMPT_USER = "portfolio@deepakkandpal";
 const PROMPT_PATH = "~";
 
+const COMMANDS = [
+  "help", "whoami", "skills", "projects", "experience", "contact",
+  "socials", "resume", "ls", "cd", "open", "hire", "history",
+  "date", "echo", "sudo", "rm", "clear", "cls",
+];
+
 const BOOT_LINES: string[] = [
-  "Initializing portfolio shell v2.1 ...",
-  "Loading projects, skills and questionable life choices ... done.",
-  "Type 'help' to see what you can ask me.",
+  "✓ Portfolio shell ready",
+  "Type 'help' to see what you can ask.",
 ];
 
 const HELP_LINES: string[] = [
-  "Available commands:",
-  "  whoami       — who is Deepak?",
-  "  skills       — his tech stack",
-  "  projects     — what he has built",
-  "  experience   — where he has worked",
-  "  contact      — how to reach him",
-  "  socials      — links to his profiles",
-  "  resume       — open his resume",
-  "  clear        — clear the terminal",
+  "about me \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+  "  whoami       who is Deepak?",
+  "  skills       his tech stack",
+  "  projects     what he has built",
+  "  experience   where he has worked",
+  "  contact      how to reach him",
+  "  socials      links to his profiles",
+  "  resume       open his resume",
+  "",
+  "navigation \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+  "  ls           list sections",
+  "  cd <name>    jump to a section (e.g. cd projects)",
+  "  open <name>  open a project page (e.g. open finora)",
+  "  hire         get in touch",
+  "",
+  "shell   \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+  "  history      what you have typed",
+  "  date         current date & time",
+  "  clear        wipe the screen",
 ];
+
+const SECTION_IDS: Record<string, string> = {
+  about: "about",
+  experience: "experience",
+  skills: "skills",
+  projects: "work",
+  contact: "contact",
+};
 
 function runCommand(raw: string): { lines: Line[]; action?: () => void } {
   const parts = raw.trim().split(/\s+/);
-  const cmd = parts[0] || "";
+  const cmd = (parts[0] || "").toLowerCase();
   const args = parts.slice(1);
-  const out = (lines: string[]): Line[] => lines.map((text) => ({ text, kind: "out" as const }));
+  const out = (texts: string[]): Line[] => texts.map((text) => ({ text, kind: "out" as const }));
 
-  switch (cmd.toLowerCase()) {
+  switch (cmd) {
     case "":
       return { lines: [] };
     case "help":
@@ -40,7 +63,7 @@ function runCommand(raw: string): { lines: Line[]; action?: () => void } {
     case "whoami":
       return {
         lines: out([
-          "Deepak Kandpal — Full-Stack Developer (MERN) from Pantnagar, India.",
+          "Deepak Kandpal \u2014 Full-Stack Developer (MERN) from Pantnagar, India.",
           "SDE Intern @ sevaSYNC. Ships production apps with React, Next.js, Node.js & TypeScript.",
           "Currently open to full-time opportunities.",
         ]),
@@ -58,10 +81,10 @@ function runCommand(raw: string): { lines: Line[]; action?: () => void } {
     case "projects":
       return {
         lines: out([
-          "1. CareerForge     — AI resume builder (Groq AI, ATS scoring, 7 templates)",
-          "2. Finora          — AI expense tracker (receipt scanning, budgets, savings goals)",
-          "3. Trim            — URL shortener (custom aliases, QR codes, 57 unit tests)",
-          "4. macOS Portfolio — macOS-inspired interactive portfolio (GSAP, Zustand)",
+          "1. CareerForge     \u2014 AI resume builder (Groq AI, ATS scoring, 7 templates)",
+          "2. Finora          \u2014 AI expense tracker (receipt scanning, budgets, savings goals)",
+          "3. Trim            \u2014 URL shortener (custom aliases, QR codes, 57 unit tests)",
+          "4. macOS Portfolio \u2014 macOS-inspired interactive portfolio (GSAP, Zustand)",
           "",
           "Tip: click any project card on this page for the full case study.",
         ]),
@@ -69,8 +92,8 @@ function runCommand(raw: string): { lines: Line[]; action?: () => void } {
     case "experience":
       return {
         lines: out([
-          "SDE Intern — sevaSYNC Digital Solutions Pvt. Ltd. (Remote)",
-          "Jun 2026 – Aug 2026",
+          "SDE Intern \u2014 sevaSYNC Digital Solutions Pvt. Ltd. (Remote)",
+          "Jun 2026 \u2013 Aug 2026",
           "- Built full-stack apps with Next.js, PostgreSQL & REST APIs",
           "- Managed Docker-based deployments & production releases",
           "- Shipped web, mobile & backend features with the marketing team",
@@ -80,7 +103,7 @@ function runCommand(raw: string): { lines: Line[]; action?: () => void } {
       return {
         lines: out([
           "Email: deepakkandpal.tech@gmail.com",
-          "Scroll down to the contact section — or just type 'socials'.",
+          "Scroll down to the contact section \u2014 or just type 'socials'.",
         ]),
       };
     case "socials":
@@ -88,8 +111,8 @@ function runCommand(raw: string): { lines: Line[]; action?: () => void } {
         lines: out([
           "GitHub:    github.com/deepakkandpal004",
           "LinkedIn:  linkedin.com/in/deepakkandpal",
-          "Twitter/X:  x.com/codedbydeepak",
-          "LeetCode:  search 'deepakkandpal' — he is there too.",
+          "Twitter/X: x.com/codedbydeepak",
+          "LeetCode:  search 'deepakkandpal' \u2014 he is there too.",
         ]),
       };
     case "resume":
@@ -97,11 +120,61 @@ function runCommand(raw: string): { lines: Line[]; action?: () => void } {
         lines: out(["Opening resume.pdf ..."]),
         action: () => window.open("/resume.pdf", "_blank"),
       };
+    case "ls":
+      return {
+        lines: out(["about/  experience/  skills/  projects/  contact/  resume.pdf"]),
+      };
+    case "cd": {
+      if (args.length === 0) return { lines: out(["cd: missing operand \u2014 try 'cd projects'."]) };
+      const target = args[0].toLowerCase();
+      if (target === "..") return { lines: out(["Already at the root of awesomeness."]) };
+      const dest = SECTION_IDS[target];
+      if (!dest) return { lines: out(["cd: no such directory: " + args[0]]) };
+      return {
+        lines: out(["Jumping to #" + dest + " ..."]),
+        action: () => document.getElementById(dest)?.scrollIntoView({ behavior: "smooth" }),
+      };
+    }
+    case "date":
+      return { lines: out([new Date().toString()]) };
+    case "open": {
+      const p = (args[0] || "").toLowerCase();
+      const pages: Record<string, string> = {
+        careerforge: "/projects/careerforge",
+        finora: "/projects/finora",
+        trim: "/projects/trim",
+        macos: "/projects/macos-portfolio",
+        "macos-portfolio": "/projects/macos-portfolio",
+        blog: "/blog",
+      };
+      if (!p)
+        return {
+          lines: out([
+            "open: missing operand — try one of:",
+            "  open careerforge | open finora | open trim | open macos | open blog",
+          ]),
+        };
+      const dest = pages[p];
+      if (!dest) return { lines: out(["open: no such project: " + args[0]]) };
+      return {
+        lines: out(["Opening " + dest + " ..."]),
+        action: () => window.open(dest, "_blank"),
+      };
+    }
+    case "hire":
+      return {
+        lines: out(["Excellent choice.", "Taking you to the contact section — let's talk."]),
+        action: () => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }),
+      };
+    case "rm":
+      if (args.includes("-rf") && args.join(" ").includes("/"))
+        return { lines: out(["rm: cannot remove '/': Permission denied. Nice try though."]) };
+      return { lines: out(["rm: refusing to delete things on a portfolio. Growth mindset."]) };
     case "sudo":
       return {
         lines: out([
           "Permission denied: you are not in the sudoers file.",
-          "This incident will be reported to Deepak.",
+          "This incident will be reported to Deepak. (He already knows.)",
         ]),
       };
     case "echo":
@@ -140,7 +213,7 @@ const Terminal = () => {
               clearInterval(t);
               setBooted(true);
             }
-          }, 450);
+          }, 400);
         }
       },
       { threshold: 0.3 }
@@ -156,13 +229,26 @@ const Terminal = () => {
 
   const focusInput = () => inputRef.current?.focus();
 
-  const submit = () => {
-    const raw = input;
-    if (raw.trim().toLowerCase() === "clear") {
+  const runRaw = (raw: string) => {
+    const normalized = raw.trim().toLowerCase();
+    if (normalized === "clear" || normalized === "cls") {
       setLines([]);
       setInput("");
       setHistory((h) => [raw, ...h]);
       setHistIdx(-1);
+      return;
+    }
+    if (normalized === "history") {
+      const histLines: Line[] =
+        history.length === 0
+          ? [{ text: "No commands yet. Make some history.", kind: "out" }]
+          : [...history]
+              .reverse()
+              .map((h, i) => ({ text: `${i + 1}  ${h}`, kind: "out" as const }));
+      setLines((prev) => [...prev, { text: "CMD::" + raw, kind: "cmd" }, ...histLines]);
+      setHistory((h) => [raw, ...h]);
+      setHistIdx(-1);
+      setInput("");
       return;
     }
     const result = runCommand(raw);
@@ -174,9 +260,32 @@ const Terminal = () => {
     if (result.action) setTimeout(result.action, 350);
   };
 
+  const submit = () => runRaw(input);
+
+  const complete = () => {
+    const q = input.trim().toLowerCase().split(/\s+/)[0];
+    if (!q) return;
+    const matches = COMMANDS.filter((c) => c.startsWith(q));
+    if (matches.length === 1) {
+      setInput(matches[0] + " ");
+    } else if (matches.length > 1) {
+      let prefix = matches[0];
+      for (const m of matches) {
+        let i = 0;
+        while (i < prefix.length && prefix[i] === m[i]) i++;
+        prefix = prefix.slice(0, i);
+      }
+      if (prefix.length > q.length) setInput(prefix);
+      else setLines((prev) => [...prev, { text: matches.join("   "), kind: "sys" }]);
+    }
+  };
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") submit();
-    else if (e.key === "ArrowUp") {
+    else if (e.key === "Tab") {
+      e.preventDefault();
+      complete();
+    } else if (e.key === "ArrowUp") {
       e.preventDefault();
       if (history.length === 0) return;
       const next = Math.min(histIdx + 1, history.length - 1);
@@ -205,18 +314,25 @@ const Terminal = () => {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
         >
-          <p className="term-eyebrow">
-            <span className="term-dollar">$</span> cd ~/playground
-          </p>
+          <p className="t-label">Playground</p>
           <h2 className="t-h2">
-            Don&apos;t take my word for it —<br />
-            <span className="term-grad">ask the terminal</span>
-            <span className="term-caret" aria-hidden="true" />
+            Skip the small talk.<br />
+            <span className="term-accent">Ask the terminal.</span>
           </h2>
           <p className="t-body term-sub">
-            A tiny shell that knows everything about Deepak. Type <code>help</code> and poke around.
+            A live shell wired to everything about Deepak — projects, stack, and experience. Type <code>help</code> to begin.
           </p>
         </motion.div>
+
+        {booted && (
+          <div className="term-chips">
+            {["whoami", "projects", "skills", "open finora", "experience", "hire"].map((c) => (
+              <button key={c} type="button" className="term-chip" onClick={() => runRaw(c)}>
+                <span>$</span> {c}
+              </button>
+            ))}
+          </div>
+        )}
 
         <motion.div
           id="terminal-window"
@@ -271,9 +387,12 @@ const Terminal = () => {
             )}
           </div>
           <div className="term-footer">
-            <span><kbd>↑</kbd><kbd>↓</kbd> history</span>
-            <span><kbd>clear</kbd> wipe screen</span>
-            <span className="term-footer-try">psst — try <span>sudo</span></span>
+            <span className="term-status"><span className="term-status-dot" />portfolio-shell v2.1</span>
+            <span className="term-hints">
+              <span><kbd>↑</kbd><kbd>↓</kbd> history</span>
+              <span><kbd>tab</kbd> complete</span>
+              <span><kbd>clear</kbd> wipe</span>
+            </span>
           </div>
         </motion.div>
       </div>
@@ -281,72 +400,31 @@ const Terminal = () => {
       <style>{`
         .term-section { background: transparent; padding: var(--sec-pad) 0; }
         .term-heading { max-width: 720px; margin: 0 auto 56px; text-align: center; }
-        .term-heading .t-h2 { margin-bottom: 18px !important; }
-        .term-eyebrow {
-          display: inline-flex;
-          align-items: center;
-          gap: 9px;
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-          font-size: 13px;
-          letter-spacing: 0.5px;
-          color: var(--fg3);
-          border: 1px solid var(--bdr);
-          background: var(--bg2);
-          padding: 9px 18px;
-          border-radius: 999px;
-          margin-bottom: 26px;
-          box-shadow: 0 0 32px -8px var(--violet-glow);
-        }
-        .term-dollar { color: var(--acc-light); font-weight: 700; }
-        .term-grad {
-          background: linear-gradient(100deg, #ffffff 15%, var(--acc-light) 60%, var(--acc) 100%);
-          -webkit-background-clip: text;
-          background-clip: text;
-          color: transparent;
-        }
-        .term-caret {
-          display: inline-block;
-          width: 13px;
-          height: 1em;
-          margin-left: 10px;
-          vertical-align: -0.12em;
-          border-radius: 2px;
-          background: var(--acc);
-          box-shadow: 0 0 16px var(--acc-glow);
-          animation: term-blink 1.1s steps(2, start) infinite;
-        }
-        @keyframes term-blink { to { visibility: hidden; } }
-        .term-sub { max-width: 520px; margin: 0 auto; }
+        .term-heading .t-label { margin-bottom: 22px; }
+        .term-heading .t-h2 { margin-bottom: 18px !important; font-size: clamp(36px, 5vw, 52px); }
+        .term-heading .term-accent { color: var(--acc); }
+        .term-sub { max-width: 520px; margin: 0 auto; font-size: 16.5px; }
         .term-sub code {
           background: var(--bg3);
           border: 1px solid var(--bdr);
           border-radius: 6px;
           padding: 2px 8px;
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-family: var(--term-font);
           font-size: 13px;
           color: var(--acc);
         }
         .term-window {
+          --term-font: var(--font-term), ui-monospace, SFMono-Regular, Menlo, monospace;
           position: relative;
           max-width: 780px;
           margin: 0 auto;
-          border: 1px solid var(--bdr2);
           border-radius: 16px;
           overflow: hidden;
-          background: var(--bg2);
-          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 80px -24px var(--violet-glow);
-          cursor: text;
-        }
-        .term-window::before {
-          content: "";
-          position: absolute;
-          top: -1px;
-          left: 32px;
-          right: 32px;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, var(--acc), transparent);
-          opacity: 0.7;
-          z-index: 2;
+          border: 1px solid transparent;
+          background:
+            linear-gradient(var(--bg2), var(--bg2)) padding-box,
+            linear-gradient(165deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.03) 35%, rgba(251, 191, 36, 0.10) 100%) border-box;
+          box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55), 0 0 60px -25px rgba(251, 191, 36, 0.35);
         }
         .term-titlebar {
           display: flex;
@@ -359,13 +437,14 @@ const Terminal = () => {
         .term-dot { width: 12px; height: 12px; border-radius: 50%; }
         .term-title {
           margin-left: 8px;
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-family: var(--term-font);
           font-size: 12.5px;
-          color: var(--fg3);
+          color: var(--fg2);
+          letter-spacing: 0.02em;
         }
         .term-shell {
           margin-left: auto;
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-family: var(--term-font);
           font-size: 11.5px;
           color: var(--fg3);
           border: 1px solid var(--bdr);
@@ -377,19 +456,53 @@ const Terminal = () => {
           height: 380px;
           overflow-y: auto;
           padding: 20px 22px;
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-family: var(--term-font);
           font-size: 14px;
-          line-height: 1.7;
+          line-height: 1.8;
+          letter-spacing: 0.01em;
+          font-variant-ligatures: contextual;
+          -webkit-font-smoothing: antialiased;
+          text-rendering: optimizeLegibility;
+          background-image: radial-gradient(ellipse 90% 55% at 50% -10%, rgba(251, 191, 36, 0.04), transparent 70%);
         }
         .term-body::-webkit-scrollbar { width: 8px; }
         .term-body::-webkit-scrollbar-thumb { background: var(--bdr2); border-radius: 8px; }
-        .term-line { white-space: pre-wrap; word-break: break-word; }
+        .term-line { white-space: pre-wrap; word-break: break-word; animation: term-in 0.28s ease both; }
+        @keyframes term-in { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+        .term-chips {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 10px;
+          max-width: 780px;
+          margin: 0 auto 30px;
+          animation: term-in 0.4s ease both;
+        }
+        .term-chip {
+          font-family: var(--font-term), ui-monospace, SFMono-Regular, Menlo, monospace;
+          font-size: 12.5px;
+          color: var(--fg2);
+          background: var(--bg2);
+          border: 1px solid var(--bdr2);
+          border-radius: 999px;
+          padding: 8px 18px;
+          cursor: pointer;
+          transition: border-color 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s;
+        }
+        .term-chip span { color: var(--acc); margin-right: 6px; font-weight: 700; }
+        .term-chip:hover {
+          border-color: var(--acc);
+          color: var(--fg);
+          box-shadow: 0 0 20px -10px var(--acc);
+          transform: translateY(-1px);
+        }
+        .term-chip:active { transform: translateY(0); }
         .term-sys { color: var(--fg3); }
         .term-out { color: var(--fg2); }
         .term-cmd { color: var(--fg); }
-        .term-prompt { color: #4ade80; font-weight: 600; }
-        .term-path { color: #60a5fa; font-weight: 600; }
-        .term-colon { color: var(--fg3); }
+        .term-prompt { color: var(--fg2); font-weight: 600; }
+        .term-path { color: var(--acc); font-weight: 600; }
+        .term-colon { color: var(--fg3); font-weight: 500; }
         .term-cmdtext { color: var(--fg); }
         .term-input {
           background: transparent;
@@ -401,17 +514,33 @@ const Terminal = () => {
           width: 60%;
           caret-color: var(--acc);
         }
+        /* Kill the global input:focus glow/outline for the terminal input */
+        .term-input:focus {
+          border: none;
+          box-shadow: none;
+          background: transparent;
+        }
         .term-footer {
           display: flex;
           align-items: center;
-          gap: 20px;
-          padding: 11px 22px;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 10px 20px;
           border-top: 1px solid var(--bdr);
-          background: var(--bg3);
-          font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+          background: rgba(0, 0, 0, 0.28);
+          font-family: var(--term-font);
           font-size: 11.5px;
           color: var(--fg3);
         }
+        .term-status { display: inline-flex; align-items: center; gap: 8px; }
+        .term-status-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--acc);
+          box-shadow: 0 0 8px rgba(251, 191, 36, 0.5);
+        }
+        .term-hints { display: inline-flex; align-items: center; gap: 16px; }
         .term-footer kbd {
           display: inline-block;
           border: 1px solid var(--bdr2);
@@ -424,12 +553,12 @@ const Terminal = () => {
           padding: 1px 8px;
           margin-right: 7px;
         }
-        .term-footer-try { margin-left: auto; }
-        .term-footer-try span { color: var(--acc-light); font-weight: 600; }
         @media (max-width: 720px) {
           .term-section { padding: var(--sec-pad-sm) 0; }
           .term-body { height: 320px; font-size: 13px; }
           .term-input { font-size: 16px; }
+          .term-footer { padding: 10px 16px; }
+          .term-hints { gap: 10px; }
         }
       `}</style>
     </section>

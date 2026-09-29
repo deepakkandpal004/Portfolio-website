@@ -110,9 +110,6 @@ const Hero = () => {
         transition: isHovered ? "transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), top 0.15s cubic-bezier(0.25, 1, 0.5, 1), left 0.15s cubic-bezier(0.25, 1, 0.5, 1)" : "width 1.5s cubic-bezier(0.16, 1, 0.3, 1), height 1.5s cubic-bezier(0.16, 1, 0.3, 1), top 1s ease, left 1s ease",
       }} />
 
-      {/* Scanner Sweep Line */}
-      {isMounted && <div className="hero-scanner-beam" />}
-
       <div className="container" style={{ position: "relative", zIndex: 1, width: "100%" }}>
         <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
 

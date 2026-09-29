@@ -21,13 +21,13 @@ const cardVariants = {
   },
 };
 
-const ProjectCard = ({ p, variant }: { p: Project; variant: "teaser" | "full" }) => {
+const ProjectCard = ({ p, variant, featured }: { p: Project; variant: "teaser" | "full"; featured?: boolean }) => {
   const [imgIdx, setImgIdx] = useState(0);
   const isFull = variant === "full";
 
   return (
     <motion.article
-      className={`wg-card ${isFull ? "" : "teaser"}`}
+      className={`wg-card ${isFull ? "" : "teaser"}${featured ? " featured" : ""}`}
       variants={cardVariants}
       style={{ "--pa": p.accent, "--pas": p.accentSoft } as React.CSSProperties}
     >
@@ -49,6 +49,7 @@ const ProjectCard = ({ p, variant }: { p: Project; variant: "teaser" | "full" })
         <span className="wg-view">
           <FiArrowUpRight size={14} /> View details
         </span>
+        {featured && <span className="wg-featured-badge">Featured</span>}
       </div>
 
       {p.screenshots.length > 1 && (
@@ -137,6 +138,7 @@ export default function WorkGrid({
   variant?: "teaser" | "full";
 }) {
   const visible = typeof limit === "number" ? projects.slice(0, limit) : projects;
+  const [featured, ...rest] = visible;
 
   return (
     <motion.div
@@ -146,7 +148,8 @@ export default function WorkGrid({
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}
     >
-      {visible.map((p) => (
+      {featured && <ProjectCard key={featured.slug} p={featured} variant={variant} featured />}
+      {rest.map((p) => (
         <ProjectCard key={p.slug} p={p} variant={variant} />
       ))}
 
@@ -418,8 +421,67 @@ export default function WorkGrid({
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
+        /* Featured spotlight: first project spans full width, horizontal layout */
+        .wg-card.featured {
+          grid-column: 1 / -1;
+          display: grid;
+          grid-template-columns: 1.15fr 1fr;
+          grid-template-areas:
+            "img body"
+            "thumbs body";
+        }
+        .wg-card.featured .wg-img {
+          grid-area: img;
+          aspect-ratio: 16 / 10;
+          border-bottom: none;
+          border-right: 1px solid var(--bdr);
+        }
+        .wg-card.featured .wg-thumbs {
+          grid-area: thumbs;
+          border-right: 1px solid var(--bdr);
+          padding: 12px 16px;
+          align-items: center;
+        }
+        .wg-card.featured .wg-body {
+          grid-area: body;
+          padding: 30px 32px;
+          justify-content: center;
+          gap: 14px;
+        }
+        .wg-card.featured .wg-title { font-size: 27px; }
+        .wg-card.featured .wg-desc {
+          font-size: 14.5px;
+          display: block;
+          -webkit-line-clamp: unset;
+        }
+        .wg-featured-badge {
+          position: absolute;
+          top: 14px;
+          left: 14px;
+          z-index: 3;
+          padding: 6px 14px;
+          border-radius: 999px;
+          background: var(--pa, var(--acc));
+          color: #07100e;
+          font-family: var(--font-body);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+        }
         @media (max-width: 900px) {
           .wg-grid { grid-template-columns: 1fr; }
+          .wg-card.featured {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+              "img"
+              "thumbs"
+              "body";
+          }
+          .wg-card.featured .wg-img { border-right: none; border-bottom: 1px solid var(--bdr); aspect-ratio: 16 / 9; }
+          .wg-card.featured .wg-thumbs { border-right: none; }
+          .wg-card.featured .wg-body { padding: 20px 22px 22px; }
+          .wg-card.featured .wg-title { font-size: 22px; }
         }
         @media (max-width: 480px) {
           .wg-body { padding: 18px 18px 20px; }

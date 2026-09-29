@@ -48,7 +48,6 @@ const About = () => {
       {/* Slow background gradient shift */}
       <div className="about-bg-gradient" />
 
-      <div className="about-scanner-beam" />
       <div className="container reveal" ref={ref} style={{ position: "relative", zIndex: 10 }}>
 
         {/* Centered Header */}
@@ -153,24 +152,6 @@ const About = () => {
           background-size: 400% 400%;
           animation: about-bg-shift 22s ease-in-out infinite;
           opacity: 0.5;
-        }
-        .about-scanner-beam {
-          position: absolute;
-          left: 0;
-          width: 100%;
-          height: 1px;
-          background: linear-gradient(90deg, transparent 10%, var(--acc-light) 50%, transparent 90%);
-          opacity: 0.2;
-          animation: about-scanner-sweep 9s ease-in-out infinite;
-          pointer-events: none;
-          z-index: 1;
-          filter: blur(1px);
-        }
-        @keyframes about-scanner-sweep {
-          0% { top: -2%; opacity: 0; }
-          10% { opacity: 0.2; }
-          90% { opacity: 0.2; }
-          100% { top: 102%; opacity: 0; }
         }
         @keyframes about-bg-shift {
           0% { background-position: 0% 50%; }
@@ -303,7 +284,7 @@ const About = () => {
         .about-trait-number {
           font-family: var(--font-head);
           font-size: 48px;
-          font-weight: 800;
+          font-weight: 700;
           color: var(--acc);
           opacity: 0.12;
           line-height: 1;
@@ -323,8 +304,6 @@ const About = () => {
           color: var(--fg2);
           line-height: 1.7;
         }
-        [data-theme="light"] #about { background: var(--bg2) !important; }
-        [data-theme="light"] .about-bg-glow { background: radial-gradient(circle at 50% 30%, rgba(79,70,229,0.05), transparent 70%) !important; }
         @media (max-width: 768px) {
           .about-main-grid {
             grid-template-columns: 1fr;

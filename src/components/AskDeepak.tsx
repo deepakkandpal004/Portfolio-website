@@ -243,7 +243,7 @@ const AskDeepak = () => {
           background: var(--acc);
           color: #07100e;
           font-family: var(--font-head);
-          font-weight: 800;
+          font-weight: 700;
           font-size: 17px;
           display: flex;
           align-items: center;

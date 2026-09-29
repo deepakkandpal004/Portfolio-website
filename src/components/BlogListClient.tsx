@@ -146,11 +146,6 @@ const BlogListClient = () => {
           </div>
         )}
 
-        {/* Footer */}
-        <div className="bl-footer">
-          <span>© {new Date().getFullYear()} Deepak Kandpal</span>
-          <span>Next.js Portfolio</span>
-        </div>
       </div>
 
       <style>{`
@@ -305,14 +300,6 @@ const BlogListClient = () => {
           text-align: center; padding: 80px 24px;
           background: var(--bg2); border: 1px solid var(--bdr);
           border-radius: var(--r-lg);
-        }
-
-        /* Footer */
-        .bl-footer {
-          display: flex; justify-content: space-between; align-items: center;
-          flex-wrap: wrap; gap: 12px; padding-top: 28px;
-          border-top: 1px solid var(--bdr);
-          font-family: var(--font-body); font-size: 12.5px; color: var(--fg3);
         }
 
         @media (max-width: 768px) {

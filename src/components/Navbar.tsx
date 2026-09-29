@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import ThemeToggle from "./ThemeToggle";
-import { useTheme } from "@/src/context/ThemeContext";
 
 const navItems = [
   { label: "About",   href: "#about" },
@@ -20,23 +18,14 @@ const navItems = [
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [activeSection, setActiveSection] = useState("");
   
   const pathname = usePathname();
-  const { theme } = useTheme();
   const isHome = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
-
-      // Calculate scroll progress
-      const winScroll = window.scrollY;
-      const height = document.documentElement.scrollHeight - window.innerHeight;
-      if (height > 0) {
-        setScrollProgress((winScroll / height) * 100);
-      }
     };
 
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -83,17 +72,11 @@ const Navbar = () => {
 
   const close = () => setOpen(false);
 
-  const navBg = scrolled
-    ? theme === "dark"
-      ? "rgba(5, 7, 12, 0.82)"
-      : "rgba(250, 251, 254, 0.82)"
-    : "transparent";
+  const navBg = scrolled ? "rgba(5, 7, 12, 0.82)" : "transparent";
 
   return (
     <>
       {/* Scroll Progress Bar */}
-      <div className="scroll-progress-bar" style={{ width: `${scrollProgress}%` }} />
-
       <nav style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
         borderBottom: scrolled ? "1px solid var(--bdr)" : "1px solid transparent",
@@ -111,7 +94,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" onClick={close} style={{
             fontFamily: "var(--font-head)",
-            fontWeight: 800, fontSize: 19,
+            fontWeight: 700, fontSize: 19,
             letterSpacing: "2.5px",
             textTransform: "uppercase",
             color: "var(--fg)",
@@ -173,12 +156,10 @@ const Navbar = () => {
                 </li>
               );
             })}
-            <li style={{ marginLeft: 12 }}><ThemeToggle /></li>
           </ul>
 
           {/* Mobile controls */}
           <div className="nav-mobile" style={{ display: "none", alignItems: "center", gap: 8 }}>
-            <ThemeToggle />
             <button onClick={() => setOpen(o => !o)} aria-label="Toggle menu" style={{
               background: "none", border: "1px solid var(--bdr2)",
               borderRadius: "var(--r)", color: "var(--fg)",

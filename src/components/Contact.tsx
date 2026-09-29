@@ -115,20 +115,6 @@ const Contact = () => {
           </div>
         </div>
 
-        {/* Footer */}
-        <div style={{
-          marginTop: 80, paddingTop: 28,
-          borderTop: "1px solid var(--bdr)",
-          display: "flex", justifyContent: "space-between", alignItems: "center",
-          flexWrap: "wrap", gap: 12,
-        }}>
-          <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--fg3)", fontWeight: 400 }}>
-            © {new Date().getFullYear()} Deepak Kandpal
-          </span>
-          <span style={{ fontFamily: "var(--font-body)", fontSize: 12.5, color: "var(--fg3)", fontWeight: 400 }}>
-            Built with Next.js + TypeScript
-          </span>
-        </div>
       </div>
 
       <style>{`

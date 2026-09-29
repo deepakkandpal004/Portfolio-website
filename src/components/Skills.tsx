@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useTheme } from "@/src/context/ThemeContext";
 import { motion } from "framer-motion";
 
 interface SkillItem {
@@ -71,7 +70,6 @@ const pillVariants = {
 
 const Skills = () => {
   const ref = useRef<HTMLDivElement>(null);
-  const { theme } = useTheme();
 
   useEffect(() => {
     const el = ref.current; if (!el) return;
@@ -89,9 +87,6 @@ const Skills = () => {
 
       {/* Slow background gradient shift */}
       <div className="skills-bg-gradient" />
-
-      {/* Scanner beam line */}
-      <div className="skills-scanner-beam" />
 
       <div className="container reveal" ref={ref} style={{ position: "relative", zIndex: 10 }}>
 
@@ -147,9 +142,7 @@ const Skills = () => {
                     viewport={{ once: true }}
                   >
                     {catSkills.map(s => {
-                      const iconFilter = s.darkInvert && theme === "dark"
-                        ? "brightness(0) invert(1)"
-                        : "none";
+                      const iconFilter = s.darkInvert ? "brightness(0) invert(1)" : "none";
                       return (
                         <motion.span key={s.name} className="skills-pill" variants={pillVariants}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -169,6 +162,24 @@ const Skills = () => {
             );
           })}
         </motion.div>
+
+        {/* Marquee ticker */}
+        <div className="skills-marquee" aria-hidden="true">
+          <div className="skills-marquee-track">
+            {[...skills, ...skills].map((s, i) => (
+              <span key={`${s.name}-${i}`} className="skills-marquee-item">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`${iconBase}/${s.icon}`}
+                  alt=""
+                  style={{ width: 16, height: 16, flexShrink: 0, filter: s.darkInvert ? "brightness(0) invert(1)" : "none" }}
+                  loading="lazy"
+                />
+                {s.name}
+              </span>
+            ))}
+          </div>
+        </div>
 
         {/* Bottom tagline */}
         <div className="skills-bottom">
@@ -198,18 +209,6 @@ const Skills = () => {
           -webkit-mask-image: radial-gradient(circle, black 20%, transparent 90%);
           mask-image: radial-gradient(circle, black 20%, transparent 90%);
         }
-        .skills-scanner-beam {
-          position: absolute;
-          left: 0;
-          width: 100%;
-          height: 1px;
-          background: linear-gradient(90deg, transparent 10%, var(--acc-light) 50%, transparent 90%);
-          opacity: 0.25;
-          animation: skills-scanner-sweep 8s ease-in-out infinite;
-          pointer-events: none;
-          z-index: 1;
-          filter: blur(1px);
-        }
         .skills-bg-gradient {
           position: absolute;
           inset: 0;
@@ -225,12 +224,6 @@ const Skills = () => {
           background-size: 400% 400%;
           animation: skills-bg-shift 20s ease-in-out infinite;
           opacity: 0.6;
-        }
-        @keyframes skills-scanner-sweep {
-          0% { top: -2%; opacity: 0; }
-          10% { opacity: 0.25; }
-          90% { opacity: 0.25; }
-          100% { top: 102%; opacity: 0; }
         }
         @keyframes skills-bg-shift {
           0% { background-position: 0% 50%; }
@@ -356,12 +349,40 @@ const Skills = () => {
           transform: translateY(-2px);
           box-shadow: 0 4px 12px var(--acc-glow2);
         }
+        .skills-marquee {
+          margin-top: 56px;
+          overflow: hidden;
+          -webkit-mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent);
+        }
+        .skills-marquee-track {
+          display: flex;
+          gap: 14px;
+          width: max-content;
+          animation: skills-marquee 32s linear infinite;
+        }
+        .skills-marquee:hover .skills-marquee-track { animation-play-state: paused; }
+        .skills-marquee-item {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 9px 18px;
+          border-radius: 999px;
+          border: 1px solid var(--bdr);
+          background: var(--bg2);
+          font-family: var(--font-body);
+          font-size: 13px;
+          font-weight: 500;
+          color: var(--fg3);
+          white-space: nowrap;
+        }
+        @keyframes skills-marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
         .skills-bottom {
           margin-top: 48px;
         }
-        [data-theme="light"] #skills { background: var(--bg) !important; }
-        [data-theme="light"] .skills-bg-glow { background: radial-gradient(circle at 50% 20%, rgba(79,70,229,0.06), transparent 70%) !important; }
-        [data-theme="light"] .skills-grid-pattern { background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px) !important; }
         @media (max-width: 768px) {
           .skills-bento-card:nth-child(1),
           .skills-bento-card:nth-child(2),
