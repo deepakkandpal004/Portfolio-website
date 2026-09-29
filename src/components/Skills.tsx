@@ -42,6 +42,9 @@ const categories = [
 
 const iconBase = "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons";
 
+// Core strengths — highlighted for recruiters
+const coreSkills = new Set(["React", "Next.js", "TypeScript", "Node.js", "MongoDB", "PostgreSQL"]);
+
 const containerVariants = {
   hidden: {},
   visible: {
@@ -144,7 +147,7 @@ const Skills = () => {
                     {catSkills.map(s => {
                       const iconFilter = s.darkInvert ? "brightness(0) invert(1)" : "none";
                       return (
-                        <motion.span key={s.name} className="skills-pill" variants={pillVariants}>
+                        <motion.span key={s.name} className={`skills-pill${coreSkills.has(s.name) ? " skills-pill-core" : ""}`} variants={pillVariants}>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={`${iconBase}/${s.icon}`}
@@ -181,13 +184,6 @@ const Skills = () => {
           </div>
         </div>
 
-        {/* Bottom tagline */}
-        <div className="skills-bottom">
-          <div className="skills-divider-short" />
-          <p className="t-body" style={{ maxWidth: 650, margin: "0 auto", textAlign: "center" }}>
-            Always learning. Always shipping. Constantly exploring new technologies to build faster, scalable and reliable products.
-          </p>
-        </div>
       </div>
 
       <style>{`
@@ -321,12 +317,6 @@ const Skills = () => {
           color: var(--fg3);
           line-height: 1.4;
         }
-        .skills-divider-short {
-          width: 140px;
-          height: 1px;
-          margin: 0 auto 28px;
-          background: linear-gradient(90deg, transparent, var(--bdr2), transparent);
-        }
         .skills-pill {
           display: inline-flex;
           align-items: center;
@@ -348,6 +338,11 @@ const Skills = () => {
           background: var(--bg3);
           transform: translateY(-2px);
           box-shadow: 0 4px 12px var(--acc-glow2);
+        }
+        .skills-pill-core {
+          border-color: color-mix(in srgb, var(--acc) 55%, transparent);
+          color: var(--fg);
+          box-shadow: 0 0 16px var(--acc-glow2), inset 0 0 12px var(--acc-glow2);
         }
         .skills-marquee {
           margin-top: 56px;
@@ -379,9 +374,6 @@ const Skills = () => {
         @keyframes skills-marquee {
           from { transform: translateX(0); }
           to { transform: translateX(-50%); }
-        }
-        .skills-bottom {
-          margin-top: 48px;
         }
         @media (max-width: 768px) {
           .skills-bento-card:nth-child(1),

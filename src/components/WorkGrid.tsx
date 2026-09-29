@@ -158,7 +158,7 @@ export default function WorkGrid({
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 20px;
-          align-items: start;
+          align-items: stretch;
         }
         .wg-card {
           position: relative;

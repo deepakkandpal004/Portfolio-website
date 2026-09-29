@@ -17,6 +17,7 @@ const navItems = [
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   
@@ -26,7 +27,11 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 30);
+      const h = document.documentElement;
+      const max = h.scrollHeight - h.clientHeight;
+      setProgress(max > 0 ? Math.min(100, (h.scrollTop / max) * 100) : 0);
     };
+    handleScroll();
 
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -76,7 +81,18 @@ const Navbar = () => {
 
   return (
     <>
-      {/* Scroll Progress Bar */}
+      {/* Scroll progress bar */}
+      <div
+        aria-hidden="true"
+        style={{
+          position: "fixed", top: 0, left: 0, zIndex: 210,
+          height: 2, width: `${progress}%`,
+          background: "linear-gradient(90deg, var(--acc), #f59e0b)",
+          boxShadow: "0 0 12px var(--acc-glow)",
+          transition: "width 0.08s linear",
+          pointerEvents: "none",
+        }}
+      />
       <nav style={{
         position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
         borderBottom: scrolled ? "1px solid var(--bdr)" : "1px solid transparent",

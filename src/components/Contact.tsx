@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiArrowUpRight, FiInstagram, FiCalendar } from "react-icons/fi";
+import { FiGithub, FiLinkedin, FiTwitter, FiMail, FiArrowUpRight, FiInstagram, FiCalendar, FiClock } from "react-icons/fi";
 import ContactForm from "./ContactForm";
 
 const CALENDLY_URL = "https://calendly.com/deepakkandpal-tech/30min";
@@ -30,10 +30,21 @@ const Contact = () => {
         <h2 className="t-h2" style={{ marginBottom: 18 }}>
           Let&apos;s build something <span className="gold">together.</span>
         </h2>
-        <p className="t-body" style={{ maxWidth: 480, marginBottom: 56 }}>
+        <p className="t-body" style={{ maxWidth: 480, marginBottom: 22 }}>
           Open to new projects, collaborations, or just a good conversation.
           Send a message and I&apos;ll get back to you.
         </p>
+
+        {/* Response time note */}
+        <div style={{
+          display: "inline-flex", alignItems: "center", gap: 9,
+          fontFamily: "var(--font-body)", fontSize: 13, color: "var(--fg3)",
+          border: "1px solid var(--bdr)", borderRadius: 999,
+          padding: "9px 18px", marginBottom: 56, background: "var(--bg2)",
+        }}>
+          <FiClock size={13} style={{ color: "var(--acc)", flexShrink: 0 }} />
+          Typically replies within 24 hours
+        </div>
 
         {/* Book a call banner */}
         <a

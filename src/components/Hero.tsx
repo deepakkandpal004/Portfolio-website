@@ -1,6 +1,6 @@
 "use client";
 
-import { FiArrowRight, FiDownload } from "react-icons/fi";
+import { FiArrowRight, FiDownload, FiGithub, FiLinkedin, FiTwitter, FiInstagram, FiMapPin, FiChevronDown } from "react-icons/fi";
 import { useState, useEffect, useRef } from "react";
 
 const roles = [
@@ -9,6 +9,13 @@ const roles = [
   "Optimizing PostgreSQL queries with Prisma & Drizzle",
   "Integrating AI models via Groq & OpenRouter",
   "Shipping full-stack apps with React & Next.js",
+];
+
+const socials = [
+  { name: "GitHub", href: "https://github.com/deepakkandpal004", Icon: FiGithub },
+  { name: "LinkedIn", href: "https://www.linkedin.com/in/deepakkandpal", Icon: FiLinkedin },
+  { name: "X", href: "https://x.com/codedbydeepak", Icon: FiTwitter },
+  { name: "Instagram", href: "https://instagram.com/codedbydeepak", Icon: FiInstagram },
 ];
 
 const Hero = () => {
@@ -111,7 +118,7 @@ const Hero = () => {
       }} />
 
       <div className="container" style={{ position: "relative", zIndex: 1, width: "100%" }}>
-        <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center" }}>
+        <div style={{ maxWidth: 700, margin: "0 auto", textAlign: "center", paddingBottom: 84 }}>
 
           {/* "Available" badge */}
           <div className="a1" style={{ display: "flex", justifyContent: "center", marginBottom: 36 }}>
@@ -179,6 +186,23 @@ const Hero = () => {
             <span>MERN Stack</span>
             <span style={{ color: "var(--acc)", fontSize: 14, opacity: 0.8 }}>•</span>
             <span>Production Development</span>
+          </div>
+
+          {/* Location */}
+          <div className="hero-loc" style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 7,
+            fontFamily: "var(--font-body)",
+            fontSize: 13,
+            color: "var(--fg3)",
+            marginBottom: 20,
+          }}>
+            <FiMapPin size={13} style={{ color: "var(--acc)", flexShrink: 0 }} />
+            <span>Based in India</span>
+            <span style={{ opacity: 0.4 }}>·</span>
+            <span>Open to remote</span>
           </div>
 
           {/* Rotating role text */}
@@ -275,8 +299,33 @@ const Hero = () => {
             </a>
           </div>
 
+          {/* Social links */}
+          <div className="a9" style={{
+            display: "flex", alignItems: "center", justifyContent: "center",
+            gap: 10, marginTop: 28,
+          }}>
+            {socials.map((s) => (
+              <a
+                key={s.name}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={s.name}
+                className="hero-social"
+              >
+                <s.Icon size={16} />
+              </a>
+            ))}
+          </div>
+
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <a href="#work" className="hero-scroll" aria-label="Scroll to work">
+        <span>Scroll</span>
+        <FiChevronDown size={16} />
+      </a>
     </section>
   );
 };

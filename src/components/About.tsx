@@ -5,16 +5,16 @@ import { motion } from "framer-motion";
 
 const traits = [
   {
-    title: "Clean code",
-    desc: "I like keeping my code clean and organized so it's easy to understand and easy to work on later.",
+    title: "Production experience",
+    desc: "SDE Intern at sevaSYNC Digital Solutions \u2014 shipped client-facing MERN features from API design to deployment.",
   },
   {
-    title: "Fast delivery",
-    desc: "I like building things fast, testing them, and making them better every day.",
+    title: "API-first backend",
+    desc: "35+ REST APIs built with Node.js, Express and TypeScript \u2014 JWT auth, Prisma ORM and Redis caching.",
   },
   {
-    title: "Always learning",
-    desc: "Every project teaches me something new, and I'm always curious to learn more and build better things.",
+    title: "Full-stack ownership",
+    desc: "From React/Next.js interfaces to Dockerized deployments \u2014 I take features from idea to production.",
   },
 ];
 
@@ -97,7 +97,7 @@ const About = () => {
             transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
           >
             <p className="t-body" style={{ fontSize: "15.5px", marginBottom: 20 }}>
-              I&apos;m a Full Stack Developer who enjoys building web applications from idea to deployment. I work mainly with React, Next.js, Node.js, and TypeScript, focusing on clean code, performance, and creating products that solve real problems.
+              I&apos;m a Full Stack Developer who enjoys building web applications from idea to deployment. Previously an SDE Intern at sevaSYNC Digital Solutions, I work mainly with React, Next.js, Node.js, and TypeScript \u2014 focusing on clean code, performance, and products that solve real problems.
             </p>
             <p className="t-body" style={{ fontSize: "15.5px" }}>
               When I&apos;m not coding, I&apos;m exploring new tools, reading about system design, or working on side projects that challenge me to grow as a developer.
