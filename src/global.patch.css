@@ -1,0 +1,64 @@
+/* ════════════════════════════════════════════════
+   globals.css changes — apply each block as marked
+   ════════════════════════════════════════════════ */
+
+/* 1) ADD inside :root { ... } */
+:root {
+  --acc-rgb: 245 158 11;                 /* lets you write rgb(var(--acc-rgb) / 0.2) */
+  --focus: rgb(245 158 11 / 0.45);       /* visible focus ring */
+  --fg3: #8a8478;                        /* REPLACES old #6b655a (contrast ~5:1) */
+  --nav-h: 88px;                         /* match your real navbar height */
+}
+
+/* 2) REPLACE your existing `html { ... }` rule with this (adds scroll-padding-top) */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--nav-h);      /* anchors no longer hide under the navbar */
+  font-size: 16px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bdr2) var(--bg);
+}
+
+/* 3) DELETE the second ::selection rule:
+      ::selection { background: var(--acc); color: #fff; }
+   Keep only the first one (amber tint). */
+
+/* 4) ADD: visible keyboard focus for links, buttons and everything else */
+:focus-visible {
+  outline: 2px solid var(--acc);
+  outline-offset: 3px;
+  border-radius: var(--r);
+}
+
+/* 5) REPLACE `input:focus, textarea:focus` with this (the old glow was transparent) */
+input:focus, textarea:focus {
+  border-color: var(--acc);
+  box-shadow: 0 0 0 3px var(--focus);
+  background: var(--bg3);
+}
+
+/* 6) REPLACE the `input, textarea { ... }` selector line with this scoped one,
+      keeping the same declarations inside:
+      input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+      textarea { ...same declarations... }
+*/
+
+/* 7) CHANGE in .btn-acc:   color: #fff;   →   color: var(--bg);   (~9:1 contrast) */
+
+/* 8) FIX the reduced-motion block. Replace the whole block with: */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;   /* stops infinite loops from flickering */
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 9) CLEANUP (delete these if unused):
+      - body { transition: background 0.4s ease, color 0.4s ease; }   (no theme toggle)
+      - --violet-glow, --grid-color, --acc-glow2
+      - .animate-pills, .skeleton (if not referenced)
+      - body::before noise overlay (or swap for a small pre-rendered PNG)
+      - !important on .blog-card (fix specificity instead)
+*/
