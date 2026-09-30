@@ -101,7 +101,7 @@ const BlogPostClient = ({ post }: Props) => {
           </header>
 
           {/* Cover */}
-          <div className="bp-cover">
+          <div className="bp-cover glass-card">
             <img src={post.coverImage} alt={post.title} />
           </div>
 
@@ -112,7 +112,7 @@ const BlogPostClient = ({ post }: Props) => {
           />
 
           {/* Share */}
-          <div className="bp-share">
+          <div className="bp-share glass-card">
             <div className="bp-share-label">
               <FiShare2 size={15} />
               <span>Share this article</span>
@@ -141,7 +141,7 @@ const BlogPostClient = ({ post }: Props) => {
           </div>
 
           {/* Author card */}
-          <div className="bp-author-card">
+          <div className="bp-author-card glass-card">
             <div className="bp-author-card-avatar">DK</div>
             <div className="bp-author-card-info">
               <p className="bp-author-card-label">Written by</p>
@@ -227,9 +227,8 @@ const BlogPostClient = ({ post }: Props) => {
 
         /* Cover */
         .bp-cover {
-          width: 100%; border-radius: 20px; overflow: hidden;
-          border: 1px solid var(--bdr); margin-bottom: 48px;
-          box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+          width: 100%; overflow: hidden;
+          margin-bottom: 48px;
           aspect-ratio: 16 / 8;
         }
         .bp-cover img {
@@ -246,8 +245,7 @@ const BlogPostClient = ({ post }: Props) => {
         .bp-share {
           display: flex; align-items: center; justify-content: space-between;
           flex-wrap: wrap; gap: 16px; margin-top: 52px;
-          padding: 24px 28px; border-radius: 16px;
-          border: 1px solid var(--bdr); background: var(--bg2);
+          padding: 24px 28px;
         }
         .bp-share-label {
           display: flex; align-items: center; gap: 8px;
@@ -262,16 +260,11 @@ const BlogPostClient = ({ post }: Props) => {
           color: var(--fg3); cursor: pointer; transition: all 0.2s;
           text-decoration: none; font-size: 11; font-family: var(--font-body);
         }
-        .bp-share-btn:hover {
-          color: var(--acc); border-color: var(--acc); background: var(--acc-glow2);
-        }
 
         /* Author card */
         .bp-author-card {
           display: flex; gap: 20px; align-items: flex-start;
           margin-top: 48px; padding: 28px;
-          border-radius: 16px; border: 1px solid var(--bdr);
-          background: var(--bg2);
         }
         .bp-author-card-avatar {
           width: 56px; height: 56px; border-radius: 14px; flex-shrink: 0;
@@ -314,7 +307,7 @@ const BlogPostClient = ({ post }: Props) => {
 
         @media (max-width: 600px) {
           .bp-hero-meta { flex-direction: column; align-items: flex-start; }
-          .bp-cover { aspect-ratio: 16 / 10; border-radius: 14px; }
+          .bp-cover { aspect-ratio: 16 / 10; }
           .bp-author-card { flex-direction: column; }
           .bp-share { flex-direction: column; align-items: flex-start; }
         }

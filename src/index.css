@@ -4,46 +4,46 @@
   --acc:       #f59e0b;
   --acc-light: #fbbf24;
   --acc-dim:   #d97706;
-  --acc-glow:  rgba(245, 158, 11, 0.16);
-  --acc-glow2: rgba(245, 158, 11, 0.07);
+  --acc-glow:  transparent; /* flat terminal look — ambient glows removed */
+  --acc-glow2: transparent;
 
-  /* Dark surfaces */
-  --bg:   #05070c;
-  --bg2:  #0a0e16;
-  --bg3:  #10151f;
-  --bg4:  #161c29;
-  --bdr:  #1b2130;
-  --bdr2: #2a3348;
+  /* Dark surfaces — warm charcoal to match the amber accent */
+  --bg:   #0b0a08;
+  --bg2:  #14120e;
+  --bg3:  #1c1814;
+  --bg4:  #26211a;
+  --bdr:  #292420;
+  --bdr2: #3a332a;
 
   /* Text */
-  --fg:   #f4f6fb;
-  --fg2:  #9aa4b8;
-  --fg3:  #5f6b82;
+  --fg:   #f6f3ea;
+  --fg2:  #a39e93;
+  --fg3:  #6b655a;
 
-  --violet-glow: rgba(139, 92, 246, 0.10);
-  --grid-color: rgba(139, 92, 246, 0.05);
+  --violet-glow: transparent;
+  --grid-color: rgba(255, 255, 255, 0.035);
 
   /* Utility */
   --err:  #f87171;
   --ok:   #4ade80;
 
   /* Radius */
-  --r:    8px;
-  --r-md: 14px;
-  --r-lg: 20px;
+  --r:    6px;
+  --r-md: 10px;
+  --r-lg: 12px;
 
-  /* Typography — 3-font system (loaded via Google Fonts <link> in app/layout.tsx) */
-  --font-head: "Space Grotesk", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-term: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Typography — Geist (headings) + Inter (body) + Geist Mono (code), via Fontsource <link> in app/layout.tsx */
+  --font-head: "Geist Variable", "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-body: "Inter Variable", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-term: "Geist Mono Variable", "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Layout */
-  --max-w: 1100px;
-  --pad-x: 52px;
+  --max-w: 1300px;
+  --pad-x: 38px;
 
   /* Section spacing */
-  --sec-pad: 112px;
-  --sec-pad-sm: 72px;
+  --sec-pad: 80px;
+  --sec-pad-sm: 56px;
 }
 
 /* ─── Reset ───────────────────────────────────── */
@@ -74,22 +74,14 @@ html::-webkit-scrollbar-thumb {
   border: 2px solid var(--bg);
 }
 
-html::-webkit-scrollbar-thumb:hover {
-  background: var(--acc-dim);
-}
-
 ::selection {
-  background: var(--acc-glow2);
+  background: rgba(245, 158, 11, 0.28);
   color: var(--acc-light);
 }
 
 body {
   font-family: var(--font-body);
-  background:
-    radial-gradient(900px 520px at 10% -6%, rgba(139, 92, 246, 0.10), transparent 60%),
-    radial-gradient(820px 500px at 90% 6%, rgba(245, 158, 11, 0.07), transparent 60%),
-    radial-gradient(1000px 700px at 50% 110%, rgba(139, 92, 246, 0.06), transparent 60%),
-    var(--bg);
+  background: var(--bg);
   color: var(--fg);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -136,13 +128,25 @@ button { font-family: var(--font-body); }
   letter-spacing: -1.5px;
 }
 
+/* Hero name — Space Grotesk, reference style, subtle gradient */
+.hero-name {
+  font-family: "Space Grotesk Variable", "Space Grotesk", system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  background: linear-gradient(180deg, #ffffff 0%, #c9c2b4 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
 /* Section headings */
 .t-h2 {
   font-family: var(--font-head);
-  font-size: clamp(28px, 4vw, 42px);
+  font-size: clamp(2.5rem, 5vw, 4rem);
   font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -1px;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
 }
 
 /* Card / sub headings */
@@ -166,12 +170,9 @@ button { font-family: var(--font-body); }
 /* Accent color utility */
 .acc { color: var(--acc); }
 
-/* Gradient highlight text */
+/* Accent highlight text — flat amber */
 .gold {
-  background: linear-gradient(135deg, var(--acc-light) 0%, var(--acc) 60%, #c084fc 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--acc);
 }
 
 /* ─── Layout ──────────────────────────────────── */
@@ -235,63 +236,6 @@ section {
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* ─── Hero stagger animations ─────────────────── */
-.a1 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both; }
-.a2 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.14s both; }
-.a3 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.23s both; }
-.a4 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.32s both; }
-.a5 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.41s both; }
-.a6 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.50s both; }
-.a7 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.59s both; }
-.a8 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.68s both; }
-.a9 { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.77s both; }
-.hero-loc { animation: fadeUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.36s both; }
-.hero-social {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 1px solid var(--bdr);
-  background: var(--bg2);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--fg3);
-  transition: color 0.25s, border-color 0.25s, transform 0.25s;
-}
-.hero-social:hover {
-  color: var(--acc);
-  border-color: color-mix(in srgb, var(--acc) 45%, transparent);
-  transform: translateY(-3px);
-}
-.hero-scroll {
-  position: absolute;
-  bottom: 26px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  color: var(--fg3);
-  font-family: var(--font-body);
-  font-size: 10.5px;
-  font-weight: 500;
-  letter-spacing: 2.5px;
-  text-transform: uppercase;
-  text-decoration: none;
-  z-index: 1;
-  opacity: 0;
-  animation: hero-scroll-in 0.8s ease 1.4s both;
-  transition: color 0.2s;
-}
-.hero-scroll:hover { color: var(--acc); }
-.hero-scroll svg { animation: hero-bounce 2s ease-in-out infinite; }
-@keyframes hero-scroll-in { to { opacity: 0.75; } }
-@keyframes hero-bounce {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
-}
-
 /* ─── Scroll reveal ───────────────────────────── */
 .reveal {
   opacity: 0;
@@ -301,24 +245,6 @@ section {
     transform 0.75s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
-
-/* ─── Role Rotator ────────────────────────────── */
-.role-text {
-  opacity: 0;
-  transform: translate(-50%, 100%);
-  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  pointer-events: none;
-  left: 50%;
-}
-.role-text.active {
-  opacity: 1;
-  transform: translate(-50%, 0);
-  pointer-events: auto;
-}
-.role-text.prev {
-  opacity: 0;
-  transform: translate(-50%, -100%);
-}
 
 /* ─── Skeleton loader ─────────────────────────── */
 .skeleton {
@@ -346,10 +272,15 @@ section {
   box-shadow: 0 10px 28px -8px var(--acc-glow);
   letter-spacing: 0.2px;
 }
+
 .btn-acc:hover {
-  background: var(--acc-light);
   transform: translateY(-2px);
-  box-shadow: 0 16px 44px -10px var(--acc-glow), 0 8px 20px -8px rgba(0, 0, 0, 0.45);
+  filter: brightness(1.08);
+  box-shadow: 0 14px 32px -8px rgba(245, 158, 11, 0.35);
+}
+.btn-acc:active {
+  transform: translateY(0);
+  filter: brightness(1);
 }
 
 .btn-outline {
@@ -369,11 +300,13 @@ section {
   letter-spacing: 0.2px;
 }
 .btn-outline:hover {
-  border-color: var(--bdr2);
-  color: var(--acc-light);
-  background: var(--bg3);
+  border-color: var(--acc);
+  color: var(--fg);
+  background: rgba(245, 158, 11, 0.06);
   transform: translateY(-2px);
-  box-shadow: 0 10px 28px -12px var(--acc-glow);
+}
+.btn-outline:active {
+  transform: translateY(0);
 }
 
 /* ─── Forms ───────────────────────────────────── */
@@ -458,11 +391,6 @@ input:disabled, textarea:disabled {
   border: none !important;
   border-radius: var(--r-lg);
   overflow: hidden;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.blog-card:hover {
-  transform: translateY(-6px);
 }
 
 .blog-card-img-wrap {
@@ -475,20 +403,11 @@ input:disabled, textarea:disabled {
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-.blog-card:hover .blog-card-img-wrap {
-  border-color: var(--bdr2);
-  box-shadow: 0 16px 40px -12px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-}
 
 .blog-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.blog-card:hover img {
-  transform: scale(1.04);
 }
 
 /* ─── Tech Stack Cards Grid ──────────────────── */
@@ -511,11 +430,6 @@ input:disabled, textarea:disabled {
               box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.tech-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--bdr2);
-  box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-}
 
 .tech-pill {
   display: inline-flex;
@@ -534,11 +448,7 @@ input:disabled, textarea:disabled {
 }
 
 .tech-pill:hover {
-  border-color: color-mix(in srgb, var(--acc) 45%, transparent);
   color: var(--fg);
-  background: var(--bg3);
-  transform: scale(1.04);
-  box-shadow: 0 4px 12px var(--acc-glow2);
 }
 
 @media (max-width: 768px) {
@@ -562,19 +472,6 @@ input:disabled, textarea:disabled {
               box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.github-stat-card:hover {
-  transform: translateY(-3px);
-  border-color: var(--bdr2);
-  box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-}
-
-.github-stat-card svg {
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.github-stat-card:hover svg {
-  transform: scale(1.15) rotate(4deg);
-}
 
 /* ─── GitHub Contribution Chart ──────────────── */
 .github-chart-card {
@@ -586,10 +483,6 @@ input:disabled, textarea:disabled {
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 
-.github-chart-card:hover {
-  border-color: var(--bdr2);
-  box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-}
 
 /* ─── GitHub Repository Cards ────────────────── */
 .github-repo-card {
@@ -606,18 +499,12 @@ input:disabled, textarea:disabled {
               background-color 0.4s ease;
 }
 
-.github-repo-card:hover {
-  background: var(--bg3);
-  transform: translateY(-4px);
-  border-color: var(--bdr2);
-  box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-}
 
 /* ─── Responsive ──────────────────────────────── */
 @media (max-width: 1024px) {
   :root {
     --pad-x: 40px;
-    --sec-pad: 96px;
+    --sec-pad: 72px;
   }
 }
 
@@ -658,6 +545,35 @@ input:disabled, textarea:disabled {
     --sec-pad: 60px;
   }
 }
+
+/* ─── Subtle gradient card ──────────────────────
+   Shared recipe: add `glass-card` to any card/surface to match
+   the WorkGrid project cards. Add `glass-zoom` to an image
+   wrapper inside it for the hover zoom. */
+.glass-card {
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.015) 100%),
+    rgba(17, 17, 19, 0.72);
+  backdrop-filter: blur(10px) saturate(130%);
+  -webkit-backdrop-filter: blur(10px) saturate(130%);
+  box-shadow:
+    0 20px 44px -16px rgba(0, 0, 0, 0.55),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  transition: border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease;
+}
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow:
+    0 26px 56px -16px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.09);
+}
+/* Image zoom inside a glass card — add `glass-zoom` to the image wrapper */
+.glass-zoom { overflow: hidden; }
+.glass-zoom img { transition: transform 0.45s ease; }
+.glass-card:hover .glass-zoom img { transform: scale(1.06); }
 
 /* ─── Reduced motion ──────────────────────────── */
 @media (prefers-reduced-motion: reduce) {

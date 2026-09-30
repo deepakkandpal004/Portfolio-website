@@ -30,11 +30,11 @@ export const projects: Project[] = [
       problem:
         "Job seekers juggle five different tools — one to write the resume, another to check ATS compatibility, a third to tailor it per job description, plus cover letters and interview prep. Good candidates get filtered out by applicant tracking systems before a human ever sees them.",
       solution:
-        "One workspace that does it all: import a PDF resume and extract structured data, tailor it to any job description with Groq AI, score ATS compatibility with actionable feedback, generate cover letters and prep for interviews — with 7 templates, live preview, PDF export, auto-save and 20 versions of history, secured by JWT auth with HttpOnly cookies.",
+        "A full-stack workspace built with React 19 + Vite on the frontend and Express 5 + MongoDB on the backend, secured with JWT auth in HttpOnly cookies. Groq AI powers the core loop: AI resume writing, tailoring to any job description, ATS scoring with actionable feedback, cover letter generation, and interview prep. 7 ATS-optimized templates with live preview, PDF import that extracts structured data from an existing resume, auto-save with 20-version history, and one-click PDF export.",
       results: [
-        "7 ATS-optimized templates",
-        "20 resume versions retained",
-        "PDF import to JD-tailored resume pipeline",
+        "7 ATS-optimized templates with live preview",
+        "JD-tailored resume generated in seconds",
+        "20-version history — no work ever lost",
       ],
     },
     highlights: [
@@ -49,9 +49,7 @@ export const projects: Project[] = [
     accent: "#f59e0b",
     accentSoft: "rgba(245, 158, 11, 0.12)",
     screenshots: [
-      { src: "/images/dashboard.png", alt: "ResumeAI dashboard", label: "Dashboard" },
-      { src: "/images/resumeBuilder.png", alt: "ResumeAI editor", label: "Resume editor" },
-      { src: "/images/resume.png", alt: "ResumeAI landing", label: "Landing page" },
+      { src: "/images/careerforge-landing.png", alt: "CareerForge landing page", label: "Landing page" },
     ],
   },
   {
@@ -63,11 +61,11 @@ export const projects: Project[] = [
       problem:
         "Manual expense tracking dies within weeks — typing every transaction is tedious, and most apps show you charts without ever telling you what your spending actually means.",
       solution:
-        "AI receipt scanning with OpenRouter that extracts transactions automatically, an AI financial coach with spending analysis and recommendations, budgets with real-time alerts, savings goals, recurring transactions, a command palette and dark mode — all on PostgreSQL + Prisma with strict multi-user data isolation.",
+        "A Next.js 15 app on PostgreSQL + Prisma with strict per-user data isolation. OpenRouter AI scans receipts and extracts transactions automatically — zero manual entry. An AI financial coach analyzes spending patterns and gives concrete recommendations. Budgets with real-time overspend alerts, savings goals with visual progress tracking, recurring transaction handling, and a command palette for power users — all wrapped in a full dark mode.",
       results: [
-        "AI receipt scanning via OpenRouter",
-        "Budgets, savings goals & real-time alerts",
-        "Multi-user isolation on PostgreSQL + Prisma",
+        "Receipt to transaction in seconds, no typing",
+        "AI coach with actionable spending insights",
+        "Budgets, goals & alerts in one dashboard",
       ],
     },
     highlights: [
@@ -82,8 +80,7 @@ export const projects: Project[] = [
     accent: "#f59e0b",
     accentSoft: "rgba(245, 158, 11, 0.12)",
     screenshots: [
-      { src: "/images/expense-dashboard.png", alt: "Finora dashboard", label: "Dashboard" },
-      { src: "/images/expense.png", alt: "Finora landing", label: "Landing page" },
+      { src: "/images/finora-landing.png", alt: "Finora landing page", label: "Landing page" },
     ],
   },
   {
@@ -95,11 +92,11 @@ export const projects: Project[] = [
       problem:
         "Long URLs look unprofessional and tell you nothing — and most shorteners either lack analytics or force you onto someone else's domain.",
       solution:
-        "Custom aliases on your own domain, link expiry, QR codes, CSV export and 14-day click analytics. Auth built from scratch — scrypt password hashing, short-lived JWTs and rotating refresh tokens in HttpOnly cookies, no auth library. 57 Vitest unit tests with GitHub Actions CI/CD.",
+        "A Next.js 16 + PostgreSQL/Drizzle URL shortener with custom aliases on your own domain, link expiry, QR code generation, CSV export, and 14-day click analytics on a management dashboard. Authentication built from scratch — scrypt password hashing, short-lived JWTs, and rotating refresh tokens in HttpOnly cookies, no auth library. 57 Vitest unit tests guard the core logic, with GitHub Actions CI/CD deploying to Vercel.",
       results: [
-        "57 Vitest unit tests",
+        "Custom aliases on your own domain",
         "Auth from scratch: scrypt + rotating refresh tokens",
-        "GitHub Actions CI/CD pipeline",
+        "57 unit tests with CI/CD on every push",
       ],
     },
     highlights: [
@@ -114,38 +111,38 @@ export const projects: Project[] = [
     accent: "#f59e0b",
     accentSoft: "rgba(245, 158, 11, 0.12)",
     screenshots: [
-      { src: "/images/Url-shortener.png", alt: "Trim dashboard", label: "Dashboard" },
+      { src: "/images/trim-dashboard.png", alt: "Trim dashboard", label: "Dashboard" },
     ],
   },
   {
-    slug: "macos-portfolio",
-    title: "macOS Portfolio",
-    category: "Interactive web experience",
-    summary: "A macOS-inspired portfolio with a dock, draggable windows, and interactive apps — Terminal, Safari, Finder, and Resume viewer.",
+    slug: "async-job-processing",
+    title: "Async Job Processing",
+    category: "Backend job queue",
+    summary: "A production-style async job system in TypeScript — Express API, Postgres-backed job store, Redis coordination, and workers with leases, heartbeats, idempotency, and a dead-letter queue.",
     caseStudy: {
       problem:
-        "Every developer portfolio looks the same — hero, cards, contact form. Nothing that makes a visitor stop, explore and remember.",
+        "Background jobs are where backends quietly break: workers die mid-task and leave work stuck, retries process the same job twice, and failures go unnoticed until customers complain.",
       solution:
-        "A full macOS desktop recreated in the browser: a dock with hover magnification and app launching, draggable windows with GSAP for a native feel, and working Terminal, Safari, Finder and Resume-viewer apps — all window state managed with Zustand, opening with a welcome typing animation.",
+        "A TypeScript job system built for failure from the start. An Express API enqueues jobs into a PostgreSQL-backed store; Redis coordinates a pool of workers that claim work with leases and heartbeats, so no job stays stuck on a dead worker. Idempotency keys and fencing tokens make retries safe to re-run; poisoned jobs land in a dead-letter queue with manual retry. Prometheus metrics and Grafana dashboards expose throughput and failure rates, everything runs via docker-compose, and load-test scripts verify behavior under pressure.",
       results: [
-        "Working Terminal, Safari & Finder apps",
-        "GSAP draggable window system",
-        "Zustand-powered window state",
+        "Lease + heartbeat model — zero stuck jobs",
+        "Safe retries via idempotency keys & fencing tokens",
+        "DLQ with manual retry + full observability",
       ],
     },
     highlights: [
-      "macOS dock with hover magnification and app launch",
-      "Draggable windows with GSAP for a native feel",
-      "Zustand-powered window state and welcome typing animation",
+      "Worker leases with heartbeats and automatic recovery",
+      "Idempotency keys, fencing tokens, and dead-letter queue",
+      "Prometheus metrics + Grafana dashboards, Redis coordination",
     ],
-    proof: ["GSAP animations", "Zustand state", "Window system"],
-    tech: ["React 19", "Vite 7", "GSAP", "Zustand", "Tailwind CSS v4"],
-    live: "https://macos-portfolio-sepia.vercel.app",
-    github: "https://github.com/deepakkandpal004/MacOS-Portfolio",
+    proof: ["DLQ + retries", "Prometheus", "Load tests"],
+    tech: ["TypeScript", "Express", "PostgreSQL", "Redis", "Docker"],
+    live: "",
+    github: "https://github.com/deepakkandpal004/Async-job-processing",
     accent: "#f59e0b",
     accentSoft: "rgba(245, 158, 11, 0.12)",
     screenshots: [
-      { src: "/images/macos-portfolio.png", alt: "macOS portfolio", label: "Desktop" },
+      { src: "/images/async-job-processing.svg", alt: "Async Job Processing — job queue overview", label: "Overview" },
     ],
   },
 ];

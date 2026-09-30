@@ -37,6 +37,14 @@ export async function POST(req: NextRequest) {
   const safeEmail   = escapeHtml(String(email).slice(0, 200));
   const safeMessage = escapeHtml(String(message).slice(0, 2000));
 
+  if (!process.env.RESEND_API_KEY) {
+    console.error("Contact API: RESEND_API_KEY is not set");
+    return NextResponse.json(
+      { error: "Email service is not configured (missing API key)." },
+      { status: 500 }
+    );
+  }
+
   try {
     const response = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -47,7 +55,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         from: "Portfolio Contact <onboarding@resend.dev>",
         to: "d.kandpal1832@gmail.com",
-        replyTo: safeEmail,
+        reply_to: safeEmail,
         subject: `New message from ${safeName}`,
         html: `
           <h3>New Contact Form Submission</h3>
@@ -60,12 +68,18 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
-      const err = await response.text();
-      console.error("Resend error:", err);
-      return NextResponse.json(
-        { error: "Failed to send message. Please try again later." },
-        { status: 500 }
-      );
+      const errText = await response.text();
+      console.error("Resend error:", errText);
+      let errMsg = "Failed to send message. Please try again later.";
+      try {
+        const parsed = JSON.parse(errText);
+        if (parsed && typeof parsed.message === "string") {
+          errMsg = `Email service: ${parsed.message}`;
+        }
+      } catch {
+        /* keep default message */
+      }
+      return NextResponse.json({ error: errMsg }, { status: 500 });
     }
 
     return NextResponse.json({ success: true });

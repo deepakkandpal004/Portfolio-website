@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import "../src/index.css";
 import Navbar from "@/src/components/Navbar";
-import SocialSidebar from "@/src/components/SocialSidebar";
 import AskDeepak from "@/src/components/AskDeepak";
 import Footer from "@/src/components/Footer";
-import BackToTop from "@/src/components/BackToTop";
+import Loader from "@/src/components/Loader";
 
 const siteUrl = "https://deepakkandpal.me";
 
@@ -148,25 +147,34 @@ export default function RootLayout({
         <link rel="preconnect" href="https://cdn.jsdelivr.net" />
         <link rel="dns-prefetch" href="https://api.github.com" />
         <link rel="dns-prefetch" href="https://ghchart.rshah.org" />
-        {/* Fonts — Space Grotesk (headings), Inter (body), JetBrains Mono (terminal/code) */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Fonts — Geist (headings) + Inter (body) + Geist Mono (terminal/code) + Space Grotesk (hero name), via Fontsource CDN */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+          href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist@5.3.0/index.min.css"
+          rel="stylesheet"
+        />
+        <link
+          href="https://cdn.jsdelivr.net/npm/@fontsource-variable/inter@5.3.0/index.min.css"
+          rel="stylesheet"
+        />
+        <link
+          href="https://cdn.jsdelivr.net/npm/@fontsource-variable/geist-mono@5.3.0/index.min.css"
+          rel="stylesheet"
+        />
+        <link
+          href="https://cdn.jsdelivr.net/npm/@fontsource-variable/space-grotesk@5.3.0/index.min.css"
           rel="stylesheet"
         />
       </head>
 
       <body>
+        <Loader />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         <Navbar />
-        <SocialSidebar />
         {children}
         <Footer />
-        <BackToTop />
         <AskDeepak />
       </body>
     </html>

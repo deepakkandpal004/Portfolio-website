@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -16,26 +16,33 @@ const navItems = [
 ];
 
 const Navbar = () => {
-  const [scrolled, setScrolled] = useState(false);
-  const [progress, setProgress] = useState(0);
   const [open, setOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
-  
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastY = useRef(0);
+
   const pathname = usePathname();
   const isHome = pathname === "/";
 
+  // Sticky shrink + blur + hide on scroll down / show on scroll up
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
-      const h = document.documentElement;
-      const max = h.scrollHeight - h.clientHeight;
-      setProgress(max > 0 ? Math.min(100, (h.scrollTop / max) * 100) : 0);
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 24);
+      if (open) {
+        setHidden(false);
+      } else if (y > lastY.current && y > 140) {
+        setHidden(true);
+      } else if (y < lastY.current) {
+        setHidden(false);
+      }
+      lastY.current = y;
     };
-    handleScroll();
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [open]);
 
   // Scrollspy to detect active section in viewport (only active on Home page)
   useEffect(() => {
@@ -77,42 +84,15 @@ const Navbar = () => {
 
   const close = () => setOpen(false);
 
-  const navBg = scrolled ? "rgba(5, 7, 12, 0.82)" : "transparent";
-
   return (
     <>
-      {/* Scroll progress bar */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "fixed", top: 0, left: 0, zIndex: 210,
-          height: 2, width: `${progress}%`,
-          background: "linear-gradient(90deg, var(--acc), #f59e0b)",
-          boxShadow: "0 0 12px var(--acc-glow)",
-          transition: "width 0.08s linear",
-          pointerEvents: "none",
-        }}
-      />
-      <nav style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
-        borderBottom: scrolled ? "1px solid var(--bdr)" : "1px solid transparent",
-        background: navBg,
-        backdropFilter: scrolled ? "blur(16px)" : "none",
-        WebkitBackdropFilter: scrolled ? "blur(16px)" : "none",
-        transition: "background 0.3s, border-color 0.3s, backdrop-filter 0.3s",
-      }}>
-        <div style={{
-          maxWidth: "var(--max-w)", margin: "0 auto",
-          padding: `${scrolled ? "14px" : "22px"} var(--pad-x)`,
-          display: "flex", alignItems: "center", justifyContent: "space-between",
-          transition: "padding 0.3s ease",
-        }}>
+      <nav className={`nav${scrolled ? " scrolled" : ""}${hidden ? " hidden" : ""}`}>
+        <div className="container nav-inner">
           {/* Logo */}
           <Link href="/" onClick={close} style={{
             fontFamily: "var(--font-head)",
-            fontWeight: 700, fontSize: 19,
-            letterSpacing: "2.5px",
-            textTransform: "uppercase",
+            fontWeight: 700, fontSize: 17,
+            letterSpacing: "2px",
             color: "var(--fg)",
             userSelect: "none",
           }}>
@@ -122,6 +102,7 @@ const Navbar = () => {
           {/* Desktop nav links */}
           <ul className="nav-links" style={{
             display: "flex", gap: 4, listStyle: "none", alignItems: "center",
+            margin: 0, padding: 0,
           }}>
             {navItems.map(item => {
               const isRouteLink = item.href.startsWith("/");
@@ -134,30 +115,7 @@ const Navbar = () => {
                 : (isHome ? item.href : `/${item.href}`);
 
               const linkContent = (
-                <span style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: 14, fontWeight: isActive ? 600 : 500,
-                  color: isActive ? "var(--acc)" : "var(--fg2)",
-                  padding: "8px 14px",
-                  display: "block",
-                  borderRadius: "var(--r)",
-                  background: isActive ? "var(--acc-glow2)" : "transparent",
-                  boxShadow: isActive ? "0 0 18px var(--acc-glow2)" : "none",
-                  transition: "color 0.2s, background 0.2s, box-shadow 0.2s",
-                }}
-                  onMouseEnter={e => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = "var(--fg)";
-                      e.currentTarget.style.background = "var(--bg3)";
-                    }
-                  }}
-                  onMouseLeave={e => {
-                    if (!isActive) {
-                      e.currentTarget.style.color = "var(--fg2)";
-                      e.currentTarget.style.background = "transparent";
-                    }
-                  }}
-                >
+                <span className={`nav-link${isActive ? " active" : ""}`}>
                   {item.label}
                 </span>
               );
@@ -175,17 +133,8 @@ const Navbar = () => {
           </ul>
 
           {/* Mobile controls */}
-          <div className="nav-mobile" style={{ display: "none", alignItems: "center", gap: 8 }}>
-            <button onClick={() => setOpen(o => !o)} aria-label="Toggle menu" style={{
-              background: "none", border: "1px solid var(--bdr2)",
-              borderRadius: "var(--r)", color: "var(--fg)",
-              width: 36, height: 36, cursor: "pointer",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              transition: "border-color 0.2s, background 0.2s",
-            }}
-              onMouseEnter={e => { e.currentTarget.style.borderColor = "var(--acc)"; e.currentTarget.style.background = "var(--acc-glow2)"; }}
-              onMouseLeave={e => { e.currentTarget.style.borderColor = "var(--bdr2)"; e.currentTarget.style.background = "none"; }}
-            >
+          <div className="nav-mobile" style={{ display: "none", alignItems: "center" }}>
+            <button onClick={() => setOpen(o => !o)} aria-label="Toggle menu" className="nav-menu-btn">
               {open ? <FiX size={16} /> : <FiMenu size={16} />}
             </button>
           </div>
@@ -194,16 +143,8 @@ const Navbar = () => {
 
       {/* Mobile full-screen drawer */}
       <div className="nav-drawer" style={{
-        position: "fixed", inset: 0, zIndex: 199,
-        background: "var(--bg)",
-        display: "none",
-        flexDirection: "column",
-        alignItems: "center", justifyContent: "center",
-        gap: 8,
         opacity: open ? 1 : 0,
-        transform: open ? "none" : "translateY(-12px)",
         pointerEvents: open ? "auto" : "none",
-        transition: "opacity 0.25s, transform 0.25s",
       }}>
         {navItems.map(item => {
           const isRouteLink = item.href.startsWith("/");
@@ -215,38 +156,23 @@ const Navbar = () => {
             ? item.href
             : (isHome ? item.href : `/${item.href}`);
 
+          const linkStyle = {
+            fontFamily: "var(--font-head)",
+            fontSize: 28, fontWeight: 700,
+            letterSpacing: "-0.5px",
+            color: isActive ? "var(--acc)" : "var(--fg2)",
+            padding: "10px 0",
+            display: "block" as const,
+          };
+
           return (
             <li key={item.href} style={{ listStyle: "none" }}>
               {isRouteLink ? (
-                <Link href={item.href} onClick={close} style={{
-                  fontFamily: "var(--font-head)",
-                  fontSize: 34, fontWeight: 700,
-                  letterSpacing: "-0.5px",
-                  textTransform: "uppercase",
-                  color: isActive ? "var(--acc)" : "var(--fg2)",
-                  padding: "10px 0",
-                  display: "block",
-                  transition: "color 0.2s",
-                }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "var(--acc)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = isActive ? "var(--acc)" : "var(--fg2)")}
-                >
+                <Link href={item.href} onClick={close} style={linkStyle}>
                   {item.label}
                 </Link>
               ) : (
-                <a href={linkHref} onClick={close} style={{
-                  fontFamily: "var(--font-head)",
-                  fontSize: 34, fontWeight: 700,
-                  letterSpacing: "-0.5px",
-                  textTransform: "uppercase",
-                  color: isActive ? "var(--acc)" : "var(--fg2)",
-                  padding: "10px 0",
-                  display: "block",
-                  transition: "color 0.2s",
-                }}
-                  onMouseEnter={e => (e.currentTarget.style.color = "var(--acc)")}
-                  onMouseLeave={e => (e.currentTarget.style.color = isActive ? "var(--acc)" : "var(--fg2)")}
-                >
+                <a href={linkHref} onClick={close} style={linkStyle}>
                   {item.label}
                 </a>
               )}
@@ -256,6 +182,88 @@ const Navbar = () => {
       </div>
 
       <style>{`
+        .nav {
+          position: sticky;
+          top: 0;
+          z-index: 200;
+          background: var(--bg);
+          border-bottom: 1px solid transparent;
+          transition: background 0.25s ease, border-color 0.25s ease, transform 0.3s ease;
+        }
+        .nav.hidden {
+          transform: translateY(-110%);
+        }
+        .nav.scrolled {
+          background: rgba(11, 10, 8, 0.82);
+          -webkit-backdrop-filter: blur(12px) saturate(140%);
+          backdrop-filter: blur(12px) saturate(140%);
+          border-bottom-color: var(--bdr);
+        }
+        .nav::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          background:
+            radial-gradient(60% 150% at 50% -30%, rgba(245, 158, 11, 0.20), rgba(245, 158, 11, 0.06) 45%, transparent 70%);
+        }
+        .nav-inner {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 18px;
+          padding-bottom: 18px;
+          transition: padding 0.25s ease;
+        }
+        .nav.scrolled .nav-inner {
+          padding-top: 12px;
+          padding-bottom: 12px;
+        }
+        section[id] {
+          scroll-margin-top: 84px;
+        }
+        .nav-link {
+          position: relative;
+          font-family: var(--font-body);
+          font-size: 14px; font-weight: 500;
+          color: var(--fg2);
+          padding: 8px 12px;
+          display: block;
+          transition: color 0.2s;
+        }
+        .nav-link::after {
+          content: "";
+          position: absolute;
+          left: 12px;
+          right: 12px;
+          bottom: 3px;
+          height: 2px;
+          border-radius: 2px;
+          background: var(--acc);
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.25s ease;
+        }
+        .nav-link:hover { color: var(--fg); }
+        .nav-link:hover::after, .nav-link.active::after { transform: scaleX(1); }
+        .nav-link.active { color: var(--acc); font-weight: 600; }
+        .nav-menu-btn {
+          background: none; border: 1px solid var(--bdr2);
+          border-radius: var(--r); color: var(--fg);
+          width: 36px; height: 36px; cursor: pointer;
+          display: flex; align-items: center; justify-content: center;
+        }
+        .nav-drawer {
+          position: fixed; inset: 0; z-index: 199;
+          background: var(--bg);
+          display: none;
+          flex-direction: column;
+          align-items: center; justify-content: center;
+          gap: 8px;
+          transition: opacity 0.25s;
+        }
         @media (max-width: 640px) {
           .nav-links  { display: none !important; }
           .nav-mobile { display: flex !important; }

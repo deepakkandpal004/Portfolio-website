@@ -48,7 +48,7 @@ const BlogListClient = () => {
 
         {/* Controls */}
         <motion.div
-          className="bl-controls"
+          className="bl-controls glass-card"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.15, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
@@ -81,13 +81,13 @@ const BlogListClient = () => {
             {/* Featured post */}
             {featured && (
               <motion.article
-                className="bl-featured"
+                className="bl-featured glass-card"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.25, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
               >
                 <Link href={`/blog/${featured.slug}`} className="bl-featured-link">
-                  <div className="bl-featured-img">
+                  <div className="bl-featured-img glass-zoom">
                     <img src={featured.coverImage} alt={featured.title} />
                     <div className="bl-featured-overlay" />
                     <span className="bl-badge">Latest</span>
@@ -115,13 +115,13 @@ const BlogListClient = () => {
               {rest.map((post, idx) => (
                 <motion.article
                   key={post.slug}
-                  className="bl-card"
+                  className="bl-card glass-card"
                   initial={{ opacity: 0, y: 30 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.35 + idx * 0.08, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
                 >
                   <Link href={`/blog/${post.slug}`} className="bl-card-link">
-                    <div className="bl-card-img">
+                    <div className="bl-card-img glass-zoom">
                       <img src={post.coverImage} alt={post.title} />
                     </div>
                     <div className="bl-card-body">
@@ -141,7 +141,7 @@ const BlogListClient = () => {
             </div>
           </>
         ) : (
-          <div className="bl-empty">
+          <div className="bl-empty glass-card">
             <p className="t-body" style={{ fontSize: 16 }}>No articles found.</p>
           </div>
         )}
@@ -168,8 +168,7 @@ const BlogListClient = () => {
         .bl-controls {
           display: flex; flex-direction: column; gap: 20px;
           margin-bottom: 56px;
-          background: var(--bg2); border: 1px solid var(--bdr);
-          border-radius: var(--r-lg); padding: 24px;
+          padding: 24px;
         }
         .bl-search-wrap { position: relative; width: 100%; }
         .bl-search-icon {
@@ -191,21 +190,17 @@ const BlogListClient = () => {
           border: 1px solid var(--bdr); background: var(--bg);
           color: var(--fg2); cursor: pointer; transition: all 0.2s;
         }
-        .bl-tag-btn:hover { border-color: var(--acc); }
         .bl-tag-btn.active {
           background: var(--acc); border-color: var(--acc); color: #07100e;
         }
 
         /* Featured */
         .bl-featured {
-          border-radius: 20px; border: 1px solid var(--bdr);
-          background: var(--bg); overflow: hidden;
+          overflow: hidden;
           margin-bottom: 32px;
           transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
         }
         .bl-featured:hover {
-          border-color: var(--acc);
-          box-shadow: 0 12px 40px rgba(245, 158, 11, 0.15), 0 0 0 1px rgba(245, 158, 11, 0.1);
           transform: translateY(-4px);
         }
         .bl-featured-link {
@@ -217,9 +212,7 @@ const BlogListClient = () => {
         }
         .bl-featured-img img {
           width: 100%; height: 100%; object-fit: cover;
-          transition: transform 0.6s ease;
         }
-        .bl-featured:hover .bl-featured-img img { transform: scale(1.04); }
         .bl-featured-overlay {
           position: absolute; inset: 0;
           background: linear-gradient(to right, transparent, rgba(0,0,0,0.15));
@@ -268,22 +261,17 @@ const BlogListClient = () => {
           gap: 28px; margin-bottom: 60px;
         }
         .bl-card {
-          border-radius: 16px; border: 1px solid var(--bdr);
-          background: var(--bg); overflow: hidden;
+          overflow: hidden;
           transition: border-color 0.35s, box-shadow 0.35s, transform 0.35s;
         }
         .bl-card:hover {
-          border-color: var(--acc);
-          box-shadow: 0 10px 35px rgba(245, 158, 11, 0.12), 0 0 0 1px rgba(245, 158, 11, 0.08);
           transform: translateY(-4px);
         }
         .bl-card-link { display: flex; flex-direction: column; height: 100%; text-decoration: none; }
         .bl-card-img { aspect-ratio: 16 / 10; overflow: hidden; }
         .bl-card-img img {
           width: 100%; height: 100%; object-fit: cover;
-          transition: transform 0.5s ease;
         }
-        .bl-card:hover .bl-card-img img { transform: scale(1.05); }
         .bl-card-body { padding: 22px; display: flex; flex-direction: column; flex: 1; }
         .bl-card-title {
           font-family: var(--font-head); font-size: 18px; font-weight: 700;
@@ -298,8 +286,6 @@ const BlogListClient = () => {
         /* Empty */
         .bl-empty {
           text-align: center; padding: 80px 24px;
-          background: var(--bg2); border: 1px solid var(--bdr);
-          border-radius: var(--r-lg);
         }
 
         @media (max-width: 768px) {

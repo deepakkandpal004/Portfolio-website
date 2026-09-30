@@ -40,15 +40,17 @@ const ProjectDetailClient = ({
           </h1>
           <p className="t-body pd-summary">{project.summary}</p>
           <div className="pd-actions">
-            <a
-              href={project.live}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="pd-btn-primary"
-              style={{ background: project.accent }}
-            >
-              Live demo <FiArrowUpRight size={15} />
-            </a>
+            {project.live && (
+              <a
+                href={project.live}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="pd-btn-primary"
+                style={{ background: project.accent }}
+              >
+                Live demo <FiArrowUpRight size={15} />
+              </a>
+            )}
             <a
               href={project.github}
               target="_blank"
@@ -67,7 +69,7 @@ const ProjectDetailClient = ({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.15, ease }}
         >
-          <div className="pd-main">
+          <div className="pd-main glass-card">
             <img
               key={`${project.slug}-${imgIdx}`}
               src={project.screenshots[imgIdx].src}
@@ -101,15 +103,15 @@ const ProjectDetailClient = ({
         >
           <h2 className="pd-h2">Case study</h2>
           <div className="pd-cs-grid">
-            <div className="pd-cs-card">
+            <div className="pd-cs-card glass-card">
               <p className="pd-cs-label">The problem</p>
               <p className="pd-cs-text">{project.caseStudy.problem}</p>
             </div>
-            <div className="pd-cs-card">
+            <div className="pd-cs-card glass-card">
               <p className="pd-cs-label">What I built</p>
               <p className="pd-cs-text">{project.caseStudy.solution}</p>
             </div>
-            <div className="pd-cs-card pd-cs-results">
+            <div className="pd-cs-card glass-card pd-cs-results">
               <p className="pd-cs-label">Results</p>
               <ul className="pd-cs-list">
                 {project.caseStudy.results.map((r) => (
@@ -123,7 +125,7 @@ const ProjectDetailClient = ({
         {/* Details */}
         <div className="pd-details">
           <motion.div
-            className="pd-block"
+            className="pd-block glass-card"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
@@ -140,7 +142,7 @@ const ProjectDetailClient = ({
           </motion.div>
 
           <motion.div
-            className="pd-block"
+            className="pd-block glass-card"
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-60px" }}
@@ -174,7 +176,7 @@ const ProjectDetailClient = ({
         {/* Prev / Next */}
         <div className="pd-nav">
           {prev ? (
-            <Link href={`/projects/${prev.slug}`} className="pd-nav-card">
+            <Link href={`/projects/${prev.slug}`} className="pd-nav-card glass-card">
               <span className="pd-nav-label">
                 <FiArrowLeft size={13} /> Previous project
               </span>
@@ -184,7 +186,7 @@ const ProjectDetailClient = ({
             <span />
           )}
           {next ? (
-            <Link href={`/projects/${next.slug}`} className="pd-nav-card next">
+            <Link href={`/projects/${next.slug}`} className="pd-nav-card glass-card next">
               <span className="pd-nav-label">
                 Next project <FiArrowRight size={13} />
               </span>
@@ -212,7 +214,6 @@ const ProjectDetailClient = ({
           margin-bottom: 40px;
           transition: color 0.2s;
         }
-        .pd-back:hover { color: var(--acc); }
 
         .pd-hero {
           max-width: 820px;
@@ -247,8 +248,8 @@ const ProjectDetailClient = ({
         }
         .pd-btn-primary { color: #07100e; }
         .pd-btn-primary:hover {
+          filter: brightness(1.08);
           transform: translateY(-2px);
-          box-shadow: 0 10px 32px var(--acc-glow2);
         }
         .pd-btn-secondary {
           border: 1px solid var(--bdr);
@@ -256,25 +257,21 @@ const ProjectDetailClient = ({
           color: var(--fg2);
         }
         .pd-btn-secondary:hover {
-          border-color: var(--acc);
           color: var(--fg);
+          border-color: var(--bdr2);
           transform: translateY(-2px);
-          box-shadow: 0 8px 24px var(--acc-glow2);
         }
 
         .pd-gallery { margin-bottom: 56px; }
         .pd-main {
           position: relative;
           aspect-ratio: 16 / 9;
-          border-radius: 20px;
           overflow: hidden;
-          border: 1px solid var(--bdr);
-          background: #0a0d12;
         }
         .pd-main img {
           width: 100%;
           height: 100%;
-          object-fit: cover;
+          object-fit: contain;
           object-position: top;
         }
         .pd-thumbs {
@@ -294,8 +291,8 @@ const ProjectDetailClient = ({
           cursor: pointer;
           transition: border-color 0.2s, transform 0.2s;
         }
-        .pd-thumb:hover { border-color: var(--acc); transform: translateY(-2px); }
         .pd-thumb.active { border-color: var(--acc); }
+        .pd-thumb:hover { border-color: var(--bdr2); transform: translateY(-2px); }
         .pd-thumb img {
           width: 72px;
           height: 44px;
@@ -325,13 +322,9 @@ const ProjectDetailClient = ({
           gap: 18px;
         }
         .pd-cs-card {
-          border: 1px solid var(--bdr);
-          border-radius: 18px;
-          background: var(--bg2);
           padding: 26px 24px;
           transition: border-color 0.25s, transform 0.25s;
         }
-        .pd-cs-card:hover { border-color: var(--acc); transform: translateY(-3px); }
         .pd-cs-label {
           font-family: var(--font-body);
           font-size: 11px;
@@ -370,9 +363,6 @@ const ProjectDetailClient = ({
           font-weight: 800;
         }
         .pd-block {
-          border: 1px solid var(--bdr);
-          border-radius: 20px;
-          background: var(--bg2);
           padding: 32px;
         }
         .pd-h2 {
@@ -406,7 +396,6 @@ const ProjectDetailClient = ({
           margin-top: 8px;
           border-radius: 50%;
           background: var(--pa, var(--acc));
-          box-shadow: 0 0 12px var(--pa, var(--acc));
         }
         .pd-tags { display: flex; flex-wrap: wrap; gap: 9px; }
         .pd-tag {
@@ -420,7 +409,7 @@ const ProjectDetailClient = ({
           color: var(--fg3);
         }
         .pd-tag-accent {
-          background: var(--pas, var(--acc-glow2));
+          background: color-mix(in srgb, var(--pa, var(--acc)) 12%, transparent);
           border-color: color-mix(in srgb, var(--pa, var(--acc)) 30%, transparent);
           color: var(--pa, var(--acc));
           font-weight: 600;
@@ -438,17 +427,14 @@ const ProjectDetailClient = ({
           flex-direction: column;
           gap: 8px;
           padding: 22px 26px;
-          border-radius: 16px;
-          border: 1px solid var(--bdr);
-          background: var(--bg2);
           transition: border-color 0.25s, transform 0.25s, box-shadow 0.25s;
         }
         .pd-nav-card.next { text-align: right; align-items: flex-end; }
         .pd-nav-card:hover {
-          border-color: var(--acc);
+          border-color: rgba(255, 255, 255, 0.16);
           transform: translateY(-3px);
-          box-shadow: 0 10px 32px var(--acc-glow2);
         }
+        .pd-nav-card:hover .pd-nav-title { color: var(--acc); }
         .pd-nav-label {
           display: inline-flex;
           align-items: center;
@@ -460,13 +446,13 @@ const ProjectDetailClient = ({
           text-transform: uppercase;
           color: var(--fg3);
         }
-        .pd-nav-card:hover .pd-nav-label { color: var(--acc); }
         .pd-nav-title {
           font-family: var(--font-head);
           font-size: 18px;
           font-weight: 700;
           color: var(--fg);
           letter-spacing: -0.3px;
+          transition: color 0.25s ease;
         }
 
         @media (max-width: 900px) {

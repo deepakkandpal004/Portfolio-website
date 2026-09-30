@@ -51,7 +51,7 @@ const Contact = () => {
           href={CALENDLY_URL || "#contact"}
           target={CALENDLY_URL ? "_blank" : undefined}
           rel="noopener noreferrer"
-          className="book-call-banner"
+          className="book-call-banner glass-card"
         >
           <div className="book-call-icon">
             <FiCalendar size={18} />
@@ -67,62 +67,29 @@ const Contact = () => {
           </span>
         </a>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "0 80px", alignItems: "start" }} className="contact-grid">
-
-          <ContactForm />
+        <div className="contact-card glass-card">
 
           {/* Social links */}
-          <div>
-            <p style={{
-              fontFamily: "var(--font-body)", fontSize: 11, color: "var(--fg3)",
-              fontWeight: 600, marginBottom: 20, letterSpacing: "1.5px", textTransform: "uppercase",
-            }}>
-              Find me on
-            </p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div className="contact-social-col">
+            <p className="contact-col-label">Find me on</p>
+            <div className="contact-social-list">
               {socials.map(s => (
-                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" style={{
-                  display: "flex", alignItems: "center", gap: 12,
-                  padding: "12px 14px",
-                  borderRadius: "var(--r-md)",
-                  transition: "background 0.25s, padding-left 0.25s, box-shadow 0.25s, border-color 0.25s",
-                }}
-                  className="contact-social-row"
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = "var(--bg2)";
-                    e.currentTarget.style.paddingLeft = "20px";
-                    e.currentTarget.style.boxShadow = "0 4px 20px rgba(245, 158, 11, 0.1)";
-                    e.currentTarget.style.borderColor = "var(--acc)";
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = "transparent";
-                    e.currentTarget.style.paddingLeft = "14px";
-                    e.currentTarget.style.boxShadow = "none";
-                    e.currentTarget.style.borderColor = "var(--bdr)";
-                  }}
-                >
-                  <div style={{
-                    width: 36, height: 36,
-                    borderRadius: "var(--r-md)",
-                    background: "var(--bg2)",
-                    border: "1px solid var(--bdr)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: "var(--acc)", flexShrink: 0,
-                  }}>
-                    <s.icon size={14} />
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontFamily: "var(--font-body)", fontSize: 13.5, fontWeight: 600, color: "var(--fg)" }}>
-                      {s.label}
-                    </div>
-                    <div style={{ fontFamily: "var(--font-body)", fontSize: 11.5, color: "var(--fg3)", marginTop: 2 }}>
-                      {s.detail}
-                    </div>
-                  </div>
-                  <FiArrowUpRight size={13} style={{ color: "var(--fg3)", flexShrink: 0 }} />
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="contact-social-row">
+                  <span className="contact-social-icon"><s.icon size={15} /></span>
+                  <span className="contact-social-text">
+                    <span className="contact-social-label">{s.label}</span>
+                    <span className="contact-social-detail">{s.detail}</span>
+                  </span>
+                  <FiArrowUpRight size={14} className="contact-social-arrow" />
                 </a>
               ))}
             </div>
+          </div>
+
+          {/* Form */}
+          <div className="contact-form-col">
+            <p className="contact-col-label">Send a message</p>
+            <ContactForm />
           </div>
         </div>
 
@@ -135,15 +102,7 @@ const Contact = () => {
           gap: 18px;
           padding: 22px 26px;
           margin-bottom: 56px;
-          border-radius: var(--r-lg);
-          border: 1px solid color-mix(in srgb, var(--acc) 35%, transparent);
-          background: linear-gradient(135deg, var(--acc-glow2), transparent 60%), var(--bg2);
           transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
-        }
-        .book-call-banner:hover {
-          transform: translateY(-3px);
-          border-color: color-mix(in srgb, var(--acc) 60%, transparent);
-          box-shadow: 0 16px 48px -12px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.45);
         }
         .book-call-icon {
           width: 48px;
@@ -153,7 +112,7 @@ const Contact = () => {
           display: flex;
           align-items: center;
           justify-content: center;
-          background: var(--acc-glow);
+          background: color-mix(in srgb, var(--acc) 12%, transparent);
           border: 1px solid color-mix(in srgb, var(--acc) 30%, transparent);
           color: var(--acc);
         }
@@ -184,18 +143,103 @@ const Contact = () => {
           font-size: 13.5px;
           font-weight: 700;
           transition: transform 0.2s, box-shadow 0.2s;
-          box-shadow: 0 10px 28px -8px var(--acc-glow);
-        }
-        .book-call-banner:hover .book-call-btn {
-          box-shadow: 0 14px 36px -8px var(--acc-glow);
+          box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.5);
         }
         @media (max-width: 640px) {
           .book-call-banner { flex-wrap: wrap; }
           .book-call-btn { width: 100%; justify-content: center; }
         }
-        @media (max-width: 768px) {
-          .contact-grid { grid-template-columns: 1fr !important; gap: 48px 0 !important; }
-          .contact-social-row:hover { padding-left: 14px !important; }
+        .contact-card {
+          display: grid;
+          grid-template-columns: 340px 1fr;
+          padding: 0;
+          overflow: hidden;
+        }
+        .contact-social-col {
+          padding: 34px 30px;
+          border-right: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(255, 255, 255, 0.02);
+        }
+        .contact-form-col {
+          padding: 34px 36px;
+        }
+        .contact-col-label {
+          font-family: var(--font-body);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          color: var(--fg3);
+          margin: 0 0 20px;
+        }
+        .contact-social-list {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+        .contact-social-row {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 11px 12px;
+          border-radius: var(--r-md);
+          border: 1px solid transparent;
+          transition: background 0.25s, border-color 0.25s;
+        }
+        .contact-social-row:hover {
+          background: rgba(255, 255, 255, 0.045);
+          border-color: rgba(255, 255, 255, 0.10);
+        }
+        .contact-social-row:hover .contact-social-arrow {
+          transform: translate(2px, -2px);
+          color: var(--acc);
+        }
+        .contact-social-icon {
+          width: 38px;
+          height: 38px;
+          border-radius: var(--r-md);
+          background: var(--bg2);
+          border: 1px solid var(--bdr);
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          color: var(--acc);
+          flex-shrink: 0;
+        }
+        .contact-social-text {
+          flex: 1;
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+        }
+        .contact-social-label {
+          font-family: var(--font-body);
+          font-size: 13.5px;
+          font-weight: 600;
+          color: var(--fg);
+        }
+        .contact-social-detail {
+          font-family: var(--font-body);
+          font-size: 11.5px;
+          color: var(--fg3);
+          margin-top: 2px;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+        .contact-social-arrow {
+          color: var(--fg3);
+          flex-shrink: 0;
+          transition: transform 0.25s, color 0.25s;
+        }
+        @media (max-width: 860px) {
+          .contact-card { grid-template-columns: 1fr; }
+          .contact-social-col {
+            border-right: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 28px 24px;
+          }
+          .contact-form-col { padding: 28px 24px; }
         }
       `}</style>
     </section>

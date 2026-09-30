@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { FiStar, FiGitBranch, FiExternalLink, FiGitPullRequest, FiUsers, FiActivity, FiCode } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { FiFolder, FiStar, FiUsers, FiGitPullRequest, FiActivity } from "react-icons/fi";
 
-interface Repo { id: number; name: string; description: string; html_url: string; stargazers_count: number; language: string; }
 interface ContribDay { date: string; count: number; level: number; pad?: boolean }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -15,45 +13,8 @@ const parseDay = (iso: string) => {
 };
 
 const GITHUB = "deepakkandpal004";
-const langColors: Record<string, string> = {
-  JavaScript: "#f7df1e",
-  TypeScript: "#3178c6",
-  CSS:        "#563d7c",
-  HTML:       "#e34f26",
-  Python:     "#3572a5",
-  EJS:        "#a91e50",
-  SCSS:       "#c6538c",
-  Shell:      "#89e051",
-  Dockerfile: "#384d54",
-  Vue:        "#41b883",
-};
-
-const Skel = () => (
-  <div className="gh-skel">
-    <div className="skeleton" style={{ height: 13, width: "55%", marginBottom: 12 }} />
-    <div className="skeleton" style={{ height: 11, width: "88%", marginBottom: 8 }} />
-    <div className="skeleton" style={{ height: 11, width: "60%", marginBottom: 16 }} />
-    <div className="skeleton" style={{ height: 10, width: "35%" }} />
-  </div>
-);
-
-const containerVariants = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.08 } }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.95 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }
-};
-
-const statVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.9 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] } }
-};
 
 const GitHubDashboard = () => {
-  const [repos,   setRepos]   = useState<Repo[]>([]);
   const [loading, setLoading] = useState(true);
   const [repoCount, setRepoCount] = useState<number | null>(null);
   const [followers, setFollowers] = useState<number | null>(null);
@@ -61,8 +22,6 @@ const GitHubDashboard = () => {
   const [prs,     setPrs]     = useState<number | null>(null);
   const [contributions, setContributions] = useState(0);
   const [contribDays, setContribDays] = useState<ContribDay[]>([]);
-  const [languages, setLanguages] = useState<{ name: string; count: number }[]>([]);
-  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     (async () => {
@@ -74,30 +33,22 @@ const GitHubDashboard = () => {
         const ghData = await ghRes.json();
         const prData = await prRes.json();
 
-        if (ghData.repos) setRepos(ghData.repos);
         if (ghData.repoCount !== undefined) setRepoCount(ghData.repoCount);
         if (ghData.followers !== undefined) setFollowers(ghData.followers);
         if (ghData.totalStars !== undefined) setTotalStars(ghData.totalStars);
         if (ghData.contributions !== undefined) setContributions(ghData.contributions);
         if (ghData.contribDays) setContribDays(ghData.contribDays);
-        if (ghData.languages) setLanguages(ghData.languages);
         if (prData?.total_count !== undefined) setPrs(prData.total_count);
       } catch { /* ignore */ }
       setLoading(false);
     })();
   }, []);
 
-  useEffect(() => {
-    const el = ref.current; if (!el) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) el.classList.add("visible"); }, { threshold: 0.05 });
-    obs.observe(el); return () => obs.disconnect();
-  }, []);
-
   const stats = [
-    { label: "Repositories",  value: repoCount, icon: FiGitBranch },
-    { label: "Stars",          value: totalStars,          icon: FiStar },
-    { label: "Followers",      value: followers,     icon: FiUsers },
-    { label: "Pull requests",  value: prs,                 icon: FiGitPullRequest },
+    { label: "Repositories",  value: repoCount,  icon: FiFolder },
+    { label: "Stars",          value: totalStars, icon: FiStar },
+    { label: "Followers",      value: followers,  icon: FiUsers },
+    { label: "Pull Requests",  value: prs,        icon: FiGitPullRequest },
   ];
 
   // Contribution calendar: weeks as columns (GitHub-style), starting on Sunday.
@@ -119,75 +70,60 @@ const GitHubDashboard = () => {
     });
   }
 
-  const maxLang = languages.length > 0 ? languages[0].count : 1;
+  const sub = loading
+    ? "Loading contributions\u2026"
+    : `${contributions} contributions in the last year`;
 
   return (
-    <section id="github" style={{ background: "transparent", position: "relative", overflow: "hidden" }}>
-      <div className="gh-bg-glow" />
+    <section id="github" className="gh-section">
+      <div className="container">
+        <div className="gh-head">
+          <p className="t-label" style={{ marginBottom: 20 }}>Open Source</p>
+          <h2 className="t-h2" style={{ margin: "20px 0 14px" }}>GitHub <span className="gold">presence.</span></h2>
+          <p className="gh-sub">My open source contributions and public repositories.</p>
+        </div>
 
-      <div className="container reveal" ref={ref} style={{ position: "relative", zIndex: 10 }}>
-
-        <motion.div
-          className="gh-header"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-        >
-          <span className="gh-badge">Open Source</span>
-          <h2 className="t-h2 gh-title">GitHub presence.</h2>
-          <p className="t-body" style={{ maxWidth: 640, margin: "32px auto 0" }}>
-            My open source contributions and public repositories.
-          </p>
-        </motion.div>
-
-        <motion.div
-          className="gh-stats-grid"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          {stats.map((s) => (
-            <motion.div key={s.label} className="gh-stat-card" variants={statVariants}>
-              <div className="gh-stat-icon-wrap">
-                <s.icon size={18} style={{ color: "var(--acc)" }} />
-              </div>
-              <div className="gh-stat-value">
-                {loading ? "—" : (s.value ?? "0")}
-              </div>
-              <div className="gh-stat-label">
-                {s.label}
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.div
-          className="gh-chart-card"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-        >
-          <div className="gh-chart-header">
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div className="gh-chart-icon">
-                <FiActivity size={16} style={{ color: "var(--acc)" }} />
-              </div>
-              <div>
-                <span className="gh-chart-title">Contribution Activity</span>
-                <span className="gh-chart-sub">
-                  {loading ? "Loading contributions..." : `${contributions} contributions`} in the last year
+        {/* Stats row */}
+        <div className="gh-stats">
+          {stats.map((s) => {
+            const Icon = s.icon;
+            return (
+              <div key={s.label} className="gh-stat glass-card">
+                <span className="gh-stat-icon">
+                  <Icon size={18} />
                 </span>
+                <span className="gh-stat-num">
+                  {loading ? "\u2014" : (s.value ?? "0")}
+                </span>
+                <span className="gh-stat-label">{s.label}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Contribution graph */}
+        <div className="gh-cal glass-card">
+          <div className="gh-cal-head">
+            <div className="gh-cal-titlewrap">
+              <span className="gh-cal-icon">
+                <FiActivity size={15} />
+              </span>
+              <div>
+                <span className="gh-cal-title">Contribution Activity</span>
+                <p className="gh-cal-sub">{sub}</p>
               </div>
             </div>
-            <a href={`https://github.com/${GITHUB}`} target="_blank" rel="noopener noreferrer" className="gh-chart-link">
+            <a
+              href={`https://github.com/${GITHUB}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gh-handle"
+            >
               @{GITHUB}
             </a>
           </div>
 
-          {/* Contribution calendar — month labels + grid scroll together */}
+          {/* Month labels + grid scroll together */}
           <div className="gh-cal-scroll">
             <div className="gh-months">
               {weeks.length > 0 ? (
@@ -222,11 +158,9 @@ const GitHubDashboard = () => {
             </div>
           </div>
 
-          {/* Legend */}
-          <div className="gh-chart-footer">
-            <span className="gh-contrib-count">
-              {loading ? "Loading..." : `${contributions} contributions in the last year`}
-            </span>
+          {/* Footer */}
+          <div className="gh-cal-foot">
+            <span className="gh-foot-sub">{sub}</span>
             <div className="gh-legend">
               <span>Less</span>
               <div className="gh-contrib-cell gh-level-0" />
@@ -237,250 +171,123 @@ const GitHubDashboard = () => {
               <span>More</span>
             </div>
           </div>
-        </motion.div>
-
-        {languages.length > 0 && (
-          <motion.div
-            className="gh-lang-card"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-          >
-            <div className="gh-chart-header">
-              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div className="gh-chart-icon">
-                  <FiCode size={16} style={{ color: "var(--acc)" }} />
-                </div>
-                <div>
-                  <span className="gh-chart-title">Top languages</span>
-                  <span className="gh-chart-sub">Most used across public repositories</span>
-                </div>
-              </div>
-            </div>
-            <div className="gh-lang-bars">
-              {languages.map((l) => (
-                <div key={l.name} className="gh-lang-row">
-                  <span className="gh-lang-name">
-                    <span style={{ width: 9, height: 9, borderRadius: "50%", background: langColors[l.name] || "#888", flexShrink: 0 }} />
-                    {l.name}
-                  </span>
-                  <div className="gh-lang-bar">
-                    <motion.div
-                      className="gh-lang-fill"
-                      style={{ background: langColors[l.name] || "var(--acc)" }}
-                      initial={{ width: 0 }}
-                      whileInView={{ width: `${(l.count / maxLang) * 100}%` }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] }}
-                    />
-                  </div>
-                  <span className="gh-lang-count">{l.count}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        <motion.div
-          className="gh-repo-grid"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-        >
-          {loading
-            ? Array.from({ length: 6 }).map((_, i) => <Skel key={i} />)
-            : repos.map((r) => (
-              <motion.a key={r.id} href={r.html_url} target="_blank" rel="noopener noreferrer"
-                className="gh-repo-card"
-                variants={itemVariants}
-              >
-                <div className="gh-repo-card-shine" />
-                <div style={{ position: "relative", zIndex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-                    <div className="gh-repo-icon-wrap">
-                      <FiGitBranch size={13} style={{ color: "var(--acc)" }} />
-                    </div>
-                    <span style={{ fontFamily: "var(--font-head)", fontSize: 15, fontWeight: 600, color: "var(--fg)" }}>
-                      {r.name}
-                    </span>
-                  </div>
-                  <p className="gh-repo-desc">
-                    {r.description || "No description provided."}
-                  </p>
-                  <div style={{ display: "flex", gap: 14, fontSize: 11.5, color: "var(--fg3)", marginTop: "auto", paddingTop: 10 }}>
-                    {r.language && (
-                      <span style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                        <span style={{ width: 9, height: 9, borderRadius: "50%", background: langColors[r.language] || "#888", flexShrink: 0 }} />
-                        {r.language}
-                      </span>
-                    )}
-                    <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                      <FiStar size={11} style={{ color: "var(--acc)" }} /> {r.stargazers_count}
-                    </span>
-                  </div>
-                </div>
-              </motion.a>
-            ))
-          }
-        </motion.div>
+        </div>
       </div>
 
       <style>{`
-        .gh-bg-glow {
-          position: absolute;
-          inset: 0;
-          pointer-events: none;
-          background: radial-gradient(circle at 50% 30%, var(--violet-glow), transparent 70%);
-          filter: blur(100px);
-        }
-        .gh-header {
-          max-width: 760px;
-          margin: 0 auto 72px;
+        .gh-section { background: transparent; padding: var(--sec-pad) 0; }
+        .gh-head {
           text-align: center;
+          margin-bottom: 40px;
         }
-        .gh-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 22px;
-          border-radius: 999px;
-          border: 1px solid var(--bdr);
-          background: var(--bg2);
-          color: var(--acc-light);
+        .gh-sub {
+          margin: 0;
           font-family: var(--font-body);
-          font-size: 12px;
-          font-weight: 600;
-          letter-spacing: 2.5px;
-          text-transform: uppercase;
+          font-size: 15px;
+          color: var(--fg3);
+        }
+        .gh-stats {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 16px;
           margin-bottom: 24px;
         }
-        .gh-title {
-          font-size: clamp(2.25rem, 4.5vw, 3.5rem) !important;
-          line-height: 1.1 !important;
-          letter-spacing: -0.04em !important;
-          margin-bottom: 0 !important;
-        }
-        .gh-skel {
-          border-radius: var(--r-md);
-          padding: 20px;
-          background: var(--bg2);
-          border: 1px solid var(--bdr);
-        }
-        .gh-stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-          gap: 20px;
-          margin-bottom: 48px;
-        }
-        .gh-stat-card {
-          text-align: center;
+        .gh-stat {
           padding: 28px 20px;
-          border-radius: 20px;
-          border: 1px solid var(--bdr);
-          background: var(--bg2);
-          transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+          text-align: center;
         }
-        .gh-stat-card:hover {
-          border-color: var(--bdr2);
-          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-          transform: translateY(-4px);
-        }
-        .gh-stat-icon-wrap {
-          width: 44px;
-          height: 44px;
-          display: flex;
+        .gh-stat-icon {
+          display: inline-flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto 14px;
-          border-radius: 14px;
-          background: var(--acc-glow2);
-          border: 1px solid color-mix(in srgb, var(--acc) 20%, transparent);
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          background: color-mix(in srgb, var(--acc) 12%, transparent);
+          color: var(--acc);
+          margin-bottom: 16px;
         }
-        .gh-stat-card:hover .gh-stat-icon-wrap {
-          transform: scale(1.1);
-        }
-        .gh-stat-icon-wrap svg {
-          transition: transform 0.3s ease;
-        }
-        .gh-stat-card:hover .gh-stat-icon-wrap svg {
-          transform: scale(1.15) rotate(4deg);
-        }
-        .gh-stat-value {
-          font-family: var(--font-head);
-          font-size: 2rem;
+        .gh-stat-num {
+          display: block;
+          font-family: var(--font-term);
+          font-size: 32px;
           font-weight: 700;
           color: var(--fg);
-          letter-spacing: -0.5px;
           line-height: 1;
-          margin-bottom: 6px;
+          margin-bottom: 10px;
         }
         .gh-stat-label {
+          display: block;
           font-family: var(--font-body);
-          font-size: 12px;
-          font-weight: 500;
-          color: var(--fg3);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 1.5px;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          color: var(--fg3);
         }
-        .gh-chart-card {
-          border-radius: var(--r-md);
-          background: var(--bg2);
-          border: 1px solid var(--bdr);
-          padding: 28px 28px 24px;
-          margin-bottom: 32px;
-          transition: border-color 0.4s ease, box-shadow 0.4s ease;
+        .gh-cal.glass-card {
+          padding: 28px;
+          box-shadow:
+            0 0 36px rgba(57, 211, 83, 0.10),
+            0 32px 64px -16px rgba(0, 0, 0, 0.65),
+            0 8px 24px -8px rgba(0, 0, 0, 0.40),
+            inset 0 1px 0 rgba(255, 255, 255, 0.12),
+            inset 0 -1px 1px rgba(0, 0, 0, 0.25);
         }
-        .gh-chart-card:hover {
-          border-color: var(--bdr2);
-          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
+        .gh-cal.glass-card:hover {
+          box-shadow:
+            0 0 56px rgba(57, 211, 83, 0.16),
+            0 40px 80px -16px rgba(0, 0, 0, 0.75),
+            0 12px 32px -8px rgba(0, 0, 0, 0.50),
+            inset 0 1px 0 rgba(255, 255, 255, 0.14),
+            inset 0 -1px 1px rgba(0, 0, 0, 0.25);
         }
-        .gh-chart-header {
+        .gh-cal-head {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           justify-content: space-between;
-          margin-bottom: 20px;
+          gap: 16px;
+          margin-bottom: 26px;
         }
-        .gh-chart-icon {
-          width: 36px;
-          height: 36px;
+        .gh-cal-titlewrap {
           display: flex;
+          align-items: flex-start;
+          gap: 14px;
+        }
+        .gh-cal-icon {
+          display: inline-flex;
           align-items: center;
           justify-content: center;
+          width: 36px;
+          height: 36px;
+          flex: none;
           border-radius: 10px;
-          background: var(--acc-glow2);
-          border: 1px solid color-mix(in srgb, var(--acc) 20%, transparent);
-          flex-shrink: 0;
+          background: color-mix(in srgb, var(--acc) 12%, transparent);
+          color: var(--acc);
         }
-        .gh-chart-title {
+        .gh-cal-title {
           display: block;
           font-family: var(--font-head);
           font-size: 15px;
           font-weight: 600;
           color: var(--fg);
         }
-        .gh-chart-sub {
-          display: block;
+        .gh-cal-sub {
+          margin: 4px 0 0;
           font-family: var(--font-body);
-          font-size: 12px;
+          font-size: 12.5px;
           color: var(--fg3);
-          margin-top: 2px;
         }
-        .gh-chart-link {
-          font-family: var(--font-body);
-          font-size: 12px;
-          font-weight: 500;
-          color: var(--fg3);
-          text-decoration: none;
-          padding: 6px 14px;
-          border-radius: 8px;
+        .gh-handle {
+          flex: none;
+          padding: 9px 16px;
           border: 1px solid var(--bdr);
-          transition: all 0.2s;
-        }
-        .gh-chart-link:hover {
-          color: var(--acc-light);
-          border-color: color-mix(in srgb, var(--acc) 45%, transparent);
+          border-radius: 8px;
+          background: var(--bg);
+          font-family: var(--font-term);
+          font-size: 12.5px;
+          color: var(--fg2);
+          text-decoration: none;
         }
         .gh-cal-scroll {
           overflow-x: auto;
@@ -488,12 +295,13 @@ const GitHubDashboard = () => {
         }
         .gh-months {
           display: flex;
-          gap: 3px;
+          gap: 4px;
           margin-bottom: 8px;
           min-width: max-content;
+          justify-content: safe center;
         }
         .gh-months span {
-          width: 13px;
+          width: 18px;
           flex: none;
           overflow: visible;
           white-space: nowrap;
@@ -504,36 +312,50 @@ const GitHubDashboard = () => {
         }
         .gh-contrib-grid {
           display: flex;
-          gap: 3px;
+          gap: 4px;
           min-width: max-content;
+          justify-content: safe center;
         }
         .gh-contrib-week {
           display: flex;
           flex-direction: column;
-          gap: 3px;
+          gap: 4px;
         }
         .gh-contrib-cell {
-          width: 13px;
-          height: 13px;
-          border-radius: 3px;
-          transition: background 0.2s;
+          width: 18px;
+          height: 18px;
+          border-radius: 5px;
+        }
+        .gh-contrib-grid .gh-contrib-cell {
+          transition: transform 0.12s ease, filter 0.12s ease, box-shadow 0.12s ease;
+        }
+        .gh-contrib-grid .gh-contrib-cell:hover {
+          filter: brightness(1.6) saturate(1.3);
+          transform: scale(1.35);
+          box-shadow: 0 0 0 2px var(--bg), 0 0 0 5px #ff8a1a, 0 0 22px rgba(255, 138, 26, 0.65);
+          position: relative;
+          z-index: 2;
+        }
+        .gh-contrib-grid .gh-contrib-cell:active {
+          transform: scale(1.12);
+          filter: brightness(1.7) saturate(1.35);
+          box-shadow: 0 0 0 2px var(--bg), 0 0 0 5px #ff8a1a, 0 0 30px rgba(255, 138, 26, 0.8);
         }
         .gh-level-0 { background: var(--bdr); }
         .gh-level-1 { background: #0e4429; }
         .gh-level-2 { background: #006d32; }
         .gh-level-3 { background: #26a641; }
         .gh-level-4 { background: #39d353; }
-        .gh-chart-footer {
+        .gh-cal-foot {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-top: 16px;
-          padding-top: 16px;
-          border-top: 1px solid var(--bdr);
+          gap: 16px;
+          margin-top: 18px;
         }
-        .gh-contrib-count {
+        .gh-foot-sub {
           font-family: var(--font-body);
-          font-size: 12px;
+          font-size: 12.5px;
           color: var(--fg3);
         }
         .gh-legend {
@@ -547,86 +369,11 @@ const GitHubDashboard = () => {
           color: var(--fg3);
           margin: 0 4px;
         }
-        .gh-lang-card {
-          border-radius: var(--r-md);
-          background: var(--bg2);
-          border: 1px solid var(--bdr);
-          padding: 28px;
-          margin-bottom: 32px;
-          transition: border-color 0.4s ease, box-shadow 0.4s ease;
-        }
-        .gh-lang-card:hover {
-          border-color: var(--bdr2);
-          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-        }
-        .gh-lang-bars { display: grid; gap: 14px; margin-top: 6px; }
-        .gh-lang-row { display: grid; grid-template-columns: 130px 1fr 32px; align-items: center; gap: 14px; }
-        .gh-lang-name { display: flex; align-items: center; gap: 8px; font-family: var(--font-body); font-size: 13px; font-weight: 500; color: var(--fg2); }
-        .gh-lang-bar { height: 8px; border-radius: 999px; background: var(--bdr); overflow: hidden; }
-        .gh-lang-fill { height: 100%; border-radius: 999px; }
-        .gh-lang-count { font-family: var(--font-body); font-size: 12px; color: var(--fg3); text-align: right; }
-        @media (max-width: 560px) {
-          .gh-lang-row { grid-template-columns: 100px 1fr 28px; gap: 10px; }
-        }
-        .gh-repo-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-          gap: 18px;
-        }
-        .gh-repo-card {
-          position: relative;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          gap: 12px;
-          padding: 24px;
-          background: var(--bg2);
-          border: 1px solid var(--bdr);
-          border-radius: var(--r-md);
-          transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-                      border-color 0.35s ease,
-                      box-shadow 0.35s ease,
-                      background-color 0.35s ease;
-        }
-        .gh-repo-card:hover {
-          background: var(--bg3);
-          transform: translateY(-4px);
-          border-color: var(--bdr2);
-          box-shadow: 0 24px 64px -16px var(--acc-glow), 0 8px 24px -8px rgba(0, 0, 0, 0.5);
-        }
-        /* Signature top-line glow reveal on hover (replaces the old shine sweep) */
-        .gh-repo-card-shine {
-          position: absolute;
-          top: 0;
-          left: 10%;
-          right: 10%;
-          height: 1px;
-          pointer-events: none;
-          background: linear-gradient(90deg, transparent, var(--acc), transparent);
-          opacity: 0;
-          transition: opacity 0.45s ease;
-        }
-        .gh-repo-card:hover .gh-repo-card-shine { opacity: 1; }
-        .gh-repo-icon-wrap {
-          width: 30px;
-          height: 30px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 9px;
-          background: var(--acc-glow2);
-          border: 1px solid color-mix(in srgb, var(--acc) 20%, transparent);
-          flex-shrink: 0;
-        }
-        .gh-repo-desc {
-          font-family: var(--font-body);
-          font-size: 13px;
-          color: var(--fg2);
-          line-height: 1.6;
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
+        @media (max-width: 640px) {
+          .gh-section { padding: var(--sec-pad-sm) 0; }
+          .gh-stats { grid-template-columns: repeat(2, 1fr); }
+          .gh-cal { padding: 20px 16px; }
+          .gh-cal-head { flex-direction: column; }
         }
       `}</style>
     </section>

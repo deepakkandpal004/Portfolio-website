@@ -34,10 +34,10 @@ const Work = () => {
       </div>
 
       <style>{`
-        .work-section { background: transparent; padding: 128px 0; overflow: hidden; }
+        .work-section { background: transparent; padding: 96px 0; overflow: hidden; }
         .work-heading {
           max-width: 760px;
-          margin: 0 auto 72px;
+          margin: 0 auto 56px;
           text-align: center;
         }
         .work-label {
@@ -61,8 +61,8 @@ const Work = () => {
           margin: 0 auto;
         }
         @media (max-width: 720px) {
-          .work-section { padding: 90px 0; }
-          .work-heading { margin-bottom: 46px; }
+          .work-section { padding: 64px 0; }
+          .work-heading { margin-bottom: 36px; }
         }
       `}</style>
     </section>

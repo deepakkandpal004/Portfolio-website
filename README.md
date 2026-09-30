@@ -1,6 +1,6 @@
 # Deepak Kandpal — Portfolio
 
-Personal portfolio website. Dark-only "modern dark glow" design with an interactive terminal, GitHub activity dashboard, project case studies, blog, and a working contact form.
+Personal portfolio website. Dark-only minimal design with a GitHub activity dashboard, project case studies, blog, and a working contact form.
 
 **Live:** https://deepakkandpal.me
 
@@ -17,7 +17,6 @@ Personal portfolio website. Dark-only "modern dark glow" design with an interact
 
 ## Features
 
-- Interactive terminal (`#playground`) — ask about skills, projects, experience
 - "Ask about Deepak" floating chat widget (rule-based)
 - GitHub dashboard — live stats, repos, and a real 365-day contribution graph
 - Project case-study pages (`/projects/[slug]`) with SEO metadata
@@ -40,7 +39,7 @@ app/
     ├── contact/              # Contact form → Resend
     └── github/               # GitHub stats proxy (cached)
 src/
-├── components/               # Hero, About, Experience, Skills, Terminal,
+├── components/               # Hero, About, Experience, Skills,
 │                             # GitHubDashboard, Work, BlogPreview, Contact,
 │                             # Navbar, AskDeepak, SocialSidebar, ...
 ├── data/                     # projects.ts, posts.ts
